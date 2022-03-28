@@ -36,10 +36,28 @@ const guardarUsuario = async (usuario)=>{
 
 //Leer usuario
 
+const leerUsuario = async (usuario) => {
+    const {email,password} = usuario;
+    let client,result;
+    try{
+        client = await pool.connect(); // Espera a abrir conexion
+        const data = await client.query(`
+                SELECT name,email,typeuser
+                FROM usuarios
+                WHERE email = $1 and password = $2`,[email,password]);
 
+        result = data.rows
+    }catch(err){
+        console.log(err);
+    }finally{
+        client.release();    
+    }
+    return result
+}
 
 const usuarios = {
-    guardarUsuario
+    guardarUsuario,
+    leerUsuario
 }
 
 module.exports = usuarios;

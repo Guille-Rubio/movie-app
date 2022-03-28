@@ -8,8 +8,20 @@ const guardarUsuario = async(req,res)=>{
     res.status(200).json(usuario);
 }
 
+//leer usuario
+const leerUsuario = async(req,res)=>{
+    const usuario = await db.leerUsuario(req.body);
+    if(usuario.length > 0){
+        res.status(200).json(usuario);
+    }else{
+        res.status(401).json({msg:"No autorizado"});
+    }
+    
+}
+
 const usuarios = {
-    guardarUsuario
+    guardarUsuario,
+    leerUsuario
 };
 
 module.exports = usuarios;
