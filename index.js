@@ -9,7 +9,7 @@ app.set('view engine','pug');
 app.set('views', './views')//comprobar ruta está ok
 
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.render('index.pug')
 })
 
 //app.use(express().JSON);
