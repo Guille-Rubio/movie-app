@@ -1,17 +1,19 @@
-const dotenv = require('dotenv').config();
+require('dotenv').config();//si no se usa no declarar, solo requerir
 const express = require('express');
+const { Db } = require('mongodb');
+require("./utils/mongoConfig");
 
 const app = express();
 
 const port = 3000;
 
 app.set('view engine','pug');
-app.set('views', './views')//comprobar ruta está ok
+app.set('views', './views')
 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
+app.use(express.json());
 
-//app.use(express().JSON);
+
+
+
 
 app.listen(port,()=>{console.log(`Example app listening on port ${port}`)});
