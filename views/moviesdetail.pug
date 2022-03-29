@@ -8,8 +8,14 @@ html(lang="en")
 
     body
         include ./header 
-
-
-
+        main
+            p Titulo: #{Title}
+            img(src="#{Poster}", alt="poster")
+            p Año: #{Year}
+            p Duración:  #{Runtime}
+            p Genero: #{Genre}
+            p Directores: #{Director}
+            p Actores: #{Actors}
+            p Argumento: #{Plot}
 
         include ./footer
