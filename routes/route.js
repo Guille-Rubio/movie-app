@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const movie = require('../controllers/controller')
 
 
 // [GET] http://localhost:3000/
-router.get('/')
+router.get('/',movie.getIndex)
 
 // [GET] http://localhost:3000/dashboard
 router.get('/dashboard')
@@ -16,10 +17,12 @@ router.get('/search/:title', movie.getMovie);
 router.get('/movies', movie.getMovie);
 
 // [POST] http://localhost:3000/api/entires
-router.post('/entries', movies.createMovie);
+router.post('/entries', movie.createMovie);
 
 
 
+
+router.get('/search',movie.getSearchView)
 
 
 

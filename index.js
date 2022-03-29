@@ -5,6 +5,8 @@ const { Db } = require('mongodb');
 require("./utils/mongoConfig");
 
 const usuarioRoutes = require('./routes/usuario');
+const router = require('./routes/route');
+
 const app = express();
 
 const port = 3000;
@@ -17,7 +19,7 @@ app.use(express.json());
 
 app.use(express.static('public'));
 
-app.use("/",usuarioRoutes);// WEB products
+app.use("/",router);
 
 
 
