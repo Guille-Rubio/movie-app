@@ -1,31 +1,57 @@
-// MONGO o PG???
+const mongoose = require('mongoose');
+const { Db } = require('mongoose/node_modules/mongodb');
 
-/*
-// CREATE
-const createMovie = async (entry) => {
-    const {title,content,email,category} = entry;
-    let client,result;
-    try{
-        client = await pool.connect(); // Espera a abrir conexion
-        const data = await client.query(`INSERT INTO entries(title,content,id_author,category) 
-                                    VALUES ($1,$2,
-                                    (SELECT id_author FROM authors WHERE email=$3),$4)`
-                                    ,[title,content,email,category])
-        result = data.rowCount
-    }catch(err){
-        console.log(err);
-        throw err;
-    }finally{
-        client.release();    
-    }
-    return result
-}
 
-//delete
-//update (put)
+const Film = mongoose.model('Favourites',new mongoose.Schema({
+    imdbID:{
+        type:String,
+        required:true
+    },
+    title: {
+        type: String,
+        required: true
+    },
+    poster: {
+        type: String,
+        required: false
+    },
+    year: {
+        type: String,
+        required: true
+    },
+    director: {
+        type: String,
+        required: true
+    },
+    genre: {
+        type: String,
+        required: true
+    },
+    runtime: {
+        type: String,
+        required: true
+    },
+    plot: {
+        type: String,
+        required: true
+    },
+    actors: {
+        type: String,
+        required: true
+    },
+    ratings: {
+        type: Array,
+        required: true
+    },
+    opinions: {
+        type: String,
+        required: false
+    },
 
-const entries = {
-    createMovie
-}
 
-module.exports = entries;*/
+
+}))
+
+
+
+module.exports= Film
