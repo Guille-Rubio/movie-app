@@ -54,7 +54,11 @@ const signup = async (req, res) => {
     console.log(newUser);
     usuarios.guardarUsuario(newUser);
     res.json({ "message": newUser })
+}
 
+const getDashboardView = async (req,res)=>{
+    res.status(200).render('dashboard')
+    
 }
 
 
@@ -64,7 +68,8 @@ const movie = {
     getSearchView,
     getIndex,
     searchMovie,
-    signup
+    signup,
+    getDashboardView
 }
 
 module.exports = movie;

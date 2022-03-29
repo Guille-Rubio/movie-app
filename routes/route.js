@@ -20,7 +20,7 @@ router.get('/dashboard')
 router.post('/entries', movie.createMovie);
 
 
-
+router.get('/dashboard',movie.getDashboardView)
 
 router.get('/search', movie.getSearchView)
 
