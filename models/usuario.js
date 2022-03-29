@@ -3,12 +3,14 @@ const {Pool} = require('pg');
 
 require('dotenv').config();
 
+
+
 const pool = new Pool({
-    user:process.env.pgUser,
-    host:process.env.pgHost,
-    database:process.env.pgUser,
-    password:process.env.pgPassword,
-    port:process.env.pgPort
+    user:process.env.PG_USER,
+    host:process.env.PG_HOST,
+    database:process.env.PG_USER,
+    password:process.env.PG_PASSWORD,
+    port:process.env.PG_PORT
 });
 
 //Introducir datos
@@ -28,7 +30,7 @@ const guardarUsuario = async (usuario)=>{
             result = {msg: "Usuario ya registrado."};
         }
     }finally{
-        client.release();    
+        client.release();  
     }
     return result
 }

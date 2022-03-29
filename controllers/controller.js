@@ -1,4 +1,5 @@
 require('dotenv');
+const usuarios = require('../models/usuario');
 const fetch = require('node-fetch');
 const API_KEY = process.env.OMDB_API_KEY
 
@@ -34,13 +35,27 @@ const searchMovie = async (req, res) => {
     const data = await response.json()
     const { Title, Year, Runtime, Genre, Director, Actors, Plot, Poster, Ratings } = data;
 
-    res.status(200).render('moviesdetail',{Title:Title,Year:Year,Runtime:Runtime,Genre:Genre,Director:Director,Actors:Actors,Plot,Plot,Poster:Poster,Ratings:Ratings})
-
-
+    res.status(200).render('moviesdetail', {
+        Title: Title,
+        Year: Year,
+        Runtime: Runtime,
+        Genre: Genre,
+        Director: Director,
+        Actors: Actors,
+        Plot: Plot,
+        Poster: Poster,
+        Ratings: Ratings
+    })
 
 }
 
+const signup = async (req, res) => {
+    const newUser = req.body;
+    console.log(newUser);
+    usuarios.guardarUsuario(newUser);
+    res.json({ "message": newUser })
 
+}
 
 
 const movie = {
@@ -48,7 +63,8 @@ const movie = {
     createMovie,
     getSearchView,
     getIndex,
-    searchMovie
+    searchMovie,
+    signup
 }
 
 module.exports = movie;
