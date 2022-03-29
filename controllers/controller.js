@@ -1,4 +1,7 @@
 
+
+
+
 const getMovie = async (req, res) => {
     const movie = await movieFetch.getMovie(req.params.title);
     res.status(200).json(movie);
@@ -13,11 +16,22 @@ const createMovie = async (req,res) => {
     res.status(201).json({"items_created":response});
 }
 
+const getIndex = (req,res)=>{
+    res.status(200).render("index");
+}
+
+const getSearchView =(req, res)=>{
+    res.status(200).render("search")
+}
+
 const movie = {
     getMovie,
     createMovie,
-    updateMovie,
-    deleteMovie
+    //updateMovie,
+    //deleteMovie,
+    getSearchView,
+    getIndex
+
 }
 
 module.exports = movie;
