@@ -4,7 +4,7 @@ const movie = require('../controllers/controller')
 
 
 // [GET] http://localhost:3000/
-router.get('/',movie.getIndex)
+router.get('/', movie.getIndex)
 
 // [GET] http://localhost:3000/dashboard
 router.get('/dashboard')
@@ -22,11 +22,11 @@ router.post('/entries', movie.createMovie);
 
 
 
-router.get('/search',movie.getSearchView)
+router.get('/search', movie.getSearchView)
 
 
-router.get('/search/:title',movie.searchMovie)
+router.get('/search/:title', movie.searchMovie)
 
-
+router.post('/signup', movie.signup)
 
 module.exports = router;
