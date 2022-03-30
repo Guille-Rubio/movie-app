@@ -64,7 +64,7 @@ const checkUserByEmail = async (email) => {
     try {
         client = await pool.connect(); // Espera a abrir conexion
         const data = await client.query(`
-                SELECT name,email,typeuser
+                SELECT name,email,role
                 FROM usuarios
                 WHERE email = $1`, [email]);
 
