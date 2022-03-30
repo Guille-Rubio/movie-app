@@ -14,17 +14,19 @@ const pool = new Pool({
 });
 
 //Introducir datos
-const guardarUsuario = async (usuario) => {
-    const { name, email, password, typeuser } = usuario;
-    let client, result;
-    try {
+
+const guardarUsuario = async (usuario)=>{
+    const {name,email,password,role} = usuario;
+    let client,result;
+    try{
         client = await pool.connect(); // Espera a abrir conexion
-        const data = await client.query
-            (` INSERT INTO usuarios(name,email,password,typeuser) 
+        const data =  await client.query
+                                    (` INSERT INTO usuarios(name,email,password,role) 
                                     VALUES ($1,$2,$3,$4)`
-                , [name, email, password, typeuser])
-        result = { msg: "Usuario creado exitosamente." }
-    } catch (err) {
+                                    ,[name,email,password,role])
+        result = {msg: "Usuario creado exitosamente."}
+    }catch(err){
+
         console.log(err);
         if (err.code == 23505) {
             result = { msg: "Usuario ya registrado." };
@@ -44,7 +46,7 @@ const leerUsuario = async (usuario) => {
     try {
         client = await pool.connect(); // Espera a abrir conexion
         const data = await client.query(`
-                SELECT name,email,typeuser
+                SELECT name,email,role
                 FROM usuarios
                 WHERE email = $1 and password = $2`, [email, password]);
 
