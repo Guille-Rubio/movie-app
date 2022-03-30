@@ -55,9 +55,33 @@ const leerUsuario = async (usuario) => {
     return result
 }
 
+
+const checkUserByEmail = async (email) => {
+    try {
+        client = await pool.connect(); // Espera a abrir conexion
+        const data = await client.query(`
+                SELECT name,email,typeuser
+                FROM usuarios
+                WHERE email = $1`, [email]);
+
+        result = data.rows
+
+    } catch (err) {
+        console.log(err);
+    } finally {
+        client.release();
+    }
+    return result
+}
+
 const usuarios = {
     guardarUsuario,
+<<<<<<< HEAD
     le
+=======
+    leerUsuario,
+    checkUserByEmail
+>>>>>>> 0c5623041f4cd46207ef9bdb92f64b993efa60a8
 }
 
 module.exports = usuarios;
