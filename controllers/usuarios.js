@@ -15,13 +15,20 @@ const leerUsuario = async(req,res)=>{
         res.status(200).json(usuario);
     }else{
         res.status(401).json({msg:"No autorizado"});
-    }
-    
+    } 
+}
+
+const checkUserByEmail = async (email)=>{
+    const user = await db.checkUserByEmail(email)
+    console.log(user)
+
+
 }
 
 const usuarios = {
     guardarUsuario,
-    leerUsuario
+    leerUsuario,
+    checkUserByEmail
 };
 
 module.exports = usuarios;
