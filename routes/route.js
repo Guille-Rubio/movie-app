@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const movie = require('../controllers/controller')
+const passwords = require ('../controllers/passwords')
 
 
 // [GET] http://localhost:3000/
 router.get('/', movie.getIndex)
 
-// [GET] http://localhost:3000/dashboard
-router.get('/dashboard')
+
 
 // [GET] http://localhost:3000/search
 // Retorna un JSON con los detalles de la peli buscada
@@ -27,6 +27,12 @@ router.get('/search', movie.getSearchView)
 
 router.get('/search/:title', movie.searchMovie)
 
+router.get('/recoverpassword',movie.getRecuPasswordView)
+
+router.get('/restorepassword',movie.getRestorePasswordView)
+
 router.post('/signup', movie.signup)
+
+
 
 module.exports = router;

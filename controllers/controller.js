@@ -61,6 +61,15 @@ const getDashboardView = async (req,res)=>{
     
 }
 
+const getRecuPasswordView = async (req,res)=>{
+    res.status(200).render('recupassword')
+
+}
+
+const getRestorePasswordView = async (req,res)=>{
+    res.status(200).render('restorepassword');
+}
+
 
 const movie = {
     getMovie,
@@ -69,7 +78,9 @@ const movie = {
     getIndex,
     searchMovie,
     signup,
-    getDashboardView
+    getDashboardView,
+    getRecuPasswordView,
+    getRestorePasswordView
 }
 
 module.exports = movie;
