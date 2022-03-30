@@ -4,7 +4,6 @@ const express = require('express');
 //const { Db } = require('mongodb');
 //require("./utils/mongoConfig");
 
-const usuarioRoutes = require('./routes/usuario');
 const router = require('./routes/route');
 
 const app = express();

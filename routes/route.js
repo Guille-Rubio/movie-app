@@ -33,6 +33,8 @@ router.get('/restorepassword',movie.getRestorePasswordView)
 
 router.post('/signup', movie.signup)
 
+router.post('/pruebasvictor',movie.pruebasvictor)
+
 
 
 module.exports = router;
