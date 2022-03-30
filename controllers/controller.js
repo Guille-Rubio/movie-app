@@ -52,9 +52,26 @@ const searchMovie = async (req, res) => {
 const signup = async (req, res) => {
     const newUser = req.body;
     console.log(newUser);
-    usuarios.guardarUsuario(newUser);
-    res.json({ "message": newUser })
+    await usuarios.guardarUsuario(newUser);
+    res.status(201).json({ "message": "Usuario creado exitosamente."})
 }
+
+const getUser = async(req,res)=>{
+    const user = await usuarios.leerUsuario(req.body);
+    if(user.length > 0){
+        res.status(200).json(user);
+    }else{
+        res.status(401).json({msg:"No autorizado"});
+    } 
+}
+
+//mis pruebas NOP TOCAR
+const pruebasvictor = async(req,res)=>{
+    //malditos todos
+    const favourite = await usuarios.updatePassword(req.body);
+    res.status(200).json(favourite);
+}
+//
 
 const getDashboardView = async (req,res)=>{
     res.status(200).render('dashboard')
@@ -78,9 +95,11 @@ const movie = {
     getIndex,
     searchMovie,
     signup,
+    getUser,
     getDashboardView,
     getRecuPasswordView,
-    getRestorePasswordView
+    getRestorePasswordView,
+    pruebasvictor
 }
 
 module.exports = movie;
