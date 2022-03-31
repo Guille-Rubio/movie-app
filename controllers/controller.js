@@ -57,23 +57,24 @@ const signup = async (req, res) => {
     const newUser = req.body;
     console.log(newUser);
     await usuarios.guardarUsuario(newUser);
-    res.status(201).json({ "message": "Usuario creado exitosamente."})
+    res.status(201).json({ "message": "Usuario creado exitosamente." })
 }
 
 
 const getDashboardView = async (req, res) => {
+}
 
-const getUser = async(req,res)=>{
+const getUser = async (req, res) => {
     const user = await usuarios.leerUsuario(req.body);
-    if(user.length > 0){
+    if (user.length > 0) {
         res.status(200).json(user);
-    }else{
-        res.status(401).json({msg:"No autorizado"});
-    } 
+    } else {
+        res.status(401).json({ msg: "No autorizado" });
+    }
 }
 
 //mis pruebas NOP TOCAR
-const pruebasvictor = async(req,res)=>{
+const pruebasvictor = async (req, res) => {
     //malditos todos
     const favourite = await usuarios.updatePassword(req.body);
     res.status(200).json(favourite);
@@ -83,7 +84,7 @@ const pruebasvictor = async(req,res)=>{
 
 
 
-const getRecuPasswordView = async (req,res)=>{
+const getRecuPasswordView = async (req, res) => {
     res.status(200).render('recoverpassword')
 
 }
@@ -93,15 +94,10 @@ const getRestorePasswordView = async (req, res) => {
 }
 
 const postCreateMovie = async (req, res) => {
-    console.log("recibido por POST", req.body)
-    const film = new MovieModel(req.body);
-    const result = await film.save();
-
-    console.log("documento creado", film)
     try {
-        await MovieModel.save()
-        console.log("crea pelicula en base de datos Mongo")
-        //res.status(201).json({ message: "Pelicula creada" })
+        const film = new MovieModel(req.body);
+        const result = await film.save();
+        res.status(201).json({ msg: `Pelicula ${req.body.title} creada` })
 
     }
     catch (err) {
@@ -109,9 +105,29 @@ const postCreateMovie = async (req, res) => {
     }
 }
 
+const deleteMovie = async (req, res) => {
+    const title = req.body.title
+    MovieModel.findOneAndDelete({ title: title }, function (err, docs) {
+        if (err) {
+            console.log(err)
+
+        } else {
+
+            res.status(202).json({ message: title + " deleted" })
+        }
+    })
+}
+
+const editMovie = async (req, res) => {
+    const filter = {title:req.body.title}
+    const update = req.body
+    let doc = await MovieModel.findOneAndUpdate(filter, update, {new:true})
+    res.status(201).json({msg:"Editado"})
 
 
-const movie = {
+}
+
+const controllers = {
     getMovie,
     getSearchView,
     getIndex,
@@ -122,7 +138,9 @@ const movie = {
     getRecuPasswordView,
     getRestorePasswordView,
     postCreateMovie,
-    pruebasvictor
+    deleteMovie,
+    editMovie,
+    pruebasvictor,
 }
 
-module.exports = movie;
+module.exports = controllers
