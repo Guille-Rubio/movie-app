@@ -56,16 +56,35 @@ const searchMovieInOMDB = async (req, res) => {
 const signup = async (req, res) => {
     const newUser = req.body;
     console.log(newUser);
-    usuarios.guardarUsuario(newUser);
-    res.json({ "message": newUser })
+    await usuarios.guardarUsuario(newUser);
+    res.status(201).json({ "message": "Usuario creado exitosamente."})
 }
+
 
 const getDashboardView = async (req, res) => {
-    res.status(200).render('dashboard')
+
+const getUser = async(req,res)=>{
+    const user = await usuarios.leerUsuario(req.body);
+    if(user.length > 0){
+        res.status(200).json(user);
+    }else{
+        res.status(401).json({msg:"No autorizado"});
+    } 
 }
 
-const getRecuPasswordView = async (req, res) => {
-    res.status(200).render('recupassword')
+//mis pruebas NOP TOCAR
+const pruebasvictor = async(req,res)=>{
+    //malditos todos
+    const favourite = await usuarios.updatePassword(req.body);
+    res.status(200).json(favourite);
+}
+//
+
+
+
+
+const getRecuPasswordView = async (req,res)=>{
+    res.status(200).render('recoverpassword')
 
 }
 
@@ -73,7 +92,7 @@ const getRestorePasswordView = async (req, res) => {
     res.status(200).render('restorepassword');
 }
 
-const postCreateMovie = async (req, res) => {//no funciona
+const postCreateMovie = async (req, res) => {
     console.log("recibido por POST", req.body)
     const film = new MovieModel(req.body);
     const result = await film.save();
@@ -98,10 +117,12 @@ const movie = {
     getIndex,
     searchMovieInOMDB,
     signup,
+    getUser,
     getDashboardView,
     getRecuPasswordView,
     getRestorePasswordView,
-    postCreateMovie
+    postCreateMovie,
+    pruebasvictor
 }
 
 module.exports = movie;

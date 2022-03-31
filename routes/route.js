@@ -19,7 +19,11 @@ router.get('/restorepassword',movie.getRestorePasswordView)
 
 router.post('/signup', movie.signup)
 
+
 router.post('/createmovie',movie.postCreateMovie)
+
+router.post('/pruebasvictor',movie.pruebasvictor)
+
 
 
 
