@@ -35,11 +35,11 @@ app.get('/moviesdetail', (req, res) => {
 app.get('/search', (req, res) => {
     res.render('search.pug')
 })
-app.get('/sign_up', (req, res) => {
-    res.render('sign_up.pug')
+app.get('/signup', (req, res) => {
+    res.render('signup.pug')
 })
-app.get('/recupassword', (req, res) => {
-    res.render('recupassword.pug')
+app.get('/recoverpassword', (req, res) => {
+    res.render('recoverpassword.pug')
 })
 app.get('/restorepassword', (req, res) => {
     res.render('restorepassword.pug')
@@ -47,14 +47,14 @@ app.get('/restorepassword', (req, res) => {
 app.get('/admin', (req, res) => {
     res.render('admin.pug')
 })
-app.get('/postmovie', (req, res) => {
-    res.render('postmovie.pug')
+app.get('/createmovie', (req, res) => {
+    res.render('createmovie.pug')
 })
-app.get('/putmovie', (req, res) => {
-    res.render('putmovie.pug')
+app.get('/editmovie', (req, res) => {
+    res.render('editmovie.pug')
 })
-app.get('/deletemovie', (req, res) => {
-    res.render('deletemovie.pug')
+app.get('/removemovie', (req, res) => {
+    res.render('removemovie.pug')
 })
 
 

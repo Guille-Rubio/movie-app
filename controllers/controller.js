@@ -79,7 +79,7 @@ const getDashboardView = async (req,res)=>{
 }
 
 const getRecuPasswordView = async (req,res)=>{
-    res.status(200).render('recupassword')
+    res.status(200).render('recoverpassword')
 
 }
 
