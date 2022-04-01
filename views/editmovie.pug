@@ -7,25 +7,25 @@ html(lang="en")
         title Editar película
     body 
         include ./header.pug 
-        form(action="" method="POST")
+        form(action="index.js" method="POST")
             label(for="Title") Título
-            input(type="text")
+            input(type="text" name="title")
             label(for="Director") Director
-            input(type="text")
+            input(type="text" name="director")
             label(for="Year") Año
-            input(type="text")
+            input(type="text"name="runtime")
             label(for="Runtime") Duración 
-            input(type="text")
+            input(type="text" name="runtime")
             label(for="Poster") Poster Url
-            input(type="text")
+            input(type="text" name="poster")
             label(for="Genero") Género
-            input(type="text")
+            input(type="text" name="genre")
             label(for="argumento") Argumento
-            input(type="text")
+            input(type="text" name="plot")
             label(for="actores") Actores
-            input(type="text")
+            input(type="text" name="actors")
             label(for="opioniones") Opiniones
-            input(type="text")
+            input(type="text" name="ratings")
             button(type="submit" value="Crear") Añadir película 
 
 
