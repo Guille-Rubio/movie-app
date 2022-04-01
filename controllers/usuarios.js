@@ -21,8 +21,6 @@ const leerUsuario = async(req,res)=>{
 const checkUserByEmail = async (email)=>{
     const user = await db.checkUserByEmail(email)
     console.log(user)
-
-
 }
 
 const usuarios = {

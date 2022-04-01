@@ -1,4 +1,4 @@
-require('dotenv');
+require('dotenv').config();
 const usuarios = require('../models/usuario');
 const fetch = require('node-fetch');
 require('mongoose');
@@ -6,6 +6,7 @@ const MovieModel = require('../models/favourites');
 //const { db } = require('../models/favourites');
 const db = require('../utils/mongoConfig')
 const API_KEY = process.env.OMDB_API_KEY
+
 
 
 const getMovie = async (req, res) => {
