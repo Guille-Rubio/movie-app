@@ -6,8 +6,34 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Crear película
     body 
-        include ./header.pug 
+        include ./header.pug
+        form(action="/createmovie" method="POST") 
+     
+            label(for="id_movie") id movie
+            input(id="id_movie" type="text" name="id_movie" placeholder="id movie")
+            label(for="title") title
+            input(id="title" type="text" name="title" placeholder="title")
+            label(for="poster") poster
+            input(id="poster" type="text" name="poster" placeholder="poster url")
+            label(for="year") year
+            input(id="year" type="text" name="year" placeholder="year")
+            label(for="director") director
+            input(id="director" type="text" name="director" placeholder="director")
+            label(for="genre") genre
+            input(id="genre" type="text" name="genre" placeholder="genre")
+            label(for="runtime") runtime
+            input(id="runtime" type="text" name="runtime" placeholder="runtime")
+            label(for="plot") plot
+            textarea(id="plot" name="plot", cols="30", rows="10" placeholder="plot") 
+            label(for="actors") actors
+            input(id="actors" type="text" name="actors" placeholder="actors")
+            label(for="rating") ratings
+            input(id="ratings" type="text" name="ratings" placeholder="ratings")
+            label(for="opinions")  opinions
+            input(id="opinions" type="text" name="opinions" placeholder="opinions") 
+            
+            button(id="submit-button" type="submit") Añadir
 
+        include ./footer.pug
 
-
-        include ./footer.pug 
+        script(src="/js/createmovie.js")

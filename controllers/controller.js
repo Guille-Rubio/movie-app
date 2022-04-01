@@ -8,6 +8,7 @@ const API_KEY = process.env.OMDB_API_KEY
 
 
 
+
 const getMovie = async (req, res) => {
     const movie = await movieFetch.getMovie(req.params.title);
     res.status(200).json(movie);
@@ -74,6 +75,8 @@ const getRestorePasswordView = async (req, res) => {
 
 const postCreateMovie = async (req, res) => {
     try {
+        console.log("body", req.body)
+        console.log("params", req.params)
         const film = new MovieModel(req.body);
         const result = await film.save();
         res.status(201).json({ msg: `Pelicula ${req.body.title} creada` })
@@ -98,13 +101,41 @@ const deleteMovie = async (req, res) => {
 }
 
 const editMovie = async (req, res) => {
-    const filter = {title:req.body.title}
+    const filter = { title: req.body.title }
     const update = req.body
-    let doc = await MovieModel.findOneAndUpdate(filter, update, {new:true})
-    res.status(201).json({msg:"Editado"})
+    let doc = await MovieModel.findOneAndUpdate(filter, update, { new: true })
+    res.status(201).json({ msg: "Editado" })
+}
+
+
+
+
+const getFavouriteMovies = async (req, res) => {
+    const favouriteMovies = await usuarios.getUserFavouriteMovies(18)//sustituir por real user
+    if (favouriteMovies == "") {
+        res.send("User has no films saved as favourites")
+    } else {
+        const favouriteIDs = []
+        favouriteMovies.map(id => favouriteIDs.push(id.id_movie))//extracts favourite ids
+
+
+        //buscar los datos de las peliculas favoritas en mongoDB
+        const movies = await MovieModel.find({ id_movie: { $in: favouriteIDs } })
+        console.log(movies)
+
+        //render movies in pug
+
+
+        res.status(200).render('movies',{"movies":movies})
+
+
+
+    }
+
 
 
 }
+
 
 //mis pruebas NOP TOCAR
 const pruebasvictor = async (req, res) => {
@@ -128,6 +159,7 @@ const controllers = {
     postCreateMovie,
     deleteMovie,
     editMovie,
+    getFavouriteMovies,
     pruebasvictor,
 }
 
