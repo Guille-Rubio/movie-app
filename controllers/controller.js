@@ -67,7 +67,7 @@ const getUser = async(req,res)=>{
 
 //mis pruebas NOP TOCAR
 const pruebasvictor = async(req,res)=>{
-    //malditos todos
+    //
     const favourite = await usuarios.updatePassword(req.body);
     res.status(200).json(favourite);
 }
