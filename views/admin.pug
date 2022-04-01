@@ -5,10 +5,19 @@ html(lang="en")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Administrador
+        script(src='../script/admin.js')
     body 
         include ./header.pug 
         p Bienvenido Sr. Administrador 
-        
+        a(href="./createmovie")
+            button.btCrear Crear película 
+        section.cajaPadre 
+
+
+
 
 
         include ./footer.pug 
+        include ../script/admin.js 
+        
+        //script(src="../script/admin.js") 

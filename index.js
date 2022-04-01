@@ -4,7 +4,8 @@ const express = require('express');
 //const { Db } = require('mongodb');
 //require("./utils/mongoConfig");
 
-const usuarioRoutes = require('./routes/usuario');
+//const usuarioRoutes = require('./routes/usuario'); el fichero usuario no está
+const usuarioRoutes = require('./routes/route');
 const router = require('./routes/route');
 
 const app = express();
