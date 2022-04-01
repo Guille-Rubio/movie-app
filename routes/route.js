@@ -1,60 +1,40 @@
 const express = require('express');
 const router = express.Router();
-const controllers = require('../controllers/controller')
+const movie = require('../controllers/controller')
 const passwords = require ('../controllers/passwords')
 
 
-
-router.get('/', controllers.getIndex)
-
-
-
-router.get('/dashboard',controllers.getDashboardView)
-
-router.get('/search', controllers.getSearchView)
-
-router.get('/search/:title', controllers.searchMovieInOMDB)
-
-router.get('/recoverpassword',controllers.getRecuPasswordView)
-
-router.get('/restorepassword',controllers.getRestorePasswordView)
-
-router.get('/signup', (req, res) => {
-    res.render('signup.pug')
-})
-
-router.post('/signup', controllers.signup)
+// [GET] http://localhost:3000/
+router.get('/', movie.getIndex)
 
 
-router.get('/createmovie', (req, res) => {
-    res.render('createmovie.pug')
-})
 
-router.post('/createmovie',controllers.postCreateMovie)
+// [GET] http://localhost:3000/search
+// Retorna un JSON con los detalles de la peli buscada
+//router.get('/search/:title', movie.getMovie);
 
-router.post('/pruebasvictor',controllers.pruebasvictor)
+// [GET] http://localhost:3000/movies
+//router.get('/movies', movie.getMovie);
 
-router.get('/removemovie', (req, res) => {
-    res.render('removemovie.pug')
-})
+// [POST] http://localhost:3000/api/entires
+router.post('/entries', movie.createMovie);
 
-router.delete('/removeMovie',controllers.deleteMovie)
-router.put('/editMovie', controllers.editMovie)
 
-router.get('/menu', (req, res) => {
-    res.render('menu.pug')
-})
-router.get('/movies', (req, res) => {
-    res.render('movies.pug')
-})
+router.get('/dashboard',movie.getDashboardView)
 
-router.get('/moviesdetail', (req, res) => {
-    res.render('moviesdetail.pug')
-})
+router.get('/search', movie.getSearchView)
 
-router.get('/admin', (req, res) => {
-    res.render('admin.pug')
-})
+
+router.get('/search/:title', movie.searchMovie)
+
+router.get('/recoverpassword',movie.getRecuPasswordView)
+
+router.get('/restorepassword',movie.getRestorePasswordView)
+
+router.post('/signup', movie.signup)
+
+router.post('/pruebasvictor',movie.pruebasvictor)
+
 
 
 module.exports = router;

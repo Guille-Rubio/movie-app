@@ -1,70 +1,57 @@
 const mongoose = require('mongoose');
-//const { Db } = require('mongoose/node_modules/mongodb');
+const { Db } = require('mongoose/node_modules/mongodb');
 
 
-const MovieSchema = new mongoose.Schema({
-    id: {
-        type: String,
-        required: false,
-        trim: true
+const Film = mongoose.model('Favourites',new mongoose.Schema({
+    imdbID:{
+        type:String,
+        required:true
     },
     title: {
         type: String,
-        required: true,
-        trim: true
+        required: true
     },
     poster: {
         type: String,
-        required: true,
-        trim: true
+        required: false
     },
     year: {
         type: String,
-        required: true,
-        trim: true,
-        maximum: new Date().getFullYear()
+        required: true
     },
     director: {
         type: String,
-        required: true,
-        trim: true
+        required: true
     },
     genre: {
         type: String,
-        required: true,
-        trim: true
+        required: true
     },
     runtime: {
         type: String,
-        required: true,
-        trim: true
+        required: true
     },
     plot: {
         type: String,
-        required: true,
-        trim: true
+        required: true
     },
     actors: {
         type: String,
-        required: true,
-        trim: true
+        required: true
     },
     ratings: {
         type: Array,
-        required: true,
-        trim: true
+        required: true
     },
     opinions: {
         type: String,
-        required: false,
-        trim: true
+        required: false
     },
 
-})
 
 
-const Movie = mongoose.model("favourites", MovieSchema)
+}))
 
 
-module.exports = Movie
 
+module.exports= Film
