@@ -1,40 +1,60 @@
 const express = require('express');
 const router = express.Router();
-const movie = require('../controllers/controller')
+const controllers = require('../controllers/controller')
 const passwords = require ('../controllers/passwords')
 
 
-// [GET] http://localhost:3000/
-router.get('/', movie.getIndex)
+
+router.get('/', controllers.getIndex)
 
 
 
-// [GET] http://localhost:3000/search
-// Retorna un JSON con los detalles de la peli buscada
-//router.get('/search/:title', movie.getMovie);
+router.get('/dashboard',controllers.getDashboardView)
 
-// [GET] http://localhost:3000/movies
-//router.get('/movies', movie.getMovie);
+router.get('/search', controllers.getSearchView)
 
-// [POST] http://localhost:3000/api/entires
-router.post('/entries', movie.createMovie);
+router.get('/search/:title', controllers.searchMovieInOMDB)
+
+router.get('/recoverpassword',controllers.getRecuPasswordView)
+
+router.get('/restorepassword',controllers.getRestorePasswordView)
+
+router.get('/signup', (req, res) => {
+    res.render('signup.pug')
+})
+
+router.post('/signup', controllers.signup)
 
 
-router.get('/dashboard',movie.getDashboardView)
+router.get('/createmovie', (req, res) => {
+    res.render('createmovie.pug')
+})
 
-router.get('/search', movie.getSearchView)
+router.post('/createmovie',controllers.postCreateMovie)
 
+router.post('/pruebasvictor',controllers.pruebasvictor)
 
-router.get('/search/:title', movie.searchMovie)
+router.get('/removemovie', (req, res) => {
+    res.render('removemovie.pug')
+})
 
-router.get('/recoverpassword',movie.getRecuPasswordView)
+router.delete('/removeMovie',controllers.deleteMovie)
+router.put('/editMovie', controllers.editMovie)
 
-router.get('/restorepassword',movie.getRestorePasswordView)
+router.get('/menu', (req, res) => {
+    res.render('menu.pug')
+})
+router.get('/movies', (req, res) => {
+    res.render('movies.pug')
+})
 
-router.post('/signup', movie.signup)
+router.get('/moviesdetail', (req, res) => {
+    res.render('moviesdetail.pug')
+})
 
-router.post('/pruebasvictor',movie.pruebasvictor)
-
+router.get('/admin', (req, res) => {
+    res.render('admin.pug')
+})
 
 
 module.exports = router;

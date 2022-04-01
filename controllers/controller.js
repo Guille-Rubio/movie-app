@@ -1,9 +1,11 @@
 require('dotenv');
 const usuarios = require('../models/usuario');
 const fetch = require('node-fetch');
+require('mongoose');
+const MovieModel = require('../models/favourites');
+//const { db } = require('../models/favourites');
+const db = require('../utils/mongoConfig')
 const API_KEY = process.env.OMDB_API_KEY
-
-
 
 
 const getMovie = async (req, res) => {
@@ -11,14 +13,14 @@ const getMovie = async (req, res) => {
     res.status(200).json(movie);
 }
 
-const createMovie = async (req, res) => {
+/* const createMovie = async (req, res) => {
     console.log(req.body); // Objeto recibido de entry nueva
     const newMovie = req.body; // {} nueva peli a guardar
     // Líneas para guardar en una BBDD SQL
     const response = await db.createMovie(newMovie);
     console.log(response);
     res.status(201).json({ "items_created": response });
-}
+} */
 
 const getIndex = (req, res) => {
     res.status(200).render("index");
@@ -29,7 +31,7 @@ const getSearchView = (req, res) => {
 };
 
 
-const searchMovie = async (req, res) => {
+const searchMovieInOMDB = async (req, res) => {
     const titleSought = req.params.title
     const response = await fetch(`http://www.omdbapi.com/?t=${titleSought}&apikey=${API_KEY}`)
     const data = await response.json()
@@ -46,60 +48,95 @@ const searchMovie = async (req, res) => {
         Poster: Poster,
         Ratings: Ratings
     })
-
 }
 
 const signup = async (req, res) => {
     const newUser = req.body;
     console.log(newUser);
     await usuarios.guardarUsuario(newUser);
-    res.status(201).json({ "message": "Usuario creado exitosamente."})
+    res.status(201).json({ "message": "Usuario creado exitosamente." })
 }
 
-const getUser = async(req,res)=>{
+
+const getDashboardView = async (req, res) => {
+}
+
+const getUser = async (req, res) => {
     const user = await usuarios.leerUsuario(req.body);
-    if(user.length > 0){
+    if (user.length > 0) {
         res.status(200).json(user);
-    }else{
-        res.status(401).json({msg:"No autorizado"});
-    } 
+    } else {
+        res.status(401).json({ msg: "No autorizado" });
+    }
 }
 
 //mis pruebas NOP TOCAR
 const pruebasvictor = async(req,res)=>{
-    //
+const pruebasvictor = async (req, res) => {
     const favourite = await usuarios.updatePassword(req.body);
     res.status(200).json(favourite);
-}
-//
+    }
+}   
 
-const getDashboardView = async (req,res)=>{
-    res.status(200).render('dashboard')
-    
-}
 
-const getRecuPasswordView = async (req,res)=>{
+
+const getRecuPasswordView = async (req, res) => {
     res.status(200).render('recoverpassword')
 
 }
 
-const getRestorePasswordView = async (req,res)=>{
+const getRestorePasswordView = async (req, res) => {
     res.status(200).render('restorepassword');
 }
 
+const postCreateMovie = async (req, res) => {
+    try {
+        const film = new MovieModel(req.body);
+        const result = await film.save();
+        res.status(201).json({ msg: `Pelicula ${req.body.title} creada` })
 
-const movie = {
+    }
+    catch (err) {
+        console.log(err)
+    }
+}
+
+const deleteMovie = async (req, res) => {
+    const title = req.body.title
+    MovieModel.findOneAndDelete({ title: title }, function (err, docs) {
+        if (err) {
+            console.log(err)
+
+        } else {
+
+            res.status(202).json({ message: title + " deleted" })
+        }
+    })
+}
+
+const editMovie = async (req, res) => {
+    const filter = {title:req.body.title}
+    const update = req.body
+    let doc = await MovieModel.findOneAndUpdate(filter, update, {new:true})
+    res.status(201).json({msg:"Editado"})
+
+
+}
+
+const controllers = {
     getMovie,
-    createMovie,
     getSearchView,
     getIndex,
-    searchMovie,
+    searchMovieInOMDB,
     signup,
     getUser,
     getDashboardView,
     getRecuPasswordView,
     getRestorePasswordView,
-    pruebasvictor
+    postCreateMovie,
+    deleteMovie,
+    editMovie,
+    pruebasvictor,
 }
 
-module.exports = movie;
+module.exports = controllers
