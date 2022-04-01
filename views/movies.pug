@@ -8,13 +8,20 @@ html(lang="en")
 
     body 
         include ./header.pug
-        article 
-            p Titulo:
-            p Director: 
-            p Año: 
-            p Argumento: 
-            img
 
+            
+        section(id="cardContainer")
+            each movie in movies
+                article 
+                    p title: #{movie.title}
+                    img(src=movie.poster)
+                    p year: #{movie.year}
+                    p director: #{movie.director}
+                    p genre: #{movie.genre}
+                    p runtime: #{movie.runtime}
+                    p plot: #{movie.plot}
+                    p actor: #{movie.actor}
+                    p opinions: #{movie.opinions}
 
 
 

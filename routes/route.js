@@ -28,9 +28,8 @@ router.get('/moviesdetail', (req, res) => {
     res.render('moviesdetail.pug')
 })
 
-router.get('/movies', (req, res) => {
-    res.render('movies.pug')
-})
+router.get('/movies', controllers.getFavouriteMovies)
+
 
 router.get('/admin', (req, res) => {
     res.render('admin.pug')
