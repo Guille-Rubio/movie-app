@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-//const { Db } = require('mongoose/node_modules/mongodb');
-
 
 const MovieSchema = new mongoose.Schema({
     id: {
@@ -22,7 +20,7 @@ const MovieSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        maximum: new Date().getFullYear()
+        validate: function (year) { return year < new Date().getFullYear() }
     },
     director: {
         type: String,
