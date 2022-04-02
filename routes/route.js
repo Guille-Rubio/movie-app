@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const controllers = require('../controllers/controller')
-const passwords = require ('../controllers/passwords')
+const passwords = require('../controllers/passwords')
 
 
 
@@ -18,7 +18,7 @@ router.post('/signup', controllers.signup)
 
 //POST /login
 
-router.get('/dashboard',controllers.getDashboardView)
+router.get('/dashboard', controllers.getDashboardView)
 
 router.get('/search', controllers.getSearchView)
 
@@ -40,7 +40,7 @@ router.get('/createmovie', (req, res) => {
     res.render('createmovie.pug')
 })
 
-router.post('/createmovie',controllers.postCreateMovie)
+router.post('/createmovie', controllers.postCreateMovie)
 
 //GET/editMovie
 
@@ -50,14 +50,20 @@ router.get('/removemovie', (req, res) => {
     res.render('removemovie.pug')
 })
 
-router.delete('/removeMovie',controllers.deleteMovie)
+router.get('/removemovie/:title', controllers.removeTitle)
+
+router.delete('/removemovie/:title',(req, res) => {
+    res.json({ "pelicula borrada":"titulo"})
+})
+
+router.delete('/removeMovie', controllers.deleteMovie)
 
 
-router.get('/recoverpassword',controllers.getRecuPasswordView)
+router.get('/recoverpassword', controllers.getRecuPasswordView)
 
 //POST /recoverpassword
 
-router.get('/restorepassword',controllers.getRestorePasswordView)
+router.get('/restorepassword', controllers.getRestorePasswordView)
 
 //POST /restoerpassword
 
@@ -65,7 +71,7 @@ router.get('/restorepassword',controllers.getRestorePasswordView)
 
 
 
-router.post('/pruebasvictor',controllers.pruebasvictor)
+router.post('/pruebasvictor', controllers.pruebasvictor)
 
 
 module.exports = router;

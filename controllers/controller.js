@@ -27,19 +27,7 @@ const searchMovieInOMDB = async (req, res) => {
     const titleSought = req.params.title
     const response = await fetch(`http://www.omdbapi.com/?t=${titleSought}&apikey=${API_KEY}`)
     const data = await response.json()
-    const { Title, Year, Runtime, Genre, Director, Actors, Plot, Poster, Ratings } = data;
-
-    res.status(200).render('moviesdetail', {
-        Title: Title,
-        Year: Year,
-        Runtime: Runtime,
-        Genre: Genre,
-        Director: Director,
-        Actors: Actors,
-        Plot: Plot,
-        Poster: Poster,
-        Ratings: Ratings
-    })
+    res.status(200).render('moviesdetail', data)
 }
 
 const signup = async (req, res) => {
@@ -116,25 +104,31 @@ const getFavouriteMovies = async (req, res) => {
         res.send("User has no films saved as favourites")
     } else {
         const favouriteIDs = []
-        favouriteMovies.map(id => favouriteIDs.push(id.id_movie))//extracts favourite ids
-
-
-        //buscar los datos de las peliculas favoritas en mongoDB
+        favouriteMovies.map(id => favouriteIDs.push(id.id_movie))
         const movies = await MovieModel.find({ id_movie: { $in: favouriteIDs } })
         console.log(movies)
 
-        //render movies in pug
-
-
-        res.status(200).render('movies',{"movies":movies})
-
-
+        res.status(200).render('movies', { "movies": movies })
 
     }
 
-
-
 }
+
+const removeTitle = async (req, res) => {
+    const title = req.query.title
+    const titleIsSaved = await MovieModel.findOne({ title: title }).exec() ? true : false
+    if (titleIsSaved) {
+        MovieModel.findOneAndDelete({ title: title })
+        res.status(202).json({ message: title + " deleted" })
+    } else {
+        res.json({ msg: "la película buscada no está en la base de datos" })
+
+    }
+}
+
+
+
+
 
 
 //mis pruebas NOP TOCAR
@@ -157,12 +151,12 @@ const controllers = {
     getRecuPasswordView,
     getRestorePasswordView,
     postCreateMovie,
-    deleteMovie,
+    deleteMovie,//se puede eliminar
     editMovie,
     getFavouriteMovies,
+    removeTitle,
     pruebasvictor,
 }
-
 
 
 module.exports = controllers
