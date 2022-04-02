@@ -19,6 +19,8 @@ app.set('view engine','pug');
 app.set('views', './views')
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(express.static('public'));
 app.use(morgan(':method :host :status :param[id] - :response-time ms :body'));
 

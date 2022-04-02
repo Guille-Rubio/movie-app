@@ -9,7 +9,7 @@ router.get('/', controllers.getIndex)
 
 
 router.get('/signup', (req, res) => {
-    res.render('signup.pug')
+    res.render('signup')
 })
 
 router.post('/signup', controllers.signup)
@@ -22,7 +22,7 @@ router.get('/dashboard', controllers.getDashboardView)
 
 router.get('/search', controllers.getSearchView)
 
-router.get('/search/:title', controllers.searchMovieInOMDB)
+router.post('/search', controllers.searchMovieInOMDB)
 
 router.get('/moviesdetail', (req, res) => {
     res.render('moviesdetail.pug')
@@ -52,9 +52,7 @@ router.get('/removemovie', (req, res) => {
 
 router.get('/removemovie/:title', controllers.removeTitle)
 
-router.delete('/removemovie/:title',(req, res) => {
-    res.json({ "pelicula borrada":"titulo"})
-})
+
 
 router.delete('/removeMovie', controllers.deleteMovie)
 
@@ -68,6 +66,14 @@ router.get('/restorepassword', controllers.getRestorePasswordView)
 //POST /restoerpassword
 
 //POST /logout
+
+
+/router.post('/savefavourite',(req,res)=>{
+    console.log(req.body)
+
+})
+
+router.post('/removefavourite', controllers.removefavourite)
 
 
 

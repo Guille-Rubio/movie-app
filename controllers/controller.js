@@ -3,7 +3,8 @@ const usuarios = require('../models/usuario');
 const fetch = require('node-fetch');
 require('mongoose');
 const MovieModel = require('../models/favourites');
-const db = require('../utils/mongoConfig')
+const db = require('../utils/mongoConfig');
+const { json } = require('express/lib/response');
 const API_KEY = process.env.OMDB_API_KEY
 
 
@@ -24,7 +25,10 @@ const getIndex = (req, res) => {
 
 
 const searchMovieInOMDB = async (req, res) => {
-    const titleSought = req.params.title
+    console.log(req.params.title)
+    console.log(req.body.title)
+    console.log(req.query.title)
+    const titleSought = req.body.title
     const response = await fetch(`http://www.omdbapi.com/?t=${titleSought}&apikey=${API_KEY}`)
     const data = await response.json()
     res.status(200).render('moviesdetail', data)
@@ -127,6 +131,15 @@ const removeTitle = async (req, res) => {
 }
 
 
+const removefavourite = (req, res) => {
+    
+    console.log(req.body.id)
+
+    //elminar registro de 
+
+}
+
+
 
 
 
@@ -155,6 +168,7 @@ const controllers = {
     editMovie,
     getFavouriteMovies,
     removeTitle,
+    removefavourite,
     pruebasvictor,
 }
 

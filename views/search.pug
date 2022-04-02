@@ -5,13 +5,16 @@ html(lang="en")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Search
+        link(rel="stylesheet", href="./css/style.css")
         
     body 
         include ./header.pug
 
         main
-            input(type="text" placeholder="Search Movie")
-            button Search
+            form(method="POST" action="/search")
+                label(for="title")
+                input(type="text" id="title" name="title" placeholder="Search Movie")
+                input(type="submit", value="Buscar")
 
 
         include ./footer.pug
