@@ -23,7 +23,7 @@ app.use(express.static('public'));
 app.use(morgan(':method :host :status :param[id] - :response-time ms :body'));
 
 morgan.token('param', function(req, res, param) {
-    /* return req.params[param]; */
+   /*  return req.params[param];  */
 });
 
 app.use("/",router);
