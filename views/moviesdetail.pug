@@ -5,17 +5,25 @@ html(lang="en")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Movies Detail
+        link(rel="stylesheet", href="./css/style.css")
 
     body
         include ./header 
+        h2 Detalle de película
         main
             p Titulo: #{Title}
-            img(src="#{Poster}", alt="poster")
+            img(src=Poster, alt="poster")
             p Año: #{Year}
             p Duración:  #{Runtime}
             p Genero: #{Genre}
             p Directores: #{Director}
             p Actores: #{Actors}
             p Argumento: #{Plot}
+            p Id: #{imdbID}
+            from 
+                button Añadir a favoritos
+            //-form(method="POST" action="/savefavourite")
+            //-    input(type="text" name="title" value=Title)
+            //-    input(type="submit", value="Añadir a Favoritos") 
 
         include ./footer

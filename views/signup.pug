@@ -5,25 +5,28 @@ html(lang="en")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Sign Up
+        link(rel="stylesheet", href="./css/style.css")
 
     body
         include ./header.pug
-        form(action="" method="POST") 
-            label(for="email")
-            input(type="text" name="email" id="email" placeholder="email")
-            label(for="user")
-            input(type="text" name="user" id="user" placeholder="user")
-            label(for="password")
-            input(type="text" name="password" id="password" placeholder="password")
-            label(for="password2" name="password2" id="password2" placeholder="Confirm password")
-            button sign up!
+        main
+            form(action="" method="POST") 
+                label(for="email")
+                input(type="text" name="email" id="email" placeholder="email")
+                label(for="user")
+                input(type="text" name="user" id="user" placeholder="user")
+                label(for="password")
+                input(type="text" name="password" id="password" placeholder="password")
+                label(for="password2" name="password2" id="password2" placeholder="Confirm password")
+                select(name="role")
+                    option(value="admin") Admin
+                    option(value="user") User
 
-            button sign up with Google
+                button sign up!
+
+                button sign up with Google
 
                                         
-
-
-
 
 
         include ./footer.pug 

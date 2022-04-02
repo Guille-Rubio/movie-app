@@ -5,22 +5,28 @@ html(lang="en")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Movies
+        link(rel="stylesheet", href="./css/style.css")
 
     body 
         include ./header.pug
 
-            
-        section(id="cardContainer")
-            each movie in movies
-                article 
-                    p title: #{movie.title}
-                    img(src=movie.poster)
-                    p year: #{movie.year}
-                    p director: #{movie.director}
-                    p genre: #{movie.genre}
-                    p runtime: #{movie.runtime}
-                    p plot: #{movie.plot}
-                    p actor: #{movie.actor}
-                    p opinions: #{movie.opinions}
+        main    
+            section(id="cardContainer")
+                each movie in movies
+                    article 
+                        p title: #{movie.title}
+                        img(src=movie.poster, alt="poster")
+                        p year: #{movie.year}
+                        p director: #{movie.director}
+                        p genre: #{movie.genre}
+                        p runtime: #{movie.runtime}
+                        p plot: #{movie.plot}
+                        p actor: #{movie.actor}
+                        p opinions: #{movie.opinions}
+                        - var idMovie = movie._id;
+                        p id movie #{idMovie}
+                        
+                        button(id='btnremovefavourite' class="favbtn" value = idMovie) quitar favoritos
 
         include ./footer.pug
+        script(src="/js/removefavourite.js") 

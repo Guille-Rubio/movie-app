@@ -5,28 +5,30 @@ html(lang="en")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Editar película
+        link(rel="stylesheet", href="./css/style.css")
     body 
         include ./header.pug 
-        form(action="index.js" method="POST")
-            label(for="Title") Título
-            input(type="text" name="title")
-            label(for="Director") Director
-            input(type="text" name="director")
-            label(for="Year") Año
-            input(type="text"name="runtime")
-            label(for="Runtime") Duración 
-            input(type="text" name="runtime")
-            label(for="Poster") Poster Url
-            input(type="text" name="poster")
-            label(for="Genero") Género
-            input(type="text" name="genre")
-            label(for="argumento") Argumento
-            input(type="text" name="plot")
-            label(for="actores") Actores
-            input(type="text" name="actors")
-            label(for="opioniones") Opiniones
-            input(type="text" name="ratings")
-            button(type="submit" value="Crear") Añadir película 
+        main
+            form(action="index.js" method="POST")
+                label(for="Title") Título
+                input(type="text" name="title")
+                label(for="Director") Director
+                input(type="text" name="director")
+                label(for="Year") Año
+                input(type="text"name="runtime")
+                label(for="Runtime") Duración 
+                input(type="text" name="runtime")
+                label(for="Poster") Poster Url
+                input(type="text" name="poster")
+                label(for="Genero") Género
+                input(type="text" name="genre")
+                label(for="argumento") Argumento
+                input(type="text" name="plot")
+                label(for="actores") Actores
+                input(type="text" name="actors")
+                label(for="opioniones") Opiniones
+                input(type="text" name="ratings")
+                button(type="submit" value="Crear") Añadir película 
 
 
 
