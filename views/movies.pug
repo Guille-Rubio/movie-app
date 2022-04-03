@@ -11,7 +11,7 @@ html(lang="en")
         include ./header.pug
 
         main    
-            section(id="cardContainer")
+            section(class="cardContainer")
                 each movie in movies
                     article 
                         p title: #{movie.title}
@@ -30,6 +30,8 @@ html(lang="en")
                         - var ids = {"idMongo":idMovie,"idOMDB":idOMDB}
                         p ids #{ids}
                         button(class="favbtn" value = ids) quitar favoritos
+            section(class="cardContainer")
+
 
         include ./footer.pug
         script(src="/js/removefavourite.js") 

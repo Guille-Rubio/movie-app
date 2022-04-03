@@ -1,6 +1,5 @@
 const buttons = document.getElementsByClassName("addFavBtn")
 
-
 for (i = 0; i < buttons.length; i++) {
     let id = buttons[i].value
     buttons[i].addEventListener("click", async () => {
@@ -25,6 +24,5 @@ for (i = 0; i < buttons.length; i++) {
             .catch(function (error) {
                 console.log(error);
             });
-
     })
 }
