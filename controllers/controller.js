@@ -56,7 +56,7 @@ const getDashboardView = async (req, res) => {
 }
 
 
-const getRecuPasswordView = async (req, res) => {
+const getRecoverPasswordView = async (req, res) => {
     res.status(200).render('recoverpassword')
 
 }
@@ -139,6 +139,12 @@ const removefavourite = (req, res) => {
 
 }
 
+const addfavourite = (req, res)=>{
+    console.log("save title " + req.body.id)
+    //conectar con base de datos
+
+}
+
 
 
 
@@ -161,7 +167,7 @@ const controllers = {
     signup,
     getUser,
     getDashboardView,
-    getRecuPasswordView,
+    getRecoverPasswordView,
     getRestorePasswordView,
     postCreateMovie,
     deleteMovie,//se puede eliminar
@@ -169,6 +175,7 @@ const controllers = {
     getFavouriteMovies,
     removeTitle,
     removefavourite,
+    addfavourite,
     pruebasvictor,
 }
 

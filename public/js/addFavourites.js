@@ -1,17 +1,18 @@
-const button = document.getElementsByClassName("favbtn");
+const buttons = document.getElementsByClassName("addFavBtn")
 
-for (let i = 0; i < button.length; i++) {
 
-    button[i].addEventListener('click', async function (e) {
-        console.log("click en " + button[i])
-        await fetch('/removefavourite', {
+for (i = 0; i < buttons.length; i++) {
+    let id = buttons[i].value
+    buttons[i].addEventListener("click", async () => {
+        
+        await fetch('/addfavourite', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                id: button[i].value
+                id: id
             })
         })
             .then(function (response) {
@@ -24,6 +25,6 @@ for (let i = 0; i < button.length; i++) {
             .catch(function (error) {
                 console.log(error);
             });
-    });
 
+    })
 }

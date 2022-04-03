@@ -1,34 +1,34 @@
 const express = require('express');
 const router = express.Router();
-const controllers = require('../controllers/controller')
-const passwords = require('../controllers/passwords')
+const controllers = require('../controllers/controller');
+const passwords = require('../controllers/passwords');
 
 
 
-router.get('/', controllers.getIndex)
+router.get('/', controllers.getIndex);
 
 
 router.get('/signup', (req, res) => {
-    res.render('signup')
+    res.render('signup');
 })
 
-router.post('/signup', controllers.signup)
+router.post('/signup', controllers.signup);
 
 //GET /login
 
 //POST /login
 
-router.get('/dashboard', controllers.getDashboardView)
+router.get('/dashboard', controllers.getDashboardView);
 
-router.get('/search', controllers.getSearchView)
+router.get('/search', controllers.getSearchView);
 
-router.post('/search', controllers.searchMovieInOMDB)
+router.post('/search', controllers.searchMovieInOMDB);
 
 router.get('/moviesdetail', (req, res) => {
-    res.render('moviesdetail.pug')
+    res.render('moviesdetail.pug');
 })
 
-router.get('/movies', controllers.getFavouriteMovies)
+router.get('/movies', controllers.getFavouriteMovies);
 
 
 router.get('/admin', (req, res) => {
@@ -37,44 +37,45 @@ router.get('/admin', (req, res) => {
 
 
 router.get('/createmovie', (req, res) => {
-    res.render('createmovie.pug')
+    res.render('createmovie.pug');
 })
 
-router.post('/createmovie', controllers.postCreateMovie)
+router.post('/createmovie', controllers.postCreateMovie);
 
 //GET/editMovie
 
-router.put('/editMovie', controllers.editMovie)
+router.put('/editMovie', controllers.editMovie);
 
 router.get('/removemovie', (req, res) => {
     res.render('removemovie.pug')
 })
 
-router.get('/removemovie/:title', controllers.removeTitle)
+router.get('/removemovie/:title', controllers.removeTitle);
 
 
 
-router.delete('/removeMovie', controllers.deleteMovie)
+router.delete('/removeMovie', controllers.deleteMovie);
 
 
-router.get('/recoverpassword', controllers.getRecuPasswordView)
+router.get('/recoverpassword', controllers.getRecoverPasswordView);
 
-//POST /recoverpassword
+router.post('/recoverpassword', passwords.recover)
 
 router.get('/restorepassword', controllers.getRestorePasswordView)
 
-//POST /restoerpassword
+    //POST /restoerpassword
 
-//POST /logout
+    //POST /logout
 
 
-/router.post('/savefavourite',(req,res)=>{
-    console.log(req.body)
+    / router.post('/savefavourite', (req, res) => {
+        console.log(req.body)
 
-})
+    })
 
 router.post('/removefavourite', controllers.removefavourite)
 
+router.post('/addfavourite', controllers.addfavourite)
 
 
 router.post('/pruebasvictor', controllers.pruebasvictor)
