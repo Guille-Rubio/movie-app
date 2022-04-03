@@ -127,7 +127,6 @@ const readMovie = async (id_user) => {
         client.release();
     }
     return result
-
 }
 
 //password 
