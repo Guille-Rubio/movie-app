@@ -20,10 +20,8 @@ html(lang="en")
             p Actores: #{Actors}
             p Argumento: #{Plot}
             p Id: #{imdbID}
-            from 
-                button Añadir a favoritos
-            //-form(method="POST" action="/savefavourite")
-            //-    input(type="text" name="title" value=Title)
-            //-    input(type="submit", value="Añadir a Favoritos") 
+            button(class="addFavBtn" value=imdbID) Añadir a favoritos
+            
 
         include ./footer
+        script(src="/js/addfavourites.js")

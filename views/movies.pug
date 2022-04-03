@@ -24,9 +24,12 @@ html(lang="en")
                         p actor: #{movie.actor}
                         p opinions: #{movie.opinions}
                         - var idMovie = movie._id;
-                        p id movie #{idMovie}
-                        
-                        button(id='btnremovefavourite' class="favbtn" value = idMovie) quitar favoritos
+                        - var idOMDB = movie.imdbID
+                        p id mongo #{idMovie}
+                        p id OMDB #{idOMDB}
+                        - var ids = {"idMongo":idMovie,"idOMDB":idOMDB}
+                        p ids #{ids}
+                        button(class="favbtn" value = ids) quitar favoritos
 
         include ./footer.pug
         script(src="/js/removefavourite.js") 
