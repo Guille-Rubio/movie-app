@@ -6,53 +6,53 @@ const MovieSchema = new mongoose.Schema({
         required: false,
         trim: true
     },
-    title: {
+    Title: {
         type: String,
         required: true,
         trim: true
     },
-    poster: {
+    Poster: {
         type: String,
         required: true,
         trim: true
     },
-    year: {
+    Year: {
         type: String,
         required: true,
         trim: true,
         validate: function (year) { return year < new Date().getFullYear() }
     },
-    director: {
+    Director: {
         type: String,
         required: true,
         trim: true
     },
-    genre: {
+    Genre: {
         type: String,
         required: true,
         trim: true
     },
-    runtime: {
+    Runtime: {
         type: String,
         required: true,
         trim: true
     },
-    plot: {
+    Plot: {
         type: String,
         required: true,
         trim: true
     },
-    actors: {
+    Actors: {
         type: String,
         required: false,
         trim: true
     },
-    ratings: {
+    Ratings: {
         type: Array,
         required: false,
         trim: true
     },
-    opinions: {
+    Opinions: {
         type: String,
         required: false,
         trim: true
