@@ -182,8 +182,8 @@ const removeUserFavouriteMovie = async (req, res) => {
         const data = await client.query(`
             SELECT *
             FROM favourites
-            WHERE id_user = $1 AND id_movie =$2`, [user,movie]);
-//change select for delete
+            WHERE id_user = $1 AND id_movie =$2`, [user, movie]);
+        //change select for delete
         const result = data.rows
         return result
     } catch (err) {
@@ -195,6 +195,29 @@ const removeUserFavouriteMovie = async (req, res) => {
     }
 }
 
+const checkSignedUpUser = async (email, password) => {
+    console.log(email)
+    console.log(password)
+    let client, result;
+    try {
+        client = await pool.connect(); // Espera a abrir conexion
+        const data = await client.query(`
+                SELECT password,email,role
+                FROM usuarios
+                WHERE email = $1 and password = $2`, [email, password]);
+ 
+        result = data.rows
+        console.log("result", result)
+    } catch (err) {
+        console.log(err);
+    } finally {
+        client.release();
+    }
+    return result
+ }
+
+
+
 const usuarios = {
     guardarUsuario,
     leerUsuario,
@@ -203,7 +226,8 @@ const usuarios = {
     readMovie,
     updatePassword,
     getUserFavouriteMovies,
-    removeUserFavouriteMovie
+    removeUserFavouriteMovie,
+    checkSignedUpUser
 }
 
 module.exports = usuarios;

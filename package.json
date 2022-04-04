@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Guille-Rubio/movie-app#readme",
   "dependencies": {
     "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.4.1",
     "mongoose": "^6.2.8",
     "node-fetch": "^2.6.7",

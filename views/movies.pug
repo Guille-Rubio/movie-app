@@ -14,15 +14,15 @@ html(lang="en")
             section(class="cardContainer")
                 each movie in movies
                     article 
-                        p title: #{movie.title}
-                        img(src=movie.poster, alt="poster")
-                        p year: #{movie.year}
-                        p director: #{movie.director}
-                        p genre: #{movie.genre}
-                        p runtime: #{movie.runtime}
-                        p plot: #{movie.plot}
-                        p actor: #{movie.actor}
-                        p opinions: #{movie.opinions}
+                        p title: #{movie.Title}
+                        img(src=movie.Poster, alt="poster")
+                        p year: #{movie.Year}
+                        p director: #{movie.Director}
+                        p genre: #{movie.Genre}
+                        p runtime: #{movie.Runtime}
+                        p plot: #{movie.Plot}
+                        p actor: #{movie.Actor}
+                        p opinions: #{movie.Opinions}
                         - var idMovie = movie._id;
                         - var idOMDB = movie.imdbID
                         p id mongo #{idMovie}
@@ -31,6 +31,7 @@ html(lang="en")
                         p ids #{ids}
                         button(class="favbtn" value = ids) quitar favoritos
             section(class="cardContainer")
+            
 
 
         include ./footer.pug
