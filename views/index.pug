@@ -16,9 +16,10 @@ html(lang="en")
                 button.btLogin Sign up!
 
             img(src='/logoPug.jpg', alt='imagen de prueba', style='width: 30%; height:auto')
-            form
-                input(type="text", placeholder="Introduzca el email...")
-                input(type="text", placeholder="Introduzca contraseña...")
+            
+            form(action="/login" method="POST")
+                input(type="text", placeholder="Introduzca el email...", name="email")
+                input(type="text", placeholder="Introduzca contraseña..." name="password")
 
                 input(type="submit", value="login con email y password") 
                     

@@ -4,12 +4,10 @@ const controllers = require('../controllers/controller');
 const passwords = require('../controllers/passwords');
 
 
-
 router.get('/', controllers.getIndex);
 router.get('/signup', controllers.getSignUpView) 
 router.post('/signup', controllers.signup);
-//GET /login
-//POST /login
+router.post('/login',controllers.login)
 router.get('/dashboard', controllers.getDashboardView);
 router.get('/search', controllers.getSearchView);
 router.post('/search', controllers.searchMovieInOMDB);
@@ -24,7 +22,7 @@ router.post('/createmovie', controllers.postCreateMovie);
 router.put('/editMovie', controllers.editMovie);
 router.get('/removemovie', controllers.getRemoveMovieView)
 router.get('/removemovie/:title', controllers.removeTitle);
-router.delete('/removeMovie', controllers.deleteMovie);
+//router.delete('/removeMovie', controllers.deleteMovie);
 router.get('/recoverpassword', controllers.getRecoverPasswordView);
 router.post('/recoverpassword', passwords.recover)
 router.get('/restorepassword', controllers.getRestorePasswordView)
