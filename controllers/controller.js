@@ -58,6 +58,7 @@ const getAdminView = async (req, res) => {
 }
 
 const getCreateMovieView = async (req, res) => {
+    res.render('createmovie')
 
 }
 const getRecoverPasswordView = async (req, res) => {
