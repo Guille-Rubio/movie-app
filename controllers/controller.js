@@ -9,7 +9,6 @@ const { readMovie, addMovieToUser } = require('../models/usuario');
 const res = require('express/lib/response');
 const API_KEY = process.env.OMDB_API_KEY
 
-
 const getMovie = async (req, res) => {
     const movie = await movieFetch.getMovie(req.params.title);
     res.status(200).json(movie);
@@ -25,10 +24,27 @@ const getIndex = (req, res) => {
 
 const searchMovieInOMDB = async (req, res) => {
     const titleSought = req.body.title
+    console.log(titleSought)
+    //search movie in OMDB
     const response = await fetch(`http://www.omdbapi.com/?t=${titleSought}&apikey=${API_KEY}`)
     const data = await response.json()
+    console.log("resultado de OMDB", data.title)
+   
+    if (data.Response==="False"){
+        const movie = await (await MovieModel.find({ Title:titleSought })).pop();
+        console.log(movie);
+
+        res.status(200).render('moviesdetail',movie);
+        
+
+    }else{
+    
     res.status(200).render('moviesdetail', data)
+    }
+
 }
+
+
 
 const signup = async (req, res) => {
     const newUser = req.body;
@@ -73,7 +89,8 @@ const postCreateMovie = async (req, res) => {
     try {
         const film = new MovieModel(req.body);
         const result = await film.save();
-        res.status(201).json({ msg: `Pelicula ${req.body.title} creada` })}
+        res.status(201).json({ msg: `Pelicula ${req.body.Title} creada` })
+    }
     catch (err) {
         console.log(err)
     }
@@ -111,7 +128,7 @@ const getFavouriteMovies = async (req, res) => {
     }
 }
 
-const getRemoveMovieView = ()=>{
+const getRemoveMovieView = () => {
     res.render('removemovie')
 }
 
@@ -126,14 +143,16 @@ const removeTitle = async (req, res) => {
     }
 }
 
-const removefavourite = (req, res) => {
+const removefavourite = async (req, res) => {
+    await usuarios.removeUserFavouriteMovie(req, res);
+    //funcion usuario eliminar registro usuario e id
     console.log(req.body.id)
     //elminar registro de tabla favoritos
 }
 
 const addfavourite = (req, res) => {
     console.log("save title " + req.body.id)
-    usuarios.addMovieToUser({id_user:18,id_movie:req.body.id})
+    usuarios.addMovieToUser({ id_user: 18, id_movie: req.body.id })
     console.log(req.body.id + " saved in DB")
     //guardar usuario e id en tabla favourites
 }
