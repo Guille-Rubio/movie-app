@@ -16,7 +16,7 @@ morgan.token('host', function(req, res) {
   })
 
 app.set('view engine','pug');
-app.set('views', './views')
+app.set('views', './views');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

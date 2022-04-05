@@ -2,11 +2,14 @@ require('dotenv').config();
 const usuarios = require('../models/usuario');
 const fetch = require('node-fetch');
 require('mongoose');
+const jwt = require('jsonwebtoken');
+const tokens = require('../utils/createToken')
 const MovieModel = require('../models/favourites');
 const db = require('../utils/mongoConfig');
 const { json } = require('express/lib/response');
 const { readMovie, addMovieToUser } = require('../models/usuario');
 const res = require('express/lib/response');
+const { LEGAL_TCP_SOCKET_OPTIONS } = require('mongodb');
 const API_KEY = process.env.OMDB_API_KEY
 
 const getMovie = async (req, res) => {
@@ -25,10 +28,43 @@ const getIndex = (req, res) => {
 //Guillermo
 const searchMovieInOMDB = async (req, res) => {
     const titleSought = req.body.title
+    console.log(titleSought)
+    //search movie in OMDB
     const response = await fetch(`http://www.omdbapi.com/?t=${titleSought}&apikey=${API_KEY}`)
     const data = await response.json()
-    res.status(200).render('moviesdetail', data)
+    console.log("resultado de OMDB", data.title)
+
+    if (data.Response === "False") {
+        const movie = await (await MovieModel.find({ Title: titleSought })).pop();
+        console.log(movie);
+
+        res.status(200).render('moviesdetail', movie);
+
+    } else {
+
+        res.status(200).render('moviesdetail', data)
+    }
 }
+
+const login = async (req, res) => {
+    const inputEmail = req.body.email
+    const inputPassword = req.body.password
+
+    const query = await (await usuarios.checkSignedUpUser(inputEmail, inputPassword)).pop()
+    const { email, password, role } = query
+
+    if (inputEmail == email && inputPassword == password) {
+        console.log("correct email and password")
+        //change logged state to true
+        const token = tokens.createToken(email)
+
+        res.cookie(token).render('dashboard');
+    } else {
+        res.json({ msg: "Incorrect email and/or password" })
+    }
+
+}
+
 
 //Fin 
 
@@ -90,9 +126,16 @@ const logout = async (req,res) => {
 
 
 const signup = async (req, res) => {
+    //validaciones
     const newUser = req.body;
+
     const usuario = await usuarios.guardarUsuario(newUser);
     res.status(201).json({ "message": usuario })
+
+    //crear usuario en SQL
+    await usuarios.guardarUsuario(newUser);
+    //hacer login
+    res.status(201).json({ "message": "Usuario creado exitosamente." })
 }
 
 const getUser = async (req, res) => {
@@ -136,22 +179,13 @@ const postCreateMovie = async (req, res) => {
     try {
         const film = new MovieModel(req.body);
         const result = await film.save();
-        res.status(201).json({ msg: `Pelicula ${req.body.title} creada` })}
+        res.status(201).json({ msg: `Pelicula ${req.body.Title} creada` })
+    }
     catch (err) {
         console.log(err)
     }
 }
 
-const deleteMovie = async (req, res) => {
-    const title = req.body.title
-    MovieModel.findOneAndDelete({ title: title }, function (err, docs) {
-        if (err) {
-            console.log(err)
-        } else {
-            res.status(202).json({ message: title + " deleted" })
-        }
-    })
-}
 
 const editMovie = async (req, res) => {
     const filter = { title: req.body.title }
@@ -161,42 +195,61 @@ const editMovie = async (req, res) => {
 }
 
 const getFavouriteMovies = async (req, res) => {
-    const favouriteMovies = await usuarios.getUserFavouriteMovies(18)//sustituir por usuario logado
-    const omdbfavourites = await usuarios.readMovie(18);
-    console.log("omdbfavourites", omdbfavourites)
+    //muestra todas las peliculas favoritas del usuario//sustituir por usuario logado
+    const ids = []
+    //recupera favoritos de usuario 18
+    const favouriteMovies = await usuarios.getUserFavouriteMovies(18)
     if (favouriteMovies == "") {
         res.send("User has no films saved as favourites")
     } else {
-        const favouriteIDs = []
-        favouriteMovies.map(id => favouriteIDs.push(id.id_movie))
-        const movies = await MovieModel.find({ id_movie: { $in: favouriteIDs } })
-        res.status(200).render('movies', { "movies": movies })
+        //guarda ids favoritos del usuario en un array
+        favouriteMovies.forEach(element => { ids.push(element.id_movie) })
+
+        console.log("ids", ids)
+        const movies = [];
+        //busca los datos de los ids en mongo o en OMDB
+        for (i = 0; i < ids.length; i++) {
+            if (ids[i].length > 9) {
+                //buscar en mongo DB
+                let response = await MovieModel.findById(ids[i]).exec()
+                //console.log("push de mongo", response)
+                response === null ? console.log(ids[i] + "Esta pelicula no existe en la base de datos") : movies.push(response);
+            } else {
+                //buscar en OMDB
+                let response = await fetch(`http://www.omdbapi.com/?i=${ids[i]}&apikey=${API_KEY}`)
+                let data = await response.json();
+                movies.push(data)
+            }
+        }
+        res.status(200).render('movies', { movies: movies })
     }
 }
 
-const getRemoveMovieView = ()=>{
+const getRemoveMovieView = (req, res) => {
     res.render('removemovie')
 }
 
 const removeTitle = async (req, res) => {
     const title = req.query.title
-    const titleIsSaved = await MovieModel.findOne({ title: title }).exec() ? true : false
+    console.log("title to delete: " + title)
+    const titleIsSaved = await MovieModel.findOne({ Title: title }).exec() ? true : false
+    console.log("title is saved: " + titleIsSaved)
     if (titleIsSaved) {
-        MovieModel.findOneAndDelete({ title: title })
+        await MovieModel.findOneAndDelete({ Title: title })
         res.status(202).json({ message: title + " deleted" })
     } else {
         res.json({ msg: "la película buscada no está en la base de datos" })
     }
 }
 
-const removefavourite = (req, res) => {
-    console.log(req.body.id)
-    //elminar registro de tabla favoritos
+const removefavourite = async (req, res) => {
+    await usuarios.removeUserFavouriteMovie(req, res);
+    //funcion usuario eliminar registro usuario e id   
 }
 
 const addfavourite = (req, res) => {
     console.log("save title " + req.body.id)
-    usuarios.addMovieToUser({id_user:18,id_movie:req.body.id})
+    usuarios.addMovieToUser({ id_user: 18, id_movie: req.body.id })
     console.log(req.body.id + " saved in DB")
     //guardar usuario e id en tabla favourites
 }
@@ -208,6 +261,7 @@ const controllers = {
     getSearchView,
     getIndex,
     searchMovieInOMDB,
+    login,
     signup,
     getUser,
     getSignUpView,
@@ -217,7 +271,6 @@ const controllers = {
     getRecoverPasswordView,
     getRestorePasswordView,
     postCreateMovie,
-    deleteMovie,//se puede eliminar
     editMovie,
     getFavouriteMovies,
     getRemoveMovieView,
@@ -225,9 +278,7 @@ const controllers = {
     removefavourite,
     addfavourite,
     getOneMovie,
-    login,
     logout
 }
-
 
 module.exports = controllers

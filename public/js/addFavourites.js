@@ -3,7 +3,6 @@ const buttons = document.getElementsByClassName("addFavBtn")
 for (i = 0; i < buttons.length; i++) {
     let id = buttons[i].value
     buttons[i].addEventListener("click", async () => {
-        
         await fetch('/addfavourite', {
             method: 'POST',
             headers: {
