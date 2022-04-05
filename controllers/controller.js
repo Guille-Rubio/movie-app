@@ -146,7 +146,7 @@ const getFavouriteMovies = async (req, res) => {
                 //buscar en mongo DB
                 let response = await MovieModel.findById(ids[i]).exec()
                 //console.log("push de mongo", response)
-                response === null ? console.log(ids[i] + "Esta pelicula no existe en la base de datos"): movies.push(response);
+                response === null ? console.log(ids[i] + "Esta pelicula no existe en la base de datos") : movies.push(response);
             } else {
                 //buscar en OMDB
                 let response = await fetch(`http://www.omdbapi.com/?i=${ids[i]}&apikey=${API_KEY}`)
@@ -154,7 +154,7 @@ const getFavouriteMovies = async (req, res) => {
                 movies.push(data)
             }
         }
-        res.status(200).render( 'movies',  { movies: movies })
+        res.status(200).render('movies', { movies: movies })
     }
 }
 
@@ -177,9 +177,7 @@ const removeTitle = async (req, res) => {
 
 const removefavourite = async (req, res) => {
     await usuarios.removeUserFavouriteMovie(req, res);
-    //funcion usuario eliminar registro usuario e id
-    console.log(req.body.id)
-    //elminar registro de tabla favoritos
+    //funcion usuario eliminar registro usuario e id   
 }
 
 const addfavourite = (req, res) => {
