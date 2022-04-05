@@ -172,19 +172,19 @@ const getUserFavouriteMovies = async (user) => {
 }
 
 const removeUserFavouriteMovie = async (req, res) => {
-    const movie = req.body.idMongo;
-    console.log("id de pelicula a borrar " + movie)
+    const id_movie = req.body.id;
+    console.log("id de pelicula a borrar " + id_movie)
     const user = 18 //replace for logged user
     let client, result
     try {
         client = await pool.connect(); // Espera a abrir conexion
 
         const data = await client.query(`
-            SELECT *
-            FROM favourites
-            WHERE id_user = $1 AND id_movie =$2`, [user, movie]);
+            DELETE FROM favourites
+            WHERE id_user = $1 AND id_movie =$2`, [user, id_movie]);
         //change select for delete
         const result = data.rows
+        console.log(`La pelicula con id ${id_movie} ha sido borrada de favoritos`)
         return result
     } catch (err) {
         console.log(err);

@@ -28,7 +28,7 @@ html(lang="en")
                         - var idOMDB = movies[i].imdbID
                         p id mongo #{idMovie}
                         p id OMDB #{idOMDB}
-                        - var ids = {"idMongo":idMovie,"idOMDB":idOMDB}
+                        - var ids = idMovie || idOMDB
                         p ids #{ids}
                         button(class="favbtn" value = ids) quitar favoritos
                         - i++
