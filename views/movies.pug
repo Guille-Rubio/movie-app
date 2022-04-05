@@ -12,24 +12,26 @@ html(lang="en")
 
         main    
             section(class="cardContainer")
+                - var i = 0
                 each movie in movies
                     article 
-                        p title: #{movie.Title}
-                        img(src=movie.Poster, alt="poster")
-                        p year: #{movie.Year}
-                        p director: #{movie.Director}
-                        p genre: #{movie.Genre}
-                        p runtime: #{movie.Runtime}
-                        p plot: #{movie.Plot}
-                        p actor: #{movie.Actor}
-                        p opinions: #{movie.Opinions}
-                        - var idMovie = movie._id;
-                        - var idOMDB = movie.imdbID
+                        p title: #{movies[i].Title}
+                        img(src=movies[i].Poster, alt="poster")
+                        p year: #{movies[i].Year}
+                        p director: #{movies[i].Director}
+                        p genre: #{movies[i].Genre}
+                        p runtime: #{movies[i].Runtime}
+                        p plot: #{movies[i].Plot}
+                        p actor: #{movies[i].Actor}
+                        p opinions: #{movies[i].Opinions}
+                        - var idMovie = movies[i]._id;
+                        - var idOMDB = movies[i].imdbID
                         p id mongo #{idMovie}
                         p id OMDB #{idOMDB}
                         - var ids = {"idMongo":idMovie,"idOMDB":idOMDB}
                         p ids #{ids}
                         button(class="favbtn" value = ids) quitar favoritos
+                        - i++
             section(class="cardContainer")
             
 
