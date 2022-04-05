@@ -55,7 +55,7 @@ const login = async (req, res) => {
     if (inputEmail == email && inputPassword == password) {
         console.log("correct email and password")
         //change logged state to true
-        const token = tokens.createToken(email) 
+        const token = tokens.createToken(email)
 
         res.cookie(token).render('dashboard');
     } else {
@@ -129,18 +129,32 @@ const editMovie = async (req, res) => {
 
 const getFavouriteMovies = async (req, res) => {
     //muestra todas las peliculas favoritas del usuario//sustituir por usuario logado
+    const ids = []
+    //recupera favoritos de usuario 18
     const favouriteMovies = await usuarios.getUserFavouriteMovies(18)
-
-    //const omdbfavourites = await usuarios.readMovie(18);
-    console.log(favouriteMovies)
     if (favouriteMovies == "") {
         res.send("User has no films saved as favourites")
     } else {
-        const favouriteIDs = []
-        favouriteMovies.map(id => favouriteIDs.push(id.id_movie))
-        const movies = await MovieModel.find({ id_movie: { $in: favouriteIDs } })
-        res.status(200).render('movies', { "movies": movies })
+        //guarda ids favoritos del usuario en un array
+        favouriteMovies.forEach(element => { ids.push(element.id_movie) })
 
+        console.log("ids", ids)
+        const movies = [];
+        //busca los datos de los ids en mongo o en OMDB
+        for (i = 0; i < ids.length; i++) {
+            if (ids[i].length > 9) {
+                //buscar en mongo DB
+                let response = await MovieModel.findById(ids[i]).exec()
+                //console.log("push de mongo", response)
+                response === null ? console.log(ids[i] + "Esta pelicula no existe en la base de datos"): movies.push(response);
+            } else {
+                //buscar en OMDB
+                let response = await fetch(`http://www.omdbapi.com/?i=${ids[i]}&apikey=${API_KEY}`)
+                let data = await response.json();
+                movies.push(data)
+            }
+        }
+        res.status(200).render( 'movies',  { movies: movies })
     }
 }
 
