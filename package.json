@@ -18,12 +18,16 @@
   },
   "homepage": "https://github.com/Guille-Rubio/movie-app#readme",
   "dependencies": {
-    "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "mongodb": "^4.4.1",
     "mongoose": "^6.2.8",
     "node-fetch": "^2.6.7",
+    "nodemailer": "^6.7.3",
     "pg": "^8.7.3",
     "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.0",
+    "morgan": "^1.10.0"
   }
 }

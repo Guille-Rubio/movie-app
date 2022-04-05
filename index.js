@@ -1,25 +1,34 @@
-require('dotenv').config();//si no se usa no declarar, solo requerir
+require('dotenv').config();
 const express = require('express');
-
-//const { Db } = require('mongodb');
-//require("./utils/mongoConfig");
+const morgan = require('morgan')
 
 const router = require('./routes/route');
-
 const app = express();
-
 const port = 3000;
 
-// Motor de vists PUG
+morgan.token('host', function(req, res) {
+    return req.hostname;
+  });
+  morgan.token('body', function (req, res) { 
+    return [
+        JSON.stringify(req.body)
+    ] 
+  })
+
 app.set('view engine','pug');
 app.set('views', './views')
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static('public'));
+app.use(morgan(':method :host :status :param[id] - :response-time ms :body'));
+
+morgan.token('param', function(req, res, param) {
+   /*  return req.params[param];  */
+});
 
 app.use("/",router);
-
 
 
 

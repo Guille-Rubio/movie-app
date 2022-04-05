@@ -5,18 +5,33 @@ html(lang="en")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Movies
+        link(rel="stylesheet", href="./css/style.css")
 
     body 
         include ./header.pug
-        article 
-            p Titulo:
-            p Director: 
-            p Año: 
-            p Argumento: 
-            img
 
-
-
+        main    
+            section(class="cardContainer")
+                each movie in movies
+                    article 
+                        p title: #{movie.title}
+                        img(src=movie.poster, alt="poster")
+                        p year: #{movie.year}
+                        p director: #{movie.director}
+                        p genre: #{movie.genre}
+                        p runtime: #{movie.runtime}
+                        p plot: #{movie.plot}
+                        p actor: #{movie.actor}
+                        p opinions: #{movie.opinions}
+                        - var idMovie = movie._id;
+                        - var idOMDB = movie.imdbID
+                        p id mongo #{idMovie}
+                        p id OMDB #{idOMDB}
+                        - var ids = {"idMongo":idMovie,"idOMDB":idOMDB}
+                        p ids #{ids}
+                        button(class="favbtn" value = ids) quitar favoritos
+            section(class="cardContainer")
 
 
         include ./footer.pug
+        script(src="/js/removefavourite.js") 

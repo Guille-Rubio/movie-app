@@ -4,18 +4,20 @@ html(lang="en")
         meta(charset="UTF-8")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        title Administrador
+        title Search
         link(rel="stylesheet", href="./css/style.css")
+        
     body 
         include ./header.pug
-        h2 Vista administrador
 
-        main
-            a(href="/createmovie")
-                button Crear película 
-            a(href="/editmovie")
-                button Editar película
-            a(href="/removemovie")
-                button Eliminar película 
         
-        include ./footer.pug 
+        script.
+            window.onload = ()=>{
+                console.log(movies)
+            }
+        main
+        
+            p titulo: #{Title}
+
+
+        include ./footer.pug

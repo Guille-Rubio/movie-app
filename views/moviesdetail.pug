@@ -5,17 +5,31 @@ html(lang="en")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Movies Detail
+        link(rel="stylesheet", href="./css/style.css")
 
     body
         include ./header 
+        h2 Detalle de película
         main
-            p Titulo: #{Title}
-            img(src="#{Poster}", alt="poster")
-            p Año: #{Year}
-            p Duración:  #{Runtime}
-            p Genero: #{Genre}
-            p Directores: #{Director}
-            p Actores: #{Actors}
-            p Argumento: #{Plot}
+        - var i = 0
+            each movie in movies    
+                section
+                    p Titulo: #{movies.Title}
+                    img(src=movies.Poster, alt="poster")
+                    p Año: #{movies.Year}
+                    p Directores: #{movies.Director}
+                    p Genero: #{movies.Genre}
+                    p Duración:  #{movies.Runtime}
+                   
+
+                    //-p Actores: #{Actors}
+                    //-p Argumento: #{Plot}
+                    //-p detalles : #{Plot}
+                    //-p Id: #{movie.imdbID}
+                    
+                    button(class="moreDetails" value=imdbID) Más detalle
+                    button(class="addFavBtn" value=imdbID) Añadir a favoritos
+            
 
         include ./footer
+        script(src="/js/addfavourites.js")

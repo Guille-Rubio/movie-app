@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
-//const { Db } = require('mongoose/node_modules/mongodb');
-
 
 const MovieSchema = new mongoose.Schema({
-    id: {
+    id_movie: {
         type: String,
         required: false,
         trim: true
@@ -22,7 +20,7 @@ const MovieSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        maximum: new Date().getFullYear()
+        validate: function (year) { return year < new Date().getFullYear() }
     },
     director: {
         type: String,
@@ -46,12 +44,12 @@ const MovieSchema = new mongoose.Schema({
     },
     actors: {
         type: String,
-        required: true,
+        required: false,
         trim: true
     },
     ratings: {
         type: Array,
-        required: true,
+        required: false,
         trim: true
     },
     opinions: {
