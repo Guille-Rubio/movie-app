@@ -30,6 +30,13 @@ const checkUserByEmail = async (email) => {
 const signup = async (req, res) => {
     //validaciones
     const newUser = req.body;
+    const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    const emailValidation = emailRegex.test(req.body.email)
+    if (!emailValidation) {
+        res.json({ msg: "El email no es válido" })
+    }
+
+
     //crear usuario en SQL y guardar en variable
     const usuario = await usuarios.guardarUsuario(newUser);
     console.log(usuario)
@@ -44,13 +51,13 @@ const login = async (req, res) => {
     const inputPassword = req.body.password
 
     const query = await (await usuarios.checkSignedUpUser(inputEmail, inputPassword)).pop()
-    const { email, password, role , id} = query
+    const { email, password, role, id } = query
 
     if (inputEmail == email && inputPassword == password) {
         console.log("correct email and password")
         //change logged state to true
         const token = tokens.createToken(email, role, id)
-        
+
 
         if (role === "admin") {
             res.cookie("access_token", token).render('admin');
@@ -64,7 +71,7 @@ const login = async (req, res) => {
 }
 
 const logout = async (req, res) => {
-    res.status(200).cookie("access_token","").render('index');
+    res.status(200).cookie("access_token", "").render('index');
 
 }
 
