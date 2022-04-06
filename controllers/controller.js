@@ -33,10 +33,12 @@ const searchMovieInOMDB = async (req, res) => {
     //search movie in OMDB
     const response = await fetch(`http://www.omdbapi.com/?t=${titleSought}&apikey=${API_KEY}`)
     const data = await response.json()
-    console.log("resultado de OMDB", data.title)
 
-    if (data.Response === "False") {
-        const movie = await (await MovieModel.find({ Title: titleSought })).pop();
+    console.log("resultado de OMDB", data.Title)
+   
+    if (data.Response==="False"){
+        const movie = await (await MovieModel.find({ Title:titleSought })).pop();
+
         console.log(movie);
 
         res.status(200).render('moviesdetail', movie);
@@ -174,6 +176,43 @@ const getRestorePasswordView = async (req, res) => {
     res.status(200).render('restorepassword');
 }
 
+const getSearchEditMovieView = async (req, res) => {
+    console.log("nuevo: " + req.body.title);
+    const titleToEdit = req.body.buscar;
+    console.log("Titulo to edit: " + titleToEdit);
+    
+    //search movie in MONGO
+    const filter = { Title: titleToEdit };
+    console.log("Filtro: " + filter);
+    let data = await MovieModel.findOne(filter); //, function (err, movie) {
+    console.log("datatatatatata: " + data);    
+    res.render('editdetail', data);
+}
+
+const postSaveChanges = async  (req, res) => {
+    //console.log("Aki empieza la nueva función: " + req.body);
+    //const filter = { _id: req.body.Id }
+    console.log("Este es el req: " + req.body);
+    const idToEdit = req.body._id;
+    console.log("Id to editttt: " + idToEdit);
+    
+    
+    const update = req.body
+    console.log("update es = a: " + update);
+    
+    await MovieModel.findByIdAndUpdate(idToEdit, update, { new: true })
+    
+    
+    res.status(201).json({ msg: "Editado" })
+    //console.log("el doc: " + doc);
+    //guardar cambios en MOngo findOneandupdate
+    //res.json({msg: "hasta aki hemos llegado"})
+}
+
+const getEditMovieView = async (req, res) => {
+    res.render('editmovie'); /**/
+}
+
 const postCreateMovie = async (req, res) => {
     try {
         const film = new MovieModel(req.body);
@@ -187,6 +226,11 @@ const postCreateMovie = async (req, res) => {
 
 
 const editMovie = async (req, res) => {
+    //Buscar Peli en Mongo
+    //Buscar peli a editar y cargarla
+    //Editar los cambios y guardarlos en la BDD
+    //Devolver mensajes OK/NOK
+    
     const filter = { title: req.body.title }
     const update = req.body
     let doc = await MovieModel.findOneAndUpdate(filter, update, { new: true })
@@ -270,6 +314,9 @@ const controllers = {
     getCreateMovieView,
     getRecoverPasswordView,
     getRestorePasswordView,
+    postSaveChanges,
+    getEditMovieView, /**/
+    getSearchEditMovieView,
     postCreateMovie,
     editMovie,
     getFavouriteMovies,

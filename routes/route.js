@@ -28,15 +28,17 @@ router.get('/admin', controllers.getAdminView)
 router.get('/createmovie', controllers.getCreateMovieView)
 router.post('/createmovie', controllers.postCreateMovie);
 
-//GET/editMovie
-router.put('/editMovie', controllers.editMovie);
+router.post('/editmovie', controllers.getSearchEditMovieView);//***/
+router.get('/editmovie', controllers.getEditMovieView);//***/
+router.post('/editmoviedetail', controllers.postSaveChanges);
+
 router.get('/removemovie', controllers.getRemoveMovieView)
 router.get('/removemovie/:title', controllers.removeTitle);
 //router.delete('/removeMovie', controllers.deleteMovie);
 router.get('/recoverpassword', controllers.getRecoverPasswordView);
 router.post('/recoverpassword', passwords.recover)
 router.get('/restorepassword', controllers.getRestorePasswordView)
-//POST /restoerpassword
+//POST /restorepassword
 //POST /logout
 router.post('/removefavourite', controllers.removefavourite)
 router.post('/addfavourite', controllers.addfavourite)
