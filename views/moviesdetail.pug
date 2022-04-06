@@ -11,6 +11,7 @@ html(lang="en")
         include ./header 
         h2 Detalle de película
         main
+
             each movie in detalles    
                 section
                     p Titulo: #{movie.Title}
@@ -18,11 +19,15 @@ html(lang="en")
                     p Año: #{movie.Year}
                     p Directores: #{movie.Director}
                     p Genero: #{movie.Genre}
-                    p Duración:  #{movie.Runtime}               
+                    p Duración:  #{movie.Runtime}
                     
-                    a(href='/movies/'+movie.imdbID) Más detalle
+
+                    a(href='/movies/'+movie.imdbID) 
+                        button Más detalles
+              
                     form(action='/addfavourite' method="POST")
                         button(type="submit" class="addFavBtn" name="id" value=movie.imdbID) Añadir a favoritos
+
             
         include ./footer
         script(src="/js/addfavourites.js")

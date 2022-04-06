@@ -11,6 +11,7 @@ const { json } = require('express/lib/response');
 const { readMovie, addMovieToUser } = require('../models/usuario');
 const res = require('express/lib/response');
 const { LEGAL_TCP_SOCKET_OPTIONS } = require('mongodb');
+const { Browser } = require('puppeteer');
 const API_KEY = process.env.OMDB_API_KEY
 
 const getMovie = async (req, res) => {
@@ -117,6 +118,7 @@ const getDetailsMovie = async (req, res) => {
     const movie = await response.json()
     res.render('getDetailsMovie', { movie });
 }
+
 
 const getSignUpView = async (req, res) => {
     res.render('signup');
