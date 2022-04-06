@@ -11,25 +11,25 @@ html(lang="en")
         main 
             form(action="/editmoviedetail" method="POST")
                 //- hay ke añadirle  style={display: 'none'}
-                input(type="text" style={display: 'none'} name="_id" value=`${_id}`)
+                input(type="text" name="id_movie" style={display: 'none'} value=`${id_movie}`)
                 label(for="Title") Título
-                input(type="text" name="title" value=`${Title}`)
+                input(type="text" name="Title" value=`${Title}`)
                 label(for="Director") Director
-                input(type="text" name="director" value=`${Director}`)
+                input(type="text" name="Director" value=`${Director}`)
                 label(for="Year") Año
-                input(type="text" name="runtime" value=`${Year}`)
+                input(type="text" name="Year" value=`${Year}`)
                 label(for="Runtime") Duración 
-                input(type="text" name="runtime" value=`${Runtime}`)
+                input(type="text" name="Runtime" value=`${Runtime}`)
                 label(for="Poster") Poster Url
-                input(type="text" name="poster" value=`${Poster}`)
+                input(type="text" name="Poster" value=`${Poster}`)
                 label(for="Genero") Género
-                input(type="text" name="genre" value=`${Genre}`)
+                input(type="text" name="Genre" value=`${Genre}`)
                 label(for="argumento") Argumento
-                input(type="text" name="plot" value=`${Plot}`)
+                input(type="text" name="Plot" value=`${Plot}`)
                 label(for="actores") Actores
-                input(type="text" name="actors" value=`${Actors}`)
+                input(type="text" name="Actors" value=`${Actors}`)
                 label(for="opioniones") Opiniones
-                input(type="text" name="ratings" value=`${Ratings.Value}`)
+                input(type="text" name="Ratings" value=`${Ratings.Value}`)
                 button(type="submit" value="Editar") Editar película 
 
         

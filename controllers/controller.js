@@ -190,23 +190,11 @@ const getSearchEditMovieView = async (req, res) => {
 }
 
 const postSaveChanges = async  (req, res) => {
-    //console.log("Aki empieza la nueva función: " + req.body);
-    //const filter = { _id: req.body.Id }
-    console.log("Este es el req: " + req.body);
-    const idToEdit = req.body._id;
-    console.log("Id to editttt: " + idToEdit);
-    
-    
+    const idToEdit ={ id_movie: req.body.id_movie }
     const update = req.body
-    console.log("update es = a: " + update);
-    
-    await MovieModel.findByIdAndUpdate(idToEdit, update, { new: true })
-    
-    
+  
+    await MovieModel.findOneAndUpdate(idToEdit, update, { new: true })
     res.status(201).json({ msg: "Editado" })
-    //console.log("el doc: " + doc);
-    //guardar cambios en MOngo findOneandupdate
-    //res.json({msg: "hasta aki hemos llegado"})
 }
 
 const getEditMovieView = async (req, res) => {
