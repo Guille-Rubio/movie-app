@@ -14,8 +14,10 @@ router.post('/login', controllers.login);
 router.post('/logout', controllers.logout);
 router.get('/dashboard', controllers.getDashboardView);
 router.get('/search', controllers.getSearchView);
-router.post('/search', controllers.getOneMovie);
+//router.post('/search', controllers.getOneMovie);
 router.get('/search/:title', controllers.getOneMovie); //todas
+//Ruta vista
+router.get('/movies/:title', controllers.getDetailsMovie);
 /* router.get('/moviesdetail', (req, res) => {
     res.render('moviesdetail.pug');
 }) */
@@ -23,6 +25,7 @@ router.get('/movies', controllers.getFavouriteMovies);
 router.get('/admin', controllers.getAdminView)
 router.get('/createmovie', controllers.getCreateMovieView)
 router.post('/createmovie', controllers.postCreateMovie);
+
 //GET/editMovie
 router.put('/editMovie', controllers.editMovie);
 router.get('/removemovie', controllers.getRemoveMovieView)

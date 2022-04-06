@@ -15,6 +15,7 @@ const getMovie = async (req, res) => {
 }
 
 const getSearchView = (req, res) => {
+    console.log(req.query.title);
     res.status(200).render("search")
 };
 
@@ -47,27 +48,25 @@ const searchMovieInOMDB = async (req, res) => {
 
 //http://localhost:3000/search/titanic/  
 const getOneMovie = async (req, res) => { 
-    const titleSought = req.body.title
+    const titleSought = req.params.title
+    console.log(titleSought);
     const response = await fetch(`https://www.omdbapi.com/?s=${titleSought}&apikey=${API_KEY}`)
     const movies = await response.json()
-    console.log(movies);
+    //console.log(movies);
+
     const titulos = [];
     //movies.Search.forEach(element => titulos.push(element.Title));
-    console.log(titulos);
-    const detalles= []
-    titulos.forEach(async movie =>{
-         const subRespon = await fetch(`http://www.omdbapi.com/?t=${movie}&apikey=${API_KEY}`)
+    let detalles= await Promise.all(
+         movies.Search.map(async movie =>{
+         const subRespon = await fetch(`http://www.omdbapi.com/?i=${movie.imdbID}&apikey=${API_KEY}`)
          const subData = await subRespon.json()
-        detalles.push(subData);
-   })
- 
-  
-
-
-
+        //detalles.push(subData);
+        //console.log(subData);
+        return subData;
+   }))
+    //console.log(detalles);
+    res.render("moviesdetail", {detalles})
     
-    res.render("moviesdetail", {movies})
- 
 }
 
 //Login
@@ -81,7 +80,7 @@ const login = async (req,res) => {
 
 //Logout
 //Como nose como vais administrar el usuario desde el lado del cliente
-// con cookie , jwt , etc no hago el logout pero ya esta hecho el
+// con cookie , jwt , etc no hago el logout pero ya esta hecho el 
 const logout = async (req,res) => {
     res.status(200);
 
@@ -104,8 +103,14 @@ const getUser = async (req, res) => {
     }
 }
 
-
-
+//Detalles de movie
+const getDetailsMovie = async (req, res) => {
+    const titleSought = req.params.title
+    console.log(titleSought);
+    const response = await fetch(`https://www.omdbapi.com/?i=${titleSought}&apikey=${API_KEY}`)
+    const movie = await response.json()
+    res.render('getDetailsMovie', {movie});
+}
 
 const getSignUpView = async (req, res) => {
     res.render('signup');
@@ -212,6 +217,7 @@ const controllers = {
     getUser,
     getSignUpView,
     getDashboardView,
+    getDetailsMovie,
     getAdminView,
     getCreateMovieView,
     getRecoverPasswordView,
