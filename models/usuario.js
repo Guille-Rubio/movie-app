@@ -1,15 +1,6 @@
-//Importando postgreeSql
-const { Pool } = require('pg');
+//Config Pg
+const pool = require("../utils/pgConfig");
 
-require('dotenv').config();
-
-const pool = new Pool({
-    user: process.env.PG_USER,
-    host: process.env.PG_HOST,
-    database: process.env.PR_USER,
-    password: process.env.PG_PASSWORD,
-    port: process.env.PG_PORT
-});
 
 //Introducir datos
 
@@ -19,9 +10,8 @@ const guardarUsuario = async (usuario) => {
     try {
         client = await pool.connect(); // Espera a abrir conexion
         const data = await client.query
-            (` INSERT INTO usuarios(user,email,password,role) 
-                                    VALUES ($1,$2,$3,$4)`
-                , [user, email, password, role])
+            (`INSERT INTO usuarios (username,email,password,role,logged) VALUES ($1,$2,$3,$4,$5)`
+                , [user, email, password, role,false])
         result = { msg: "Usuario creado exitosamente." }
     } catch (err) {
         console.log(err);
@@ -35,19 +25,26 @@ const guardarUsuario = async (usuario) => {
 }
 
 
-//Leer usuario
+//Login Usuario
 
-const leerUsuario = async (usuario) => {
+const login = async (usuario) => {
     const { email, password } = usuario;
     let client, result;
     try {
         client = await pool.connect(); // Espera a abrir conexion
         const data = await client.query(`
-                SELECT name,email,role
+                SELECT username,email,role,logged
                 FROM usuarios
-                WHERE email = $1 and password = $2`, [email, password]);
+                WHERE email = $1 AND password = $2`, [email, password]);
 
-        result = data.rows
+        if(data.rowCount > 0){
+            await client.query(`UPDATE usuarios SET logged = true WHERE email = $1 AND password = $2`, [email, password]);
+            result = data.rows
+
+        }else{
+            result={"message": "Usuario o contraseña incorrecta"}
+        }
+
     } catch (err) {
         console.log(err);
     } finally {
@@ -55,6 +52,9 @@ const leerUsuario = async (usuario) => {
     }
     return result
 }
+
+//Logout usuario
+
 
 
 const checkUserByEmail = async (email) => {
@@ -220,7 +220,7 @@ const checkSignedUpUser = async (email, password) => {
 
 const usuarios = {
     guardarUsuario,
-    leerUsuario,
+    login,
     checkUserByEmail,
     addMovieToUser,
     readMovie,

@@ -1,4 +1,4 @@
-require('dotenv');
+require('dotenv').config();
 const usuarios = require('../models/usuario');
 const fetch = require('node-fetch');
 require('mongoose');
@@ -18,6 +18,7 @@ const getMovie = async (req, res) => {
 }
 
 const getSearchView = (req, res) => {
+    console.log(req.query.title);
     res.status(200).render("search")
 };
 
@@ -25,6 +26,7 @@ const getIndex = (req, res) => {
     res.status(200).render("index");
 }
 
+//Guillermo
 const searchMovieInOMDB = async (req, res) => {
     const titleSought = req.body.title
     console.log(titleSought)
@@ -65,10 +67,64 @@ const login = async (req, res) => {
 }
 
 
+//Fin 
+
+//Victor
+// const getMovies = async(title)=>{
+//     const response = await fetch(`https://www.omdbapi.com/?s=${title}&apikey=${API_KEY}`)
+//     const data = await response.json()
+//     let movies = [];
+//     data.Search.forEach(async movie =>{
+//         const subRespon = await fetch(`http://www.omdbapi.com/?t=${movie.Title}&apikey=${API_KEY}`)
+//         const subData = await subRespon.json()
+//         movies.push(subData);
+//     })
+//     return movies;
+// }
+
+//http://localhost:3000/search/titanic/  
+const getOneMovie = async (req, res) => { 
+    const titleSought = req.params.title
+    console.log(titleSought);
+    const response = await fetch(`https://www.omdbapi.com/?s=${titleSought}&apikey=${API_KEY}`)
+    const movies = await response.json()
+    //console.log(movies);
+
+    const titulos = [];
+    //movies.Search.forEach(element => titulos.push(element.Title));
+    let detalles= await Promise.all(
+         movies.Search.map(async movie =>{
+         const subRespon = await fetch(`http://www.omdbapi.com/?i=${movie.imdbID}&apikey=${API_KEY}`)
+         const subData = await subRespon.json()
+        //detalles.push(subData);
+        //console.log(subData);
+        return subData;
+   }))
+    //console.log(detalles);
+    res.render("moviesdetail", {detalles})
+    
+}
+
+
+
+
+//Logout
+//Como nose como vais administrar el usuario desde el lado del cliente
+// con cookie , jwt , etc no hago el logout pero ya esta hecho el 
+const logout = async (req,res) => {
+    res.status(200);
+
+}
+
+
 
 const signup = async (req, res) => {
     //validaciones
     const newUser = req.body;
+
+    const usuario = await usuarios.guardarUsuario(newUser);
+    res.status(201).json({ "message": usuario })
+
     //crear usuario en SQL
     await usuarios.guardarUsuario(newUser);
     //hacer login
@@ -84,6 +140,15 @@ const getUser = async (req, res) => {
     }
 }
 
+//Detalles de movie
+const getDetailsMovie = async (req, res) => {
+    const titleSought = req.params.title
+    console.log(titleSought);
+    const response = await fetch(`https://www.omdbapi.com/?i=${titleSought}&apikey=${API_KEY}`)
+    const movie = await response.json()
+    res.render('getDetailsMovie', {movie});
+}
+
 const getSignUpView = async (req, res) => {
     res.render('signup');
 }
@@ -91,6 +156,7 @@ const getSignUpView = async (req, res) => {
 const getDashboardView = async (req, res) => {
     res.render('dashboard');
 }
+
 
 const getAdminView = async (req, res) => {
     res.render('admin.pug')
@@ -189,15 +255,6 @@ const addfavourite = (req, res) => {
 
 
 
-//mis pruebas NOP TOCAR
-const pruebasvictor = async (req, res) => {
-    //malditos todos
-    const favourite = await usuarios.updatePassword(req.body);
-    res.status(200).json(favourite);
-}
-//
-
-
 const controllers = {
     getMovie,
     getSearchView,
@@ -208,6 +265,7 @@ const controllers = {
     getUser,
     getSignUpView,
     getDashboardView,
+    getDetailsMovie,
     getAdminView,
     getCreateMovieView,
     getRecoverPasswordView,
@@ -219,7 +277,8 @@ const controllers = {
     removeTitle,
     removefavourite,
     addfavourite,
-    pruebasvictor,
+    getOneMovie,
+    logout
 }
 
 module.exports = controllers

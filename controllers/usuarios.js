@@ -24,7 +24,6 @@ const checkUserByEmail = async (email) => {
 }
 
 
-
 const usuarios = {
     guardarUsuario,
     leerUsuario,
