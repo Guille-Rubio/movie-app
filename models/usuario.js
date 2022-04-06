@@ -1,15 +1,6 @@
-//Importando postgreeSql
-const { Pool } = require('pg');
+//Config Pg
+const pool = require("../utils/pgConfig");
 
-require('dotenv').config();
-
-const pool = new Pool({
-    user: process.env.PG_USER,
-    host: process.env.PG_HOST,
-    database: process.env.PR_USER,
-    password: process.env.PG_PASSWORD,
-    port: process.env.PG_PORT
-});
 
 //Introducir datos
 
@@ -19,9 +10,8 @@ const guardarUsuario = async (usuario) => {
     try {
         client = await pool.connect(); // Espera a abrir conexion
         const data = await client.query
-            (` INSERT INTO usuarios(user,email,password,role) 
-                                    VALUES ($1,$2,$3,$4)`
-                , [user, email, password, role])
+            (`INSERT INTO usuarios (username,email,password,role,logged) VALUES ($1,$2,$3,$4,$5)`
+                , [user, email, password, role,false])
         result = { msg: "Usuario creado exitosamente." }
     } catch (err) {
         console.log(err);
@@ -35,19 +25,26 @@ const guardarUsuario = async (usuario) => {
 }
 
 
-//Leer usuario
+//Login Usuario
 
-const leerUsuario = async (usuario) => {
+const login = async (usuario) => {
     const { email, password } = usuario;
     let client, result;
     try {
         client = await pool.connect(); // Espera a abrir conexion
         const data = await client.query(`
-                SELECT name,email,role
+                SELECT username,email,role,logged
                 FROM usuarios
-                WHERE email = $1 and password = $2`, [email, password]);
+                WHERE email = $1 AND password = $2`, [email, password]);
 
-        result = data.rows
+        if(data.rowCount > 0){
+            await client.query(`UPDATE usuarios SET logged = true WHERE email = $1 AND password = $2`, [email, password]);
+            result = data.rows
+
+        }else{
+            result={"message": "Usuario o contraseña incorrecta"}
+        }
+
     } catch (err) {
         console.log(err);
     } finally {
@@ -55,6 +52,9 @@ const leerUsuario = async (usuario) => {
     }
     return result
 }
+
+//Logout usuario
+
 
 
 const checkUserByEmail = async (email) => {
@@ -172,19 +172,19 @@ const getUserFavouriteMovies = async (user) => {
 }
 
 const removeUserFavouriteMovie = async (req, res) => {
-    const movie = req.body.idMongo;
-    console.log("id de pelicula a borrar " + movie)
+    const id_movie = req.body.id;
+    console.log("id de pelicula a borrar " + id_movie)
     const user = 18 //replace for logged user
     let client, result
     try {
         client = await pool.connect(); // Espera a abrir conexion
 
         const data = await client.query(`
-            SELECT *
-            FROM favourites
-            WHERE id_user = $1 AND id_movie =$2`, [user,movie]);
-//change select for delete
+            DELETE FROM favourites
+            WHERE id_user = $1 AND id_movie =$2`, [user, id_movie]);
+        //change select for delete
         const result = data.rows
+        console.log(`La pelicula con id ${id_movie} ha sido borrada de favoritos`)
         return result
     } catch (err) {
         console.log(err);
@@ -195,15 +195,39 @@ const removeUserFavouriteMovie = async (req, res) => {
     }
 }
 
+const checkSignedUpUser = async (email, password) => {
+    console.log(email)
+    console.log(password)
+    let client, result;
+    try {
+        client = await pool.connect(); // Espera a abrir conexion
+        const data = await client.query(`
+                SELECT password,email,role
+                FROM usuarios
+                WHERE email = $1 and password = $2`, [email, password]);
+ 
+        result = data.rows
+        console.log("result", result)
+    } catch (err) {
+        console.log(err);
+    } finally {
+        client.release();
+    }
+    return result
+ }
+
+
+
 const usuarios = {
     guardarUsuario,
-    leerUsuario,
+    login,
     checkUserByEmail,
     addMovieToUser,
     readMovie,
     updatePassword,
     getUserFavouriteMovies,
-    removeUserFavouriteMovie
+    removeUserFavouriteMovie,
+    checkSignedUpUser
 }
 
 module.exports = usuarios;

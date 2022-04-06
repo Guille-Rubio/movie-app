@@ -4,24 +4,23 @@ html(lang="en")
         meta(charset="UTF-8")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        title Movies Detail
+        title Index
         link(rel="stylesheet", href="./css/style.css")
-
     body
-        include ./header 
-        h2 Detalle de película
+
+        include ./header.pug 
         main
-            each movie in detalles    
-                section
+          
                     p Titulo: #{movie.Title}
+                    hr
                     img(src=movie.Poster, alt="poster")
                     p Año: #{movie.Year}
                     p Directores: #{movie.Director}
                     p Genero: #{movie.Genre}
-                    p Duración:  #{movie.Runtime}               
+                    p Duración:  #{movie.Runtime}
+                    p Sipnosis: #{movie.Plot}
+                    p Actores: #{movie.Actors}
                     
-                    a(href='/movies/'+movie.imdbID) Más detalle
-                    button(class="addFavBtn" value=imdbID) Añadir a favoritos
-            
-        include ./footer
-        script(src="/js/addfavourites.js")
+               
+        include ./footer.pug
+
