@@ -3,10 +3,12 @@ const jwt = require('jsonwebtoken')
 
 const SECRET = process.env.MY_TOKEN_SECRET
 
-const createToken = (email) => {
+const createToken = (email,role,id) => {
     const payload = {
         check: true,
-        email:email
+        email:email,
+        role:role,
+        id:id
     };
     const token = jwt.sign(payload, SECRET, {
         expiresIn: "30min"

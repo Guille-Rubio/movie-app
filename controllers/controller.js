@@ -3,7 +3,8 @@ const usuarios = require('../models/usuario');
 const fetch = require('node-fetch');
 require('mongoose');
 const jwt = require('jsonwebtoken');
-const tokens = require('../utils/createToken')
+const tokens = require('../utils/createToken');
+const cookieParser = require('cookie-parser');
 const MovieModel = require('../models/favourites');
 const db = require('../utils/mongoConfig');
 const { json } = require('express/lib/response');
@@ -34,10 +35,12 @@ const searchMovieInOMDB = async (req, res) => {
     //search movie in OMDB
     const response = await fetch(`http://www.omdbapi.com/?t=${titleSought}&apikey=${API_KEY}`)
     const data = await response.json()
-    console.log("resultado de OMDB", data.title)
+
+    console.log("resultado de OMDB", data.Title)
 
     if (data.Response === "False") {
         const movie = await (await MovieModel.find({ Title: titleSought })).pop();
+
         console.log(movie);
 
         res.status(200).render('moviesdetail', movie);
@@ -48,24 +51,7 @@ const searchMovieInOMDB = async (req, res) => {
     }
 }
 
-const login = async (req, res) => {
-    const inputEmail = req.body.email
-    const inputPassword = req.body.password
 
-    const query = await (await usuarios.checkSignedUpUser(inputEmail, inputPassword)).pop()
-    const { email, password, role } = query
-
-    if (inputEmail == email && inputPassword == password) {
-        console.log("correct email and password")
-        //change logged state to true
-        const token = tokens.createToken(email)
-
-        res.cookie(token).render('dashboard');
-    } else {
-        res.json({ msg: "Incorrect email and/or password" })
-    }
-
-}
 
 
 //Fin 
@@ -84,7 +70,7 @@ const login = async (req, res) => {
 // }
 
 //http://localhost:3000/search/titanic/  
-const getOneMovie = async (req, res) => { 
+const getOneMovie = async (req, res) => {
     const titleSought = req.params.title
     console.log(titleSought);
     const response = await fetch(`https://www.omdbapi.com/?s=${titleSought}&apikey=${API_KEY}`)
@@ -93,17 +79,17 @@ const getOneMovie = async (req, res) => {
 
     const titulos = [];
     //movies.Search.forEach(element => titulos.push(element.Title));
-    let detalles= await Promise.all(
-         movies.Search.map(async movie =>{
-         const subRespon = await fetch(`http://www.omdbapi.com/?i=${movie.imdbID}&apikey=${API_KEY}`)
-         const subData = await subRespon.json()
-        //detalles.push(subData);
-        //console.log(subData);
-        return subData;
-   }))
+    let detalles = await Promise.all(
+        movies.Search.map(async movie => {
+            const subRespon = await fetch(`http://www.omdbapi.com/?i=${movie.imdbID}&apikey=${API_KEY}`)
+            const subData = await subRespon.json()
+            //detalles.push(subData);
+            //console.log(subData);
+            return subData;
+        }))
     //console.log(detalles);
-    res.render("moviesdetail", {detalles})
-    
+    res.render("moviesdetail", { detalles })
+
 }
 
 
@@ -112,25 +98,8 @@ const getOneMovie = async (req, res) => {
 //Logout
 //Como nose como vais administrar el usuario desde el lado del cliente
 // con cookie , jwt , etc no hago el logout pero ya esta hecho el 
-const logout = async (req,res) => {
-    res.status(200);
-
-}
 
 
-
-const signup = async (req, res) => {
-    //validaciones
-    const newUser = req.body;
-
-    const usuario = await usuarios.guardarUsuario(newUser);
-    res.status(201).json({ "message": usuario })
-
-    //crear usuario en SQL
-    await usuarios.guardarUsuario(newUser);
-    //hacer login
-    res.status(201).json({ "message": "Usuario creado exitosamente." })
-}
 
 const getUser = async (req, res) => {
     const user = await usuarios.leerUsuario(req.body);
@@ -147,7 +116,7 @@ const getDetailsMovie = async (req, res) => {
     console.log(titleSought);
     const response = await fetch(`https://www.omdbapi.com/?i=${titleSought}&apikey=${API_KEY}`)
     const movie = await response.json()
-    res.render('getDetailsMovie', {movie});
+    res.render('getDetailsMovie', { movie });
 }
 
 
@@ -176,6 +145,32 @@ const getRestorePasswordView = async (req, res) => {
     res.status(200).render('restorepassword');
 }
 
+const getSearchEditMovieView = async (req, res) => {
+    console.log("nuevo: " + req.body.title);
+    const titleToEdit = req.body.buscar;
+    console.log("Titulo to edit: " + titleToEdit);
+
+    //search movie in MONGO
+    const filter = { Title: titleToEdit };
+    console.log("Filtro: " + filter);
+    let data = await MovieModel.findOne(filter); //, function (err, movie) {
+    console.log("datatatatatata: " + data);
+    res.render('editdetail', data);
+}
+
+
+const postSaveChanges = async  (req, res) => {
+    const idToEdit ={ id_movie: req.body.id_movie }
+    const update = req.body
+  
+    await MovieModel.findOneAndUpdate(idToEdit, update, { new: true })
+    res.status(201).json({ msg: "Editado" })
+}
+
+const getEditMovieView = async (req, res) => {
+    res.render('editmovie'); /**/
+}
+
 const postCreateMovie = async (req, res) => {
     try {
         const film = new MovieModel(req.body);
@@ -189,6 +184,11 @@ const postCreateMovie = async (req, res) => {
 
 
 const editMovie = async (req, res) => {
+    //Buscar Peli en Mongo
+    //Buscar peli a editar y cargarla
+    //Editar los cambios y guardarlos en la BDD
+    //Devolver mensajes OK/NOK
+
     const filter = { title: req.body.title }
     const update = req.body
     let doc = await MovieModel.findOneAndUpdate(filter, update, { new: true })
@@ -199,7 +199,7 @@ const getFavouriteMovies = async (req, res) => {
     //muestra todas las peliculas favoritas del usuario//sustituir por usuario logado
     const ids = []
     //recupera favoritos de usuario 18
-    const favouriteMovies = await usuarios.getUserFavouriteMovies(18)
+    const favouriteMovies = await usuarios.getUserFavouriteMovies(req.body.id_user)
     if (favouriteMovies == "") {
         res.send("User has no films saved as favourites")
     } else {
@@ -250,7 +250,7 @@ const removefavourite = async (req, res) => {
 
 const addfavourite = (req, res) => {
     console.log("save title " + req.body.id)
-    usuarios.addMovieToUser({ id_user: 18, id_movie: req.body.id })
+    usuarios.addMovieToUser({ id_user: req.body.user_id, id_movie: req.body.id })
     console.log(req.body.id + " saved in DB")
     //guardar usuario e id en tabla favourites
 }
@@ -262,8 +262,6 @@ const controllers = {
     getSearchView,
     getIndex,
     searchMovieInOMDB,
-    login,
-    signup,
     getUser,
     getSignUpView,
     getDashboardView,
@@ -272,6 +270,9 @@ const controllers = {
     getCreateMovieView,
     getRecoverPasswordView,
     getRestorePasswordView,
+    postSaveChanges,
+    getEditMovieView, /**/
+    getSearchEditMovieView,
     postCreateMovie,
     editMovie,
     getFavouriteMovies,
@@ -280,7 +281,6 @@ const controllers = {
     removefavourite,
     addfavourite,
     getOneMovie,
-    logout
 }
 
 module.exports = controllers
