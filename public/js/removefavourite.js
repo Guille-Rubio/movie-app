@@ -16,7 +16,6 @@ for (let i = 0; i < button.length; i++) {
         })
             .then(function (response) {
                 if (response.ok) {
-                    console.log('Click was recorded');
                     return;
                 }
                 throw new Error('Request failed.');

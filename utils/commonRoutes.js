@@ -15,8 +15,6 @@ commonRoutes.use((req, res, next) => {
       } else {
         //comprobar que login está en true en SQL
         req.decoded = decoded;
-        console.log("commonRoutes" + req.decoded.id_user)
-        console.log("commonRoutes" + req.decoded.role)
         if (decoded.role === "user" || decoded.role === "admin") {
 
           next();

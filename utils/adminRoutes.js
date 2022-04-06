@@ -12,7 +12,7 @@ adminRoutes.use((req, res, next) => {
       if (err) {
         return res.json({ mensaje: 'Token inválida' });
       } else {
-        //comprobar que login está en true en SQL
+
         req.decoded = decoded;
         if (decoded.role === "admin") {
         

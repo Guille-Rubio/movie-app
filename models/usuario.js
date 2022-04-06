@@ -1,14 +1,10 @@
-//Config Pg
 const pool = require("../utils/pgConfig");
-
-
-//Introducir datos
 
 const guardarUsuario = async (usuario) => {
     const { user, email, password, role } = usuario;
     let client, result;
     try {
-        client = await pool.connect(); // Espera a abrir conexion
+        client = await pool.connect();
         const data = await client.query
             (`INSERT INTO usuarios (username,email,password,role,logged) VALUES ($1,$2,$3,$4,$5)`
                 , [user, email, password, role,false])
@@ -25,13 +21,11 @@ const guardarUsuario = async (usuario) => {
 }
 
 
-//Login Usuario
-
 const login = async (usuario) => {
     const { email, password } = usuario;
     let client, result;
     try {
-        client = await pool.connect(); // Espera a abrir conexion
+        client = await pool.connect(); 
         const data = await client.query(`
                 SELECT username,email,role,logged
                 FROM usuarios
@@ -53,13 +47,11 @@ const login = async (usuario) => {
     return result
 }
 
-//Logout usuario
-
 
 
 const checkUserByEmail = async (email) => {
     try {
-        client = await pool.connect(); // Espera a abrir conexion
+        client = await pool.connect();
         const data = await client.query(`
                 SELECT user,email,role
                 FROM usuarios
@@ -76,13 +68,12 @@ const checkUserByEmail = async (email) => {
 }
 
 
-//NO TOCAR
 const addMovieToUser = async (favRecord) => {
 
     const { id_user, id_movie } = favRecord;
     let client, result;
     try {
-        client = await pool.connect(); // Espera a abrir conexion
+        client = await pool.connect(); 
         const data = await client.query
             (`SELECT * FROM favourites WHERE id_user=$1 AND id_movie=$2`
                 , [id_user, id_movie])
@@ -107,18 +98,15 @@ const addMovieToUser = async (favRecord) => {
 
 }
 
-//Leer peliculas de los usuarios
-
+//Se usa??
 const readMovie = async (id_user) => {
     let client, result;
-
     try {
-        client = await pool.connect(); // Espera a abrir conexion
+        client = await pool.connect(); 
         const data = await client.query(`
                 SELECT * 
                 FROM favourites
                 WHERE id_user = $1`, [id_user]);
-
         result = data.rows
 
     } catch (err) {
@@ -134,13 +122,12 @@ const updatePassword = async (usuario) => {
     const { id, password } = usuario;
     let client, result;
     try {
-        client = await pool.connect(); // Espera a abrir conexion
+        client = await pool.connect();
         const data = await client.query
             (` UPDATE usuarios SET password =$1 WHERE id =$2`
                 , [password, id])
         result = { msg: "Usuario modificado exitosamente." }
     } catch (err) {
-
         console.log(err);
     } finally {
         client.release();
@@ -152,13 +139,11 @@ const updatePassword = async (usuario) => {
 const getUserFavouriteMovies = async (user) => {
     let client, result
     try {
-        client = await pool.connect(); // Espera a abrir conexion
-
+        client = await pool.connect(); 
         const data = await client.query(`
             SELECT id_movie
             FROM favourites
             WHERE id_user = $1`, [user]);
-
         const result = data.rows
         return result
     } catch (err) {
@@ -166,7 +151,6 @@ const getUserFavouriteMovies = async (user) => {
         throw err
     } finally {
         client.release();
-
     }
 
 }
@@ -174,15 +158,14 @@ const getUserFavouriteMovies = async (user) => {
 const removeUserFavouriteMovie = async (req, res) => {
     const id_movie = req.body.id;
     console.log("id de pelicula a borrar " + id_movie)
-    const user = req.decode.id_user //replace for logged user
+    const user = req.decode.id_user 
     let client, result
     try {
-        client = await pool.connect(); // Espera a abrir conexion
+        client = await pool.connect(); 
 
         const data = await client.query(`
             DELETE FROM favourites
             WHERE id_user = $1 AND id_movie =$2`, [user, id_movie]);
-        //change select for delete
         const result = data.rows
         console.log(`La pelicula con id ${id_movie} ha sido borrada de favoritos`)
         return result
@@ -191,16 +174,13 @@ const removeUserFavouriteMovie = async (req, res) => {
         throw err
     } finally {
         client.release();
-
     }
 }
 
 const checkSignedUpUser = async (email, password) => {
-    console.log(email)
-    console.log(password)
     let client, result;
     try {
-        client = await pool.connect(); // Espera a abrir conexion
+        client = await pool.connect();
         const data = await client.query(`
                 SELECT *
                 FROM usuarios
@@ -217,20 +197,19 @@ const checkSignedUpUser = async (email, password) => {
  const checkSavedAsFavourite = async (id_user, id_movie) =>{
     let client, result;
     try {
-        client = await pool.connect(); // Espera a abrir conexion
+        client = await pool.connect(); 
         const data = await client.query(`
                 SELECT *
                 FROM favourites
                 WHERE id_user = $1 and id_movie = $2`, [id_user, id_movie]);
         result = data.rows
-
         
     } catch (err) {
         console.log(err);
     } finally {
         client.release();
     }
-    return result==true?true:false;
+    return result==0?true:false;
 
 
  }

@@ -10,7 +10,6 @@ const createToken = (email, role, id) => {
         role: role,
         id_user: id
     };
-    
     const token = jwt.sign(payload, SECRET, {
         expiresIn: "30min"
     });

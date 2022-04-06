@@ -31,22 +31,14 @@ const getIndex = (req, res) => {
 //Guillermo
 const searchMovieInOMDB = async (req, res) => {
     const titleSought = req.body.title
-    console.log(titleSought)
     //search movie in OMDB
     const response = await fetch(`http://www.omdbapi.com/?t=${titleSought}&apikey=${API_KEY}`)
     const data = await response.json()
 
-    console.log("resultado de OMDB", data.Title)
-
     if (data.Response === "False") {
         const movie = await (await MovieModel.find({ Title: titleSought })).pop();
-
-        console.log(movie);
-
         res.status(200).render('moviesdetail', movie);
-
     } else {
-
         res.status(200).render('moviesdetail', data)
     }
 }
@@ -75,7 +67,6 @@ const getOneMovie = async (req, res) => {
     console.log(titleSought);
     const response = await fetch(`https://www.omdbapi.com/?s=${titleSought}&apikey=${API_KEY}`)
     const movies = await response.json()
-    //console.log(movies);
 
     const titulos = [];
     //movies.Search.forEach(element => titulos.push(element.Title));
@@ -83,21 +74,13 @@ const getOneMovie = async (req, res) => {
         movies.Search.map(async movie => {
             const subRespon = await fetch(`http://www.omdbapi.com/?i=${movie.imdbID}&apikey=${API_KEY}`)
             const subData = await subRespon.json()
-            //detalles.push(subData);
-            //console.log(subData);
+      
             return subData;
         }))
-    //console.log(detalles);
+
     res.render("moviesdetail", { detalles })
 
 }
-
-
-
-
-//Logout
-//Como nose como vais administrar el usuario desde el lado del cliente
-// con cookie , jwt , etc no hago el logout pero ya esta hecho el 
 
 
 
@@ -110,15 +93,12 @@ const getUser = async (req, res) => {
     }
 }
 
-//Detalles de movie
 const getDetailsMovie = async (req, res) => {
     const titleSought = req.params.title
-    console.log(titleSought);
     const response = await fetch(`https://www.omdbapi.com/?i=${titleSought}&apikey=${API_KEY}`)
     const movie = await response.json()
     res.render('getDetailsMovie', { movie });
 }
-
 
 const getSignUpView = async (req, res) => {
     res.render('signup');
@@ -127,7 +107,6 @@ const getSignUpView = async (req, res) => {
 const getDashboardView = async (req, res) => {
     res.render('dashboard');
 }
-
 
 const getAdminView = async (req, res) => {
     res.render('admin.pug')
@@ -146,25 +125,18 @@ const getRestorePasswordView = async (req, res) => {
 }
 
 const getSearchEditMovieView = async (req, res) => {
-    console.log("nuevo: " + req.body.title);
     const titleToEdit = req.body.buscar;
-    console.log("Titulo to edit: " + titleToEdit);
-
-    //search movie in MONGO
     const filter = { Title: titleToEdit };
-    console.log("Filtro: " + filter);
     let data = await MovieModel.findOne(filter); //, function (err, movie) {
-    console.log("datatatatatata: " + data);
     res.render('editdetail', data);
 }
 
 
 const postSaveChanges = async (req, res) => {
-    const idToEdit = { id_movie: req.body.id_movie }
-    const update = req.body
-
-    await MovieModel.findOneAndUpdate(idToEdit, update, { new: true })
-    res.status(201).json({ msg: "Editado" })
+    const idToEdit = { id_movie: req.body.id_movie };
+    const update = req.body;
+    await MovieModel.findOneAndUpdate(idToEdit, update, { new: true });
+    res.status(201).json({ msg: "Editado" });
 }
 
 const getEditMovieView = async (req, res) => {
@@ -184,11 +156,6 @@ const postCreateMovie = async (req, res) => {
 
 
 const editMovie = async (req, res) => {
-    //Buscar Peli en Mongo
-    //Buscar peli a editar y cargarla
-    //Editar los cambios y guardarlos en la BDD
-    //Devolver mensajes OK/NOK
-
     const filter = { title: req.body.title }
     const update = req.body
     let doc = await MovieModel.findOneAndUpdate(filter, update, { new: true })
@@ -196,27 +163,20 @@ const editMovie = async (req, res) => {
 }
 
 const getFavouriteMovies = async (req, res) => {
-    //muestra todas las peliculas favoritas del usuario//sustituir por usuario logado
     const ids = []
-    //recupera favoritos de usuario 18
     const favouriteMovies = await usuarios.getUserFavouriteMovies(req.decoded.id_user)
     if (favouriteMovies == "") {
         res.send("User has no films saved as favourites")
     } else {
         //guarda ids favoritos del usuario en un array
         favouriteMovies.forEach(element => { ids.push(element.id_movie) })
-
-        console.log("ids", ids)
         const movies = [];
         //busca los datos de los ids en mongo o en OMDB
         for (i = 0; i < ids.length; i++) {
             if (ids[i].length > 9) {
-                //buscar en mongo DB
                 let response = await MovieModel.findById(ids[i]).exec()
-                //console.log("push de mongo", response)
                 response === null ? console.log(ids[i] + "Esta pelicula no existe en la base de datos") : movies.push(response);
             } else {
-                //buscar en OMDB
                 let response = await fetch(`http://www.omdbapi.com/?i=${ids[i]}&apikey=${API_KEY}`)
                 let data = await response.json();
                 movies.push(data)
@@ -244,22 +204,18 @@ const removeTitle = async (req, res) => {
 }
 
 const removefavourite = async (req, res) => {
-    await usuarios.removeUserFavouriteMovie(req, res);
-    //funcion usuario eliminar registro usuario e id   
+    await usuarios.removeUserFavouriteMovie(req, res); 
 }
 
 const addfavourite = async (req, res) => {
-    //funcion para comprobar si ya esá guardada 
     const isSaved = await usuarios.checkSavedAsFavourite(req.decoded.user,req.body.id)
     if (isSaved){
         console.log("This movie is saved already")
     }else{
     console.log("save " + req.body.id + " for user: " + req.decoded.id_user)
     usuarios.addMovieToUser({ id_user: req.decoded.id_user, id_movie: req.body.id })
-    //guardar usuario e id en tabla favourites
     }
 }
-
 
 
 const controllers = {
@@ -276,7 +232,7 @@ const controllers = {
     getRecoverPasswordView,
     getRestorePasswordView,
     postSaveChanges,
-    getEditMovieView, /**/
+    getEditMovieView,
     getSearchEditMovieView,
     postCreateMovie,
     editMovie,
