@@ -24,10 +24,58 @@ const checkUserByEmail = async (email) => {
 }
 
 
+
+
+
+const signup = async (req, res) => {
+    //validaciones
+    const newUser = req.body;
+    //crear usuario en SQL y guardar en variable
+    const usuario = await usuarios.guardarUsuario(newUser);
+    console.log(usuario)
+
+    //hacer login
+    await login(req, res)
+
+}
+
+const login = async (req, res) => {
+    const inputEmail = req.body.email
+    const inputPassword = req.body.password
+
+    const query = await (await usuarios.checkSignedUpUser(inputEmail, inputPassword)).pop()
+    const { email, password, role , id} = query
+
+    if (inputEmail == email && inputPassword == password) {
+        console.log("correct email and password")
+        //change logged state to true
+        const token = tokens.createToken(email, role, id)
+        
+
+        if (role === "admin") {
+            res.cookie("access_token", token).render('admin');
+        } if (role === "user") {
+            res.cookie("access_token", token).render('dashboard')
+        }
+    } else {
+        res.json({ msg: "Incorrect email and/or password" })
+    }
+
+}
+
+const logout = async (req, res) => {
+    res.status(200).cookie("access_token","").render('index');
+
+}
+
+
 const usuarios = {
     guardarUsuario,
     leerUsuario,
-    checkUserByEmail
+    checkUserByEmail,
+    signup,
+    login,
+    logout
 };
 
 module.exports = usuarios;

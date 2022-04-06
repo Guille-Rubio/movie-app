@@ -4,6 +4,7 @@ header
     nav 
         a(href="javascript: history.go(-1)")
             button volver 
-        button logout
+        form(action="/logout" method="POST")
+            button(type="submit") logout
         a(href="./")
             button menú
