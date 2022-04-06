@@ -105,14 +105,8 @@ const getOneMovie = async (req, res) => {
     
 }
 
-//Login
-const login = async (req,res) => {
-    const user = req.body;
-    const usuario = await usuarios.login(user);
-    console.log(user);
-    res.status(200).json({"message" : usuario})
 
-}
+
 
 //Logout
 //Como nose como vais administrar el usuario desde el lado del cliente
