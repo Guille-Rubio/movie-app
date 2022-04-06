@@ -159,10 +159,10 @@ const getSearchEditMovieView = async (req, res) => {
 }
 
 
-const postSaveChanges = async  (req, res) => {
-    const idToEdit ={ id_movie: req.body.id_movie }
+const postSaveChanges = async (req, res) => {
+    const idToEdit = { id_movie: req.body.id_movie }
     const update = req.body
-  
+
     await MovieModel.findOneAndUpdate(idToEdit, update, { new: true })
     res.status(201).json({ msg: "Editado" })
 }
@@ -199,7 +199,7 @@ const getFavouriteMovies = async (req, res) => {
     //muestra todas las peliculas favoritas del usuario//sustituir por usuario logado
     const ids = []
     //recupera favoritos de usuario 18
-    const favouriteMovies = await usuarios.getUserFavouriteMovies(req.body.id_user)
+    const favouriteMovies = await usuarios.getUserFavouriteMovies(req.decoded.id_user)
     if (favouriteMovies == "") {
         res.send("User has no films saved as favourites")
     } else {
@@ -248,11 +248,16 @@ const removefavourite = async (req, res) => {
     //funcion usuario eliminar registro usuario e id   
 }
 
-const addfavourite = (req, res) => {
-    console.log("save title " + req.body.id)
-    usuarios.addMovieToUser({ id_user: req.body.user_id, id_movie: req.body.id })
-    console.log(req.body.id + " saved in DB")
+const addfavourite = async (req, res) => {
+    //funcion para comprobar si ya esá guardada 
+    const isSaved = await usuarios.checkSavedAsFavourite(req.decoded.user,req.body.id)
+    if (isSaved){
+        console.log("This movie is saved already")
+    }else{
+    console.log("save " + req.body.id + " for user: " + req.decoded.id_user)
+    usuarios.addMovieToUser({ id_user: req.decoded.id_user, id_movie: req.body.id })
     //guardar usuario e id en tabla favourites
+    }
 }
 
 

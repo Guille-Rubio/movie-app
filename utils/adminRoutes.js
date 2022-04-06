@@ -7,7 +7,6 @@ const adminRoutes = express.Router();
 
 adminRoutes.use((req, res, next) => {
   const token = req.headers['access_token'];
-  console.log("estoy en ruta restringida")
   if (token) {
     jwt.verify(token, SECRET, (err, decoded) => {
       if (err) {
@@ -16,7 +15,7 @@ adminRoutes.use((req, res, next) => {
         //comprobar que login está en true en SQL
         req.decoded = decoded;
         if (decoded.role === "admin") {
-          console.log("token decoded", req.decoded)
+        
           next();
         } else { res.status(401).send({ mensaje: "ruta no autorizada" }) }
       }

@@ -1,18 +1,20 @@
 
 
 const db = require('../models/usuario');
+const usermodels = require('../models/usuario')
+const tokens = require('../utils/createToken')
 
 //Guardar usuario
 const guardarUsuario = async (req, res) => {
-    const usuario = await db.guardarUsuario(req.body);
-    res.status(200).json(usuario);
+    const user = await db.guardarUsuario(req.body);
+    res.status(200).json(user);
 }
 
 //leer usuario
 const leerUsuario = async (req, res) => {
-    const usuario = await db.leerUsuario(req.body);
-    if (usuario.length > 0) {
-        res.status(200).json(usuario);
+    const user = await db.leerUsuario(req.body);
+    if (user.length > 0) {
+        res.status(200).json(user);
     } else {
         res.status(401).json({ msg: "No autorizado" });
     }
@@ -38,7 +40,7 @@ const signup = async (req, res) => {
 
 
     //crear usuario en SQL y guardar en variable
-    const usuario = await usuarios.guardarUsuario(newUser);
+    const user = await usermodels.guardarUsuario(newUser);
     console.log(usuario)
 
     //hacer login
@@ -50,14 +52,12 @@ const login = async (req, res) => {
     const inputEmail = req.body.email
     const inputPassword = req.body.password
 
-    const query = await (await usuarios.checkSignedUpUser(inputEmail, inputPassword)).pop()
-    const { email, password, role, id } = query
-
+    const query = await (await usermodels.checkSignedUpUser(inputEmail, inputPassword)).pop()
+    const { email, password, role, id} = query
     if (inputEmail == email && inputPassword == password) {
         console.log("correct email and password")
         //change logged state to true
         const token = tokens.createToken(email, role, id)
-
 
         if (role === "admin") {
             res.cookie("access_token", token).render('admin');

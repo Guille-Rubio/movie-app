@@ -5,6 +5,7 @@ const passwords = require('../controllers/passwords');
 const usuarios = require('../controllers/usuarios');
 const adminRoutes = require('../utils/adminRoutes');
 const userRoutes = require('../utils/userRoutes');
+const commonRoutes = require('../utils/commonRoutes');
 
 
 router.get('/', controllers.getIndex);
@@ -43,8 +44,8 @@ router.post('/recoverpassword', passwords.recover);
 router.get('/restorepassword', controllers.getRestorePasswordView);
 //POST /restorepassword
 router.post('/logout',usuarios.logout)
-router.post('/removefavourite', controllers.removefavourite);
-router.post('/addfavourite', controllers.addfavourite);
+router.post('/removefavourite', commonRoutes, controllers.removefavourite);
+router.post('/addfavourite',commonRoutes, controllers.addfavourite);
 
 
 module.exports = router;

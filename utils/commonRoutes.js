@@ -4,9 +4,9 @@ const jwt = require('jsonwebtoken')
 
 const SECRET = process.env.MY_TOKEN_SECRET
 
-const adminRoutes = express.Router();
+const commonRoutes = express.Router();
 
-adminRoutes.use((req, res, next) => {
+commonRoutes.use((req, res, next) => {
   const token = req.cookies['access_token'];
   if (token) {
     jwt.verify(token, SECRET, (err, decoded) => {
@@ -15,8 +15,10 @@ adminRoutes.use((req, res, next) => {
       } else {
         //comprobar que login está en true en SQL
         req.decoded = decoded;
-        if (decoded.role === "user") {
-        
+        console.log("commonRoutes" + req.decoded.id_user)
+        console.log("commonRoutes" + req.decoded.role)
+        if (decoded.role === "user" || decoded.role === "admin") {
+
           next();
         } else { res.status(401).send({ mensaje: "ruta no autorizada" }) }
       }
@@ -28,4 +30,4 @@ adminRoutes.use((req, res, next) => {
   }
 });
 
-module.exports = adminRoutes;
+module.exports = commonRoutes;

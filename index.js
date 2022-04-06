@@ -4,7 +4,7 @@ const express = require('express');
 const morgan = require('morgan');
 
 //Web scraping
-const puppeteer = require('puppeteer');
+/* const puppeteer = require('puppeteer');
 
 (async()=>{
   const browser = await puppeteer.launch({
@@ -13,10 +13,10 @@ const puppeteer = require('puppeteer');
   const pase=await browser.newPage();
   await loadUrl(page, "https://www.sensacine.com/peliculas/pelicula-219262/",browser);
 })();
-
+ */
 //Web scraping
 
-async function loadUrl(page,url,browser){
+/* async function loadUrl(page,url,browser){
   await page.goto(url,{
       waitUntil:["load","domcontentloaded","networkidle0", "networkidle2"]
   });
@@ -25,7 +25,7 @@ async function loadUrl(page,url,browser){
   await console.log("\nComentarios de espectadores: "+valorEncontrado+"\n");
   await browser.close();
 }
-
+ */
 
 
 const router = require('./routes/route');

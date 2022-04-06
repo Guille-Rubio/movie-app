@@ -77,9 +77,9 @@ const checkUserByEmail = async (email) => {
 
 
 //NO TOCAR
-const addMovieToUser = async (info) => {
+const addMovieToUser = async (favRecord) => {
 
-    const { id_user, id_movie } = info;
+    const { id_user, id_movie } = favRecord;
     let client, result;
     try {
         client = await pool.connect(); // Espera a abrir conexion
@@ -174,7 +174,7 @@ const getUserFavouriteMovies = async (user) => {
 const removeUserFavouriteMovie = async (req, res) => {
     const id_movie = req.body.id;
     console.log("id de pelicula a borrar " + id_movie)
-    const user = 18 //replace for logged user
+    const user = req.decode.id_user //replace for logged user
     let client, result
     try {
         client = await pool.connect(); // Espera a abrir conexion
@@ -202,18 +202,37 @@ const checkSignedUpUser = async (email, password) => {
     try {
         client = await pool.connect(); // Espera a abrir conexion
         const data = await client.query(`
-                SELECT password,email,role
+                SELECT *
                 FROM usuarios
                 WHERE email = $1 and password = $2`, [email, password]);
- 
         result = data.rows
-        console.log("result", result)
     } catch (err) {
         console.log(err);
     } finally {
         client.release();
     }
     return result
+ }
+
+ const checkSavedAsFavourite = async (id_user, id_movie) =>{
+    let client, result;
+    try {
+        client = await pool.connect(); // Espera a abrir conexion
+        const data = await client.query(`
+                SELECT *
+                FROM favourites
+                WHERE id_user = $1 and id_movie = $2`, [id_user, id_movie]);
+        result = data.rows
+
+        
+    } catch (err) {
+        console.log(err);
+    } finally {
+        client.release();
+    }
+    return result==true?true:false;
+
+
  }
 
 
@@ -227,7 +246,8 @@ const usuarios = {
     updatePassword,
     getUserFavouriteMovies,
     removeUserFavouriteMovie,
-    checkSignedUpUser
+    checkSignedUpUser,
+    checkSavedAsFavourite
 }
 
 module.exports = usuarios;
