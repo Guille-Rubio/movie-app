@@ -21,7 +21,8 @@ html(lang="en")
                     p Duración:  #{movie.Runtime}               
                     
                     a(href='/movies/'+movie.imdbID) Más detalle
-                    button(class="addFavBtn" value=imdbID) Añadir a favoritos
+                    form(action='/addfavourite' method="POST")
+                        button(type="submit" class="addFavBtn" name="id" value=movie.imdbID) Añadir a favoritos
             
         include ./footer
         script(src="/js/addfavourites.js")
