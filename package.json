@@ -25,7 +25,8 @@
     "node-fetch": "^2.6.7",
     "nodemailer": "^6.7.3",
     "pg": "^8.7.3",
-    "pug": "^3.0.2"
+    "pug": "^3.0.2",
+    "puppeteer": "^13.5.2"
   },
   "devDependencies": {
     "dotenv": "^16.0.0",

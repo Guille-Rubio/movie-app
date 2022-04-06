@@ -10,17 +10,19 @@ html(lang="en")
 
         include ./header.pug 
         main
-          
+            h1 Detalle de movie
+
                     p Titulo: #{movie.Title}
-                    hr
                     img(src=movie.Poster, alt="poster")
+                    hr
                     p Año: #{movie.Year}
                     p Directores: #{movie.Director}
                     p Genero: #{movie.Genre}
                     p Duración:  #{movie.Runtime}
                     p Sipnosis: #{movie.Plot}
                     p Actores: #{movie.Actors}
-                    
+                    p Rating: #{movie.Ratings}
                
+
         include ./footer.pug
 
