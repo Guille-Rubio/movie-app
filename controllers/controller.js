@@ -80,7 +80,11 @@ const getOneMovie = async (req, res) => {
         console.log("la peli no está en OMBD")
         const pelisMongo = await (await MovieModel.find({ Title: titleSought })).pop();
         result.push(pelisMongo);
-        res.render("moviesdetail", { detalles: result });
+        if (pelisMongo) {
+            res.render("moviesdetail", { detalles: result })
+        } else {
+            res.send("No se ha encontrado la película");
+        }
     } else {
         //movies.Search.forEach(element => titulos.push(element.Title));
         let detalles = await Promise.all(
@@ -89,7 +93,7 @@ const getOneMovie = async (req, res) => {
                 const subData = await subRespon.json();
                 return subData;
             }))
-        
+
         res.render("moviesdetail", { detalles })
     }
 }
