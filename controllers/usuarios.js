@@ -5,7 +5,7 @@ const tokens = require('../utils/createToken')
 //Guardar usuario
 const guardarUsuario = async (req, res) => {
     const user = await db.guardarUsuario(req.body);
-    res.status(200).json(user);
+    res.status(200).render('message',{msg:user});
 }
 
 //leer usuario
@@ -20,7 +20,6 @@ const leerUsuario = async (req, res) => {
 
 const checkUserByEmail = async (email) => {
     const user = await db.checkUserByEmail(email)
-    console.log(user)
 }
 
 
@@ -33,7 +32,7 @@ const signup = async (req, res) => {
     const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     const emailValidation = emailRegex.test(req.body.email)
     if (!emailValidation) {
-        res.json({ msg: "El email no es válido" })
+        res.render('message',{ msg: "El email no es válido" })
     }
 
 
@@ -63,7 +62,7 @@ const login = async (req, res) => {
             res.cookie("access_token", token).render('dashboard')
         }
     } else {
-        res.json({ msg: "Incorrect email and/or password" })
+        res.render('message',{ msg: "Incorrect email and/or password" })
     }
 
 }

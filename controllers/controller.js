@@ -79,7 +79,7 @@ const getOneMovie = async (req, res) => {
         if (pelisMongo) {
             res.render("moviesdetail", { detalles: result })
         } else {
-            res.send("No se ha encontrado la película");
+            res.send("message",{msg:"No se ha encontrado la película"});
         }
     } else {
         let detalles = await Promise.all(
@@ -153,7 +153,7 @@ const postSaveChanges = async (req, res) => {
     const idToEdit = { id_movie: req.body.id_movie }
     const update = req.body
     await MovieModel.findOneAndUpdate(idToEdit, update, { new: true })
-    res.status(201).json({ msg: "Editado" })
+    res.status(201).render('message',{ msg: "Editado" })
 }
 
 const getEditMovieView = async (req, res) => {
@@ -164,7 +164,7 @@ const postCreateMovie = async (req, res) => {
     try {
         const film = new MovieModel(req.body);
         const result = await film.save();
-        res.status(201).json({ msg: `Pelicula ${req.body.Title} creada` })
+        res.status(201).render('message',{msg: `Pelicula ${req.body.Title} creada` })
     }
     catch (err) {
         console.log(err)
@@ -176,7 +176,7 @@ const editMovie = async (req, res) => {
     const filter = { title: req.body.title }
     const update = req.body
     let doc = await MovieModel.findOneAndUpdate(filter, update, { new: true })
-    res.status(201).json({ msg: "Editado" })
+    res.status(201).render('message',{ msg: "Editado" })
 }
 
 const getFavouriteMovies = async (req, res) => {
@@ -217,7 +217,7 @@ const removeTitle = async (req, res) => {
         await MovieModel.findOneAndDelete({ Title: title })
         res.status(202).json({ message: title + " deleted" })
     } else {
-        res.json({ msg: "la película buscada no está en la base de datos" })
+        res.render('message',{ msg: "la película buscada no está en la base de datos" })
     }
 }
 
@@ -229,15 +229,14 @@ const removefavourite = async (req, res) => {
 const addfavourite = async (req, res) => {
     //funcion para comprobar si ya esá guardada 
     const isSaved = await usuarios.checkSavedAsFavourite(req.decoded.user, req.body.id)
-    console.log("***************");
-    console.log(isSaved)
+    
     if (isSaved) {
         console.log("This movie is saved already")
-        res.json({ msg: "This movie is saved already" })
+        res.render('message',{ msg: "This movie is saved already" })
     } else {
        
         await usuarios.addMovieToUser({ id_user: req.decoded.id_user, id_movie: req.body.id })
-        res.json({ msg: "save " + req.body.id + " for user: " + req.decoded.id_user })
+        res.render('message',{ msg: "save " + req.body.id + " for user: " + req.decoded.id_user })
 
     }
 }
@@ -258,7 +257,7 @@ const controllers = {
     getRecoverPasswordView,
     getRestorePasswordView,
     postSaveChanges,
-    getEditMovieView, /**/
+    getEditMovieView,
     getSearchEditMovieView,
     postCreateMovie,
     editMovie,
