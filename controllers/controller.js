@@ -161,12 +161,31 @@ const getRestorePasswordView = async (req, res) => {
     res.status(200).render('restorepassword');
 }
 
+
+/**Descripción de la función: Busca la película que se va a editar y pinta sus datos en el formulario de la vista edit detail
+ * @namespace controlador
+ * @memberof function
+ * @method getSearchEditMovieView
+ * @param {object} req 
+ * @param {object} res 
+ * 
+ */
 const getSearchEditMovieView = async (req, res) => {
     const titleToEdit = req.body.buscar;
     const filter = { Title: titleToEdit };
     let data = await MovieModel.findOne(filter); 
     res.render('editdetail', data);
 }
+
+/**Descripción de la función: guarda los cambios introducidos en la edición de una pelicula de la vista editmovie.
+ * 
+ * @namespace controlador
+ * @memberof function
+ * @method postSaveChanges
+ * @param {object} req 
+ * @param {object} res 
+
+ */
 
 const postSaveChanges = async (req, res) => {
     const idToEdit = { id_movie: req.body.id_movie }
@@ -179,6 +198,16 @@ const getEditMovieView = async (req, res) => {
     res.render('editmovie'); 
 }
 
+/** Descripción de la función: Crea una película nueva en la base de datos de mongo
+ * @namespace controlador
+ * @memberof function
+ * @method postCreateMovie
+ * @param {object} req 
+ * @param {object} res 
+ 
+ */
+
+
 const postCreateMovie = async (req, res) => {
     try {
         const film = new MovieModel(req.body);
@@ -190,12 +219,30 @@ const postCreateMovie = async (req, res) => {
     }
 }
 
+/** Descripción de la función: busca por título y edita una película en la base de datos de mongo
+ * @namespace controlador
+ * @memberof function
+ * @method editMovie
+ * @param {object} req 
+ * @param {object} res 
+
+ */
+
 const editMovie = async (req, res) => {
     const filter = { title: req.body.title }
     const update = req.body
     let doc = await MovieModel.findOneAndUpdate(filter, update, { new: true })
     res.status(201).render('message',{ msg: "Editado" })
 }
+
+/** Descripción de la función: Devuelve vista movies con las peliculas favoritas del usuario logado 
+ * @namespace controlador
+ * @memberof function
+ * @method getFavouriteMovies
+ * @param {object} req 
+ * @param {object} res 
+
+ */
 
 const getFavouriteMovies = async (req, res) => {
     const ids = []
@@ -227,6 +274,14 @@ const getRemoveMovieView = (req, res) => {
     res.render('removemovie')
 }
 
+/** Descripción de la función: Elimina la película con el titulo especificado de la base de datos de mongo
+ * @namespace controlador
+ * @memberof function
+ * @method removeTitle
+ * @param {object} req 
+ * @param {object} res 
+ */
+
 const removeTitle = async (req, res) => {
     const title = req.query.title
     const titleIsSaved = await MovieModel.findOne({ Title: title }).exec() ? true : false
@@ -243,6 +298,14 @@ const removefavourite = async (req, res) => {
     await usuarios.removeUserFavouriteMovie(req, res);
     //funcion usuario eliminar registro usuario e id   
 }
+
+/** Descripción de la función: Crea un registro que relaciona el id de usuario con el id de la pelicula seleccionada como favorita
+ * @namespace controlador
+ * @memberof function
+ * @method addfavourite
+ * @param {object} req 
+ * @param {object} res 
+ */
 
 const addfavourite = async (req, res) => {
     //funcion para comprobar si ya esá guardada 
