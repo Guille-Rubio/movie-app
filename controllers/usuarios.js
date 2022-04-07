@@ -41,7 +41,7 @@ const signup = async (req, res) => {
 
     //crear usuario en SQL y guardar en variable
     const user = await usermodels.guardarUsuario(newUser);
-    console.log(usuario)
+   
 
     //hacer login
     await login(req, res)
