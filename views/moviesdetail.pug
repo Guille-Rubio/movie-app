@@ -20,14 +20,15 @@ html(lang="en")
                     p Directores: #{movie.Director}
                     p Genero: #{movie.Genre}
                     p Duración:  #{movie.Runtime}
+                    - var id = movie.imdbID ||movie._id
                     
 
                     a(href='/movies/'+movie.imdbID) 
                         button Más detalles
               
-                    form(action='/addfavourite' method="POST")
-                        button(type="submit" class="addFavBtn" name="id" value=movie.imdbID) Añadir a favoritos
+                form(action='/addfavourite' method="POST")
+                    button(type="submit" class="addFavBtn" name="id" value=id) Añadir a favoritos
 
             
         include ./footer
-        script(src="/js/addfavourites.js")
+        //-script(src="/js/addfavourites.js")

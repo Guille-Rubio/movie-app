@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 const adminRoutes = express.Router();
 
 adminRoutes.use((req, res, next) => {
-  const token = req.headers['access_token'];
+  const token = req.cookies['access_token'];
   if (token) {
     jwt.verify(token, SECRET, (err, decoded) => {
       if (err) {
