@@ -1,3 +1,9 @@
+/**
+ * @author Guillermo Rubio, Gaizka Arrondo, Victor Balladares
+ * @exports controllers
+ * @namespace controllers
+ */
+
 require('dotenv').config();
 const usuarios = require('../models/usuario');
 const fetch = require('node-fetch');
@@ -14,10 +20,21 @@ const { LEGAL_TCP_SOCKET_OPTIONS } = require('mongodb');
 const { Browser } = require('puppeteer');
 const API_KEY = process.env.OMDB_API_KEY
 
+/**
+ * Descripción de la función: función para buscar película en ombd por titulo 
+
+ * @namespace controlador
+ * @memberof function
+ * @method getMovie
+ * @param {object} req 
+ * @param {object} res 
+ */
+
 const getMovie = async (req, res) => {
     const movie = await movieFetch.getMovie(req.params.title);
     res.status(200).json(movie);
 }
+
 
 const getSearchView = (req, res) => {
     console.log(req.query.title);
@@ -28,6 +45,16 @@ const getIndex = (req, res) => {
     res.status(200).render("index");
 }
 
+/**
+ * Descripción de la función
+ * Busca una película en OMDB por título si no existe la busca en la base de datos de mongo y la muestra en la vista moviesdetail
+ * @namespace controlador
+ * @memberof function
+ * @method searchMovieInOMDB
+ * @param {object} req 
+ * @param {object} res 
+ * 
+ */
 
 const searchMovieInOMDB = async (req, res) => {
     const titleSought = req.body.title
@@ -50,23 +77,14 @@ const searchMovieInOMDB = async (req, res) => {
 }
 
 
-
-
-//Fin 
-
-//Victor
-// const getMovies = async(title)=>{
-//     const response = await fetch(`https://www.omdbapi.com/?s=${title}&apikey=${API_KEY}`)
-//     const data = await response.json()
-//     let movies = [];
-//     data.Search.forEach(async movie =>{
-//         const subRespon = await fetch(`http://www.omdbapi.com/?t=${movie.Title}&apikey=${API_KEY}`)
-//         const subData = await subRespon.json()
-//         movies.push(subData);
-//     })
-//     return movies;
-// }
-
+/**
+ * Descripción de la función: busca el titulo de la pelicula pasada como parametro en OMDB, si no existe en busca solo en mongo, si existe une los resultados de buscar en omdb y en mongo en un array.  El resultado de las busquedas se muestra en la vista moviesdetail 
+ * @namespace controlador
+ * @memberof function
+ * @method getOneMovie
+ * @param {object} req 
+ * @param {object} res 
+ */
 
 const getOneMovie = async (req, res) => {
     const result = [];
@@ -79,7 +97,7 @@ const getOneMovie = async (req, res) => {
         if (pelisMongo) {
             res.render("moviesdetail", { detalles: result })
         } else {
-            res.send("message",{msg:"No se ha encontrado la película"});
+            res.render("message",{msg:"No se ha encontrado la película"});
         }
     } else {
         let detalles = await Promise.all(
@@ -93,11 +111,6 @@ const getOneMovie = async (req, res) => {
     }
 }
 
-
-
-
-
-
 const getUser = async (req, res) => {
     const user = await usuarios.leerUsuario(req.body);
     if (user.length > 0) {
@@ -107,7 +120,14 @@ const getUser = async (req, res) => {
     }
 }
 
-//Detalles de movie
+/**
+ * Descripción de la función: Obtiene los datos completos de una pelicula de OMDB y los muestra en getDetailsMovie
+ * @namespace controlador
+ * @memberof function
+ * @method getDetailsMovie
+ * @param {object} req 
+ * @param {object} res 
+ */
 const getDetailsMovie = async (req, res) => {
     const titleSought = req.params.title
     const response = await fetch(`https://www.omdbapi.com/?i=${titleSought}&apikey=${API_KEY}`)
@@ -148,7 +168,6 @@ const getSearchEditMovieView = async (req, res) => {
     res.render('editdetail', data);
 }
 
-
 const postSaveChanges = async (req, res) => {
     const idToEdit = { id_movie: req.body.id_movie }
     const update = req.body
@@ -170,7 +189,6 @@ const postCreateMovie = async (req, res) => {
         console.log(err)
     }
 }
-
 
 const editMovie = async (req, res) => {
     const filter = { title: req.body.title }
@@ -240,8 +258,6 @@ const addfavourite = async (req, res) => {
 
     }
 }
-
-
 
 const controllers = {
     getMovie,

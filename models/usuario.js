@@ -1,8 +1,4 @@
-//Config Pg
 const pool = require("../utils/pgConfig");
-
-
-//Introducir datos
 
 const guardarUsuario = async (usuario) => {
     const { user, email, password, role } = usuario;
@@ -231,6 +227,7 @@ const checkSignedUpUser = async (email, password) => {
         }
     } catch (err) {
         console.log(err);
+        return false
     } finally {
         client.release();
     }

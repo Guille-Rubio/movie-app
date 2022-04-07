@@ -2,13 +2,12 @@ const db = require('../models/usuario');
 
 const tokens = require('../utils/createToken')
 
-//Guardar usuario
+
 const guardarUsuario = async (req, res) => {
     const user = await db.guardarUsuario(req.body);
     res.status(200).render('message',{msg:user});
 }
 
-//leer usuario
 const leerUsuario = async (req, res) => {
     const user = await db.leerUsuario(req.body);
     if (user.length > 0) {
@@ -22,12 +21,14 @@ const checkUserByEmail = async (email) => {
     const user = await db.checkUserByEmail(email)
 }
 
-
-
-
-
+/** Descripción de la función: Crea un nuevo usuario en la base de datos y hace login
+ * @namespace usuarios
+ * @memberof function
+ * @method signup
+ * @param {object} req 
+ * @param {object} res 
+ */
 const signup = async (req, res) => {
-    //validaciones
     const newUser = req.body;
     const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     const emailValidation = emailRegex.test(req.body.email)
@@ -35,15 +36,19 @@ const signup = async (req, res) => {
         res.render('message',{ msg: "El email no es válido" })
     }
 
-
-    //crear usuario en SQL y guardar en variable
     const user = await db.guardarUsuario(newUser);
 
-
-    //hacer login
     await login(req, res)
-
 }
+
+/**
+ * Descripción de la función: Loguea al usuario validando el password y la contraseña y devuelve la cookie y la vista correspondiente al role del usuario.
+ * @namespace usuarios
+ * @memberof function
+ * @method signup
+ * @param {object} req 
+ * @param {object} res 
+ */
 
 const login = async (req, res) => {
     const inputEmail = req.body.email
@@ -66,6 +71,13 @@ const login = async (req, res) => {
     }
 
 }
+/** Descripción de la función: Desloguea al usuario, borra el token de la cookie y devuelve la vista de inicio. 
+* @namespace usuarios
+* @memberof function
+* @method signup
+* @param {object} req 
+* @param {object} res 
+*/
 
 const logout = async (req, res) => {
     res.status(200).cookie("access_token", "").render('index');
