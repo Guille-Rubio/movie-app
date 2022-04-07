@@ -1,5 +1,16 @@
 const pool = require("../utils/pgConfig");
 
+/**
+ * Descripción de la función: guarda el usuario pasado por parámetro en la tabla usuarios 
+ * @param {Object} usuario 
+ * @returns mensaje
+ * @exports usuarios
+ * @method guardarUsuario
+ * @namespace usuarios
+ * @memberof function
+ * 
+ */
+
 const guardarUsuario = async (usuario) => {
     const { user, email, password, role } = usuario;
     let client, result;
@@ -21,13 +32,21 @@ const guardarUsuario = async (usuario) => {
 }
 
 
-//Login Usuario
+/** Descripción de la función: Establece el valor logado para el usuario pasado por parámetro en la tabla usuarios 
+ * @param {Object} usuario 
+ * @returns mensaje
+ * @exports usuarios
+ * @method login
+ * @namespace usuarios
+ * @memberof function
+ * 
+ */
 
 const login = async (usuario) => {
     const { email, password } = usuario;
     let client, result;
     try {
-        client = await pool.connect(); // Espera a abrir conexion
+        client = await pool.connect();
         const data = await client.query(`
                 SELECT username,email,role,logged
                 FROM usuarios
@@ -49,13 +68,19 @@ const login = async (usuario) => {
     return result
 }
 
-//Logout usuario
-
-
+/** Descripción de la función: Devuelve el usuario y el role del email pasado como parámetro
+ * @param {string} email 
+ * @returns mensaje
+ * @exports usuarios
+ * @method checkUSerByEmail
+ * @namespace usuarios
+ * @memberof function
+ * @return datos del usuario con el email especificado
+ */
 
 const checkUserByEmail = async (email) => {
     try {
-        client = await pool.connect(); // Espera a abrir conexion
+        client = await pool.connect();
         const data = await client.query(`
                 SELECT user,email,role
                 FROM usuarios
@@ -72,7 +97,15 @@ const checkUserByEmail = async (email) => {
 }
 
 
-//NO TOCAR
+/** Descripción de la función: Establece el valor logado para el usuario pasado por parámetro en la tabla usuarios 
+ * @param {Object} usuario 
+ * @returns mensaje
+ * @exports usuarios
+ * @method addMovieToUser
+ * @namespace usuarios
+ * @memberof function
+ * 
+ */
 const addMovieToUser = async (favRecord) => {
 
     const { id_user, id_movie } = favRecord;
@@ -103,13 +136,13 @@ const addMovieToUser = async (favRecord) => {
 
 }
 
-//Leer peliculas de los usuarios
+
 
 const readMovie = async (id_user) => {
     let client, result;
 
     try {
-        client = await pool.connect(); // Espera a abrir conexion
+        client = await pool.connect();
         const data = await client.query(`
                 SELECT * 
                 FROM favourites
@@ -125,7 +158,18 @@ const readMovie = async (id_user) => {
     return result
 }
 
-//password 
+
+/** Descripción de la función: Modifica el password del usuario especificado
+ * 
+ * @param {Object} usuario 
+ * @returns mensaje
+ * @exports usuarios
+ * @method updatePassword
+ * @namespace usuarios
+ * @memberof function
+ * 
+ */
+
 const updatePassword = async (usuario) => {
     const { id, password } = usuario;
     let client, result;
@@ -144,6 +188,15 @@ const updatePassword = async (usuario) => {
     return result
 }
 
+/** Descripción de la función: devuelve una lista de ids de películas favoritas del id de usuario especificado
+ * @param {Object} usuario 
+ * @returns Array de objetos con pares de id de usuario y id de película favorita 
+ * @exports usuarios
+ * @method getUserFavouriteMovies
+ * @namespace usuarios
+ * @memberof function
+ * 
+ */
 
 const getUserFavouriteMovies = async (user) => {
     let client, result
@@ -162,23 +215,30 @@ const getUserFavouriteMovies = async (user) => {
         throw err
     } finally {
         client.release();
-
     }
-
 }
 
+/** Descripción de la función: Elimina el registro de la tabal favoritos que relaciona al usuario logado con una película
+ * @param {Object} req 
+ * @param {Object} res
+ * @returns mensaje
+ * @exports usuarios
+ * @method removeUserFavouriteMovie
+ * @namespace usuarios
+ * @memberof function
+ * 
+ */
 const removeUserFavouriteMovie = async (req, res) => {
     const id_movie = req.body.id;
     console.log("id de pelicula a borrar " + id_movie)
-    const user = req.decode.id_user //replace for logged user
+    const user = req.decode.id_user 
     let client, result
     try {
-        client = await pool.connect(); // Espera a abrir conexion
+        client = await pool.connect(); 
 
         const data = await client.query(`
             DELETE FROM favourites
             WHERE id_user = $1 AND id_movie =$2`, [user, id_movie]);
-        //change select for delete
         const result = data.rows
         console.log(`La pelicula con id ${id_movie} ha sido borrada de favoritos`)
         return result
@@ -190,7 +250,15 @@ const removeUserFavouriteMovie = async (req, res) => {
 
     }
 }
-
+/** Descripción de la función: Establece el valor logado para el usuario pasado por parámetro en la tabla usuarios 
+ * @param {Object} usuario 
+ * @returns mensaje
+ * @exports usuarios
+ * @method addMovieToUser
+ * @namespace usuarios
+ * @memberof function
+ * 
+ */
 const checkSignedUpUser = async (email, password) => {
     console.log(email)
     console.log(password)
@@ -209,6 +277,17 @@ const checkSignedUpUser = async (email, password) => {
     }
     return result
  }
+
+ /** Descripción de la función: Devuelve true si el usuario logado ya tiene el id_movie del parámetro guardado como favorito y false si no. 
+ * @param {string} id_user
+ * @param {string} id_movie
+ * @returns mensaje
+ * @exports usuarios
+ * @method checkSavedAsFavourite
+ * @namespace usuarios
+ * @memberof function
+ * 
+ */
 
  const checkSavedAsFavourite = async (id_user, id_movie) =>{
     let client, result;
@@ -231,8 +310,6 @@ const checkSignedUpUser = async (email, password) => {
     } finally {
         client.release();
     }
-
-
 
  }
 
