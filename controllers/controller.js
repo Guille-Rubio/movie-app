@@ -71,25 +71,27 @@ const searchMovieInOMDB = async (req, res) => {
 
 //http://localhost:3000/search/titanic/  
 const getOneMovie = async (req, res) => {
+    const result = [];
     const titleSought = req.params.title
     console.log(titleSought);
     const response = await fetch(`https://www.omdbapi.com/?s=${titleSought}&apikey=${API_KEY}`)
-    const movies = await response.json()
-    //console.log(movies);
-
-    const titulos = [];
-    //movies.Search.forEach(element => titulos.push(element.Title));
-    let detalles = await Promise.all(
-        movies.Search.map(async movie => {
-            const subRespon = await fetch(`http://www.omdbapi.com/?i=${movie.imdbID}&apikey=${API_KEY}`)
-            const subData = await subRespon.json()
-            //detalles.push(subData);
-            //console.log(subData);
-            return subData;
-        }))
-    //console.log(detalles);
-    res.render("moviesdetail", { detalles })
-
+    const movies = await response.json();
+    if (movies.Response == "False") {
+        console.log("la peli no está en OMBD")
+        const pelisMongo = await (await MovieModel.find({ Title: titleSought })).pop();
+        result.push(pelisMongo);
+        res.render("moviesdetail", { detalles: result });
+    } else {
+        //movies.Search.forEach(element => titulos.push(element.Title));
+        let detalles = await Promise.all(
+            movies.Search.map(async movie => {
+                const subRespon = await fetch(`http://www.omdbapi.com/?i=${movie.imdbID}&apikey=${API_KEY}`)
+                const subData = await subRespon.json();
+                return subData;
+            }))
+        
+        res.render("moviesdetail", { detalles })
+    }
 }
 
 
@@ -250,13 +252,13 @@ const removefavourite = async (req, res) => {
 
 const addfavourite = async (req, res) => {
     //funcion para comprobar si ya esá guardada 
-    const isSaved = await usuarios.checkSavedAsFavourite(req.decoded.user,req.body.id)
-    if (isSaved){
+    const isSaved = await usuarios.checkSavedAsFavourite(req.decoded.user, req.body.id)
+    if (isSaved) {
         console.log("This movie is saved already")
-    }else{
-    console.log("save " + req.body.id + " for user: " + req.decoded.id_user)
-    usuarios.addMovieToUser({ id_user: req.decoded.id_user, id_movie: req.body.id })
-    //guardar usuario e id en tabla favourites
+    } else {
+        console.log("save " + req.body.id + " for user: " + req.decoded.id_user)
+        usuarios.addMovieToUser({ id_user: req.decoded.id_user, id_movie: req.body.id })
+        //guardar usuario e id en tabla favourites
     }
 }
 

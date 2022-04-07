@@ -1,7 +1,5 @@
-
-
 const db = require('../models/usuario');
-const usermodels = require('../models/usuario')
+
 const tokens = require('../utils/createToken')
 
 //Guardar usuario
@@ -40,8 +38,8 @@ const signup = async (req, res) => {
 
 
     //crear usuario en SQL y guardar en variable
-    const user = await usermodels.guardarUsuario(newUser);
-   
+    const user = await db.guardarUsuario(newUser);
+
 
     //hacer login
     await login(req, res)
@@ -52,7 +50,7 @@ const login = async (req, res) => {
     const inputEmail = req.body.email
     const inputPassword = req.body.password
 
-    const query = await (await usermodels.checkSignedUpUser(inputEmail, inputPassword)).pop()
+    const query = await (await db.checkSignedUpUser(inputEmail, inputPassword)).pop()
     const { email, password, role, id} = query
     if (inputEmail == email && inputPassword == password) {
         console.log("correct email and password")
