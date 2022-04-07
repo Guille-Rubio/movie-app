@@ -98,7 +98,7 @@ const addMovieToUser = async (favRecord) => {
 
         console.log(err);
         if (err.code == 23505) {
-            result = { msg: "Usuario ya registrado." };
+            result = { msg: "Error al guardar favorito" };
         }
     } finally {
         client.release();
@@ -223,14 +223,18 @@ const checkSignedUpUser = async (email, password) => {
                 FROM favourites
                 WHERE id_user = $1 and id_movie = $2`, [id_user, id_movie]);
         result = data.rows
-
-        
+        //QUE da de resultado???
+        if (result==0){
+            return false
+        }else{
+            return true
+        }
     } catch (err) {
         console.log(err);
     } finally {
         client.release();
     }
-    return result==true?true:false;
+
 
 
  }

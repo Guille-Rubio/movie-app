@@ -20,7 +20,7 @@ const MovieSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        validate: function (year) { return year < new Date().getFullYear() }
+        validate: function (year) { return year <= new Date().getFullYear() }
     },
     Director: {
         type: String,
