@@ -6,16 +6,18 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Movies
         link(rel="stylesheet", href="./css/style.css")
+        include ./font.pug
 
     body 
         include ./header.pug
 
-        main    
-            section(class="cardContainer")
-                - var i = 0
-                each movie in movies
-                    article 
-                        p title: #{movies[i].Title}
+        main
+            h2 Tus películas favoritas
+            - var i = 0
+            each movie in movies
+                section(class="favouritecardscontainer")
+                    article(class="card") 
+                        h2 #{movies[i].Title}
                         img(src=movies[i].Poster, alt="poster")
                         p year: #{movies[i].Year}
                         p director: #{movies[i].Director}
@@ -32,9 +34,8 @@ html(lang="en")
                         p ids #{ids}
                         button(class="favbtn" value = ids) quitar favoritos
                         - i++
-            section(class="cardContainer")
             
-
+        
 
         include ./footer.pug
         script(src="/js/removefavourite.js") 

@@ -6,33 +6,37 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Crear película
         link(rel="stylesheet", href="./css/style.css")
+        include ./font.pug
     body 
         include ./header.pug
         main
-            form(action="/createmovie" method="POST") 
+
+                form(action="/createmovie" method="POST" class="createmovieform") 
      
-                label(for="title") title
-                input(id="title" type="text" name="Title" placeholder="title")
-                label(for="poster") poster
-                input(id="poster" type="text" name="Poster" placeholder="poster url")
-                label(for="year") year
-                input(id="year" type="text" name="Year" placeholder="year")
-                label(for="director") director
-                input(id="director" type="text" name="Director" placeholder="director")
-                label(for="genre") genre
-                input(id="genre" type="text" name="Genre" placeholder="genre")
-                label(for="runtime") runtime
-                input(id="runtime" type="text" name="Runtime" placeholder="runtime")
-                label(for="plot") plot
-                textarea(id="plot" name="Plot", cols="30", rows="10" placeholder="plot") 
-                label(for="actors") actors
-                input(id="actors" type="text" name="Actors" placeholder="actors")
-                label(for="rating") ratings
-                input(id="ratings" type="text" name="Ratings" placeholder="ratings")
-                label(for="opinions")  opinions
-                input(id="opinions" type="text" name="Opinions" placeholder="opinions") 
+                    div(class="inputs")
+                        input(id="title" type="text" name="Title" placeholder="title")
+                
+                        input(id="poster" type="text" name="Poster" placeholder="poster url")
+               
+                        input(id="year" type="text" name="Year" placeholder="year")
+                
+                        input(id="director" type="text" name="Director" placeholder="director")
+                
+                        input(id="genre" type="text" name="Genre" placeholder="genre")
+                
+                        input(id="runtime" type="text" name="Runtime" placeholder="runtime")
+              
+                        input(id="actors" type="text" name="Actors" placeholder="actors")
+                
+                        input(id="ratings" type="text" name="Ratings" placeholder="ratings")
+              
+                        input(id="opinions" type="text" name="Opinions" placeholder="opinions") 
+
+                        label(for="plot") Plot
+
+                        textarea(id="plot" name="Plot", cols="30", rows="10" placeholder="Plot") 
             
-                button(id="submit-button" type="submit") Añadir
+                        button(id="submit-button" type="submit") Añadir
 
         include ./footer.pug
 
