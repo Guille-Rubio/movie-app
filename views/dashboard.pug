@@ -6,14 +6,16 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Dashboard
         link(rel="stylesheet", href="./css/style.css")
+        include ./font.pug
         
     body 
         include ./header.pug
         main
-            a(href="/search")
-                button Buscar películas 
-            a(href="/movies")
-                button Mis películas
+            div
+                a(href="/search")
+                    button Buscar películas 
+                a(href="/movies")
+                    button Mis películas
 
 
 
