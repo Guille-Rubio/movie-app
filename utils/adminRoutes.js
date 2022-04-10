@@ -14,15 +14,15 @@ adminRoutes.use((req, res, next) => {
       } else {
         //comprobar que login está en true en SQL
         req.decoded = decoded;
-        if (decoded.role === "admin") {
+        if (decoded.role === "admin") { 
         
           next();
         } else { res.status(401).send({ mensaje: "ruta no autorizada" }) }
       }
     });
   } else {
-    res.send({
-      mensaje: 'Token no proveída.'
+    res.render('message',{
+      msg: 'Token no proveída.'
     });
   }
 });

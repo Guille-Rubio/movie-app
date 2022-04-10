@@ -61,7 +61,7 @@ const login = async (req, res) => {
     const inputEmail = req.body.email
     const inputPassword = req.body.password
 
-    const query = await (await db.checkSignedUpUser(inputEmail, inputPassword)).pop()
+    const query = await db.checkSignedUpUser(inputEmail, inputPassword).pop()
     const { email, password, role, id} = query
     if (inputEmail == email && inputPassword == password) {
         console.log("correct email and password")
@@ -90,6 +90,7 @@ const logout = async (req, res) => {
     res.status(200).cookie("access_token", "").render('index');
 
 }
+
 
 
 const usuarios = {
