@@ -23,8 +23,8 @@ commonRoutes.use((req, res, next) => {
       }
     });
   } else {
-    res.render('message',{
-      msg: 'Token no proveída.'
+    res.send({
+      mensaje: 'Token no proveída.'
     });
   }
 });
