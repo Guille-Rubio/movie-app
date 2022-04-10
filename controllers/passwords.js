@@ -2,7 +2,7 @@ require('dotenv');
 const usuarios = require('../models/usuario');
 const mailer = require('../utils/nodemailer')
 
-const recover = async (req, res) => {
+const recoverPassword = async (req, res) => {
     const email = req.body.email
     const user = await usuarios.checkUserByEmail(email)
     console.log(user)
@@ -16,8 +16,21 @@ const recover = async (req, res) => {
 }
 
 
+const restorePassword = async (req, res) =>{
+const email = req.decoded.email
+const newPass = req.body.password
+
+usuarios.updateUserPassword(email,newPass)
+
+res.status(201).render('message',{msg:"La contraseña ha sido mofificada"})
+
+}
+
+
 const passwords = {
-    recover
+    recoverPassword,
+    restorePassword
+    
 }
 
 

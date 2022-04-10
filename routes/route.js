@@ -6,6 +6,7 @@ const usuarios = require('../controllers/usuarios');
 const adminRoutes = require('../utils/adminRoutes');
 const userRoutes = require('../utils/userRoutes');
 const commonRoutes = require('../utils/commonRoutes');
+const restorePasswordRoute = require('../utils/restorePasswordRoute')
 
 
 router.get('/', controllers.getIndex);
@@ -40,9 +41,9 @@ router.get('/removemovie', adminRoutes,controllers.getRemoveMovieView);
 router.get('/removemovie/:title', adminRoutes,controllers.removeTitle);
 //router.delete('/removeMovie', controllers.deleteMovie);
 router.get('/recoverpassword', controllers.getRecoverPasswordView);
-router.post('/recoverpassword', passwords.recover);
-router.get('/restorepassword', controllers.getRestorePasswordView);
-//POST /restorepassword
+router.post('/recoverpassword', passwords.recoverPassword);
+router.get('/restorepassword/:token', controllers.getRestorePasswordView);
+router.post('/restorepassword',restorePasswordRoute, passwords.restorePassword);
 router.post('/logout',usuarios.logout)
 router.post('/removefavourite', commonRoutes, controllers.removefavourite);
 router.post('/addfavourite',commonRoutes, controllers.addfavourite);

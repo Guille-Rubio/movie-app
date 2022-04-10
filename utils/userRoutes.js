@@ -20,8 +20,8 @@ userRoutes.use((req, res, next) => {
       }
     });
   } else {
-    res.send({
-      mensaje: 'Token no proveída.'
+    res.render('message',{
+      msg: 'Token no proveída.'
     });
   }
 });

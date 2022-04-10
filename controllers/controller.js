@@ -158,7 +158,13 @@ const getRecoverPasswordView = async (req, res) => {
 }
 
 const getRestorePasswordView = async (req, res) => {
-    res.status(200).render('restorepassword');
+    const token = req.params
+    res.status(200).render('restorepassword',token);
+}
+
+const postRestorePassword = async (req, res) =>{
+    console.log("Hi!")
+    
 }
 
 
