@@ -1,11 +1,9 @@
-const res = require("express/lib/response");
 const nodemailer = require("nodemailer");
-const usuarios = require("../models/usuario");
-const token = require("../utils/createToken");
-require('dotenv');
+require('dotenv')
 
 const email = process.env.PASS_RECOVER_EMAIL
 const password = process.env.PASS_RECOVER_PASSWORD
+
 const smtp = process.env.SMTP_SERVER
 const restorePasswordURL = "http://localhost:3000/restorepassword"
 
@@ -53,14 +51,10 @@ async function main(userEmail) {
 
 
 
-        // Preview only available when sending through an Ethereal account
-        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-    }
 
-    //main().catch(console.error);
+//main().catch(console.error);
 
-}
+
 const mailer = {
     main,
 }
