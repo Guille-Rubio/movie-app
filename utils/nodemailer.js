@@ -6,6 +6,7 @@ require('dotenv');
 
 const email = process.env.PASS_RECOVER_EMAIL
 const password = process.env.PASS_RECOVER_PASSWORD
+const smtp = process.env.SMTP_SERVER
 const restorePasswordURL = "http://localhost:3000/restorepassword"
 
 // async..await is not allowed in global scope, must use a wrapper
@@ -29,7 +30,7 @@ async function main(userEmail) {
         // create reusable transporter object using the default SMTP transport
 
         let transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
+            host: smtp,
             port: 465,
             secure: true, // true for 465, false for other ports
             auth: {
