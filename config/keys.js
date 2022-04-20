@@ -1,10 +1,12 @@
-if (process.env.NODE_ENV === 'Production') {
+if (process.env.NODE_ENV === 'production') {
 
     module.exports = require('./prod');
+    console.log("production environment")
 
 } else {
 
-    module.exports = require('./prod');
-    //module.exports = require('./dev');
+    module.exports = require('./dev');
+    console.log("development environment")
+
 
 }
