@@ -8,7 +8,7 @@ const morgan = require('./config/morganConfig');
 const helmet = require('helmet');
 const router = require('./routes/route');
 const app = express();
-const port = keys.PORT //|| 5000;
+const port = process.env.PORT || keys.PORT;
 
 app.set('view engine', 'pug');
 app.set('views', './views');
