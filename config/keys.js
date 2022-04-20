@@ -4,6 +4,7 @@ if (process.env.NODE_ENV === 'Production') {
 
 } else {
 
+    module.exports = require('./prod');
     //module.exports = require('./dev');
 
 }
