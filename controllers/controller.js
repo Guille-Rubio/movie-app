@@ -36,12 +36,12 @@ const getMovie = async (req, res) => {
 }
 
 
-const getSearchView = (req, res) => {
+const getSearchView = async (req, res) => {
     console.log(req.query.title);
     res.status(200).render("search")
 };
 
-const getIndex = (req, res) => {
+const getIndex = async (req, res) => {
     res.status(200).render("index");
 }
 
@@ -57,22 +57,27 @@ const getIndex = (req, res) => {
  */
 
 const searchMovieInOMDB = async (req, res) => {
-    const titleSought = req.body.title
-    const response = await fetch(`http://www.omdbapi.com/?t=${titleSought}&apikey=${API_KEY}`)
-    const data = await response.json()
+    try {
+        const titleSought = req.body.title
+        const response = await fetch(`http://www.omdbapi.com/?t=${titleSought}&apikey=${API_KEY}`)
+        const data = await response.json()
 
-    console.log("resultado de OMDB", data.Title)
+        console.log("resultado de OMDB", data.Title)
 
-    if (data.Response === "False") {
-        const movie = await (await MovieModel.find({ Title: titleSought })).pop();
+        if (data.Response === "False") {
+            const movie = await (await MovieModel.find({ Title: titleSought })).pop();
 
-        console.log(movie);
+            console.log(movie);
 
-        res.status(200).render('moviesdetail', movie);
+            res.status(200).render('moviesdetail', movie);
 
-    } else {
+        } else {
 
-        res.status(200).render('moviesdetail', data)
+            res.status(200).render('moviesdetail', data)
+        }
+    } catch (err) {
+        res.status().json({ msg: err })
+
     }
 }
 
@@ -87,28 +92,33 @@ const searchMovieInOMDB = async (req, res) => {
  */
 
 const getOneMovie = async (req, res) => {
-    const result = [];
-    const titleSought = req.params.title
-    const response = await fetch(`https://www.omdbapi.com/?s=${titleSought}&apikey=${API_KEY}`)
-    const movies = await response.json();
-    if (movies.Response == "False") {
-        const pelisMongo = await (await MovieModel.find({ Title: titleSought })).pop();
-        result.push(pelisMongo);
-        if (pelisMongo) {
-            res.render("moviesdetail", { detalles: result })
+    try {
+        const result = [];
+        const titleSought = req.params.title
+        const response = await fetch(`https://www.omdbapi.com/?s=${titleSought}&apikey=${API_KEY}`)
+        const movies = await response.json();
+        if (movies.Response == "False") {
+            const pelisMongo = await (await MovieModel.find({ Title: titleSought })).pop();
+            result.push(pelisMongo);
+            if (pelisMongo) {
+                res.render("moviesdetail", { detalles: result })
+            } else {
+                res.render("message", { msg: "No se ha encontrado la película" });
+            }
         } else {
-            res.render("message",{msg:"No se ha encontrado la película"});
-        }
-    } else {
-        let detalles = await Promise.all(
-            movies.Search.map(async movie => {
-                const subRespon = await fetch(`http://www.omdbapi.com/?i=${movie.imdbID}&apikey=${API_KEY}`)
-                const subData = await subRespon.json();
-                return subData;
-            }))
+            let detalles = await Promise.all(
+                movies.Search.map(async movie => {
+                    const subRespon = await fetch(`http://www.omdbapi.com/?i=${movie.imdbID}&apikey=${API_KEY}`)
+                    const subData = await subRespon.json();
+                    return subData;
+                }))
 
-        res.render("moviesdetail", { detalles })
+            res.render("moviesdetail", { detalles })
+        }
+    } catch (err) {
+        res.status(400).json({ msg: err });
     }
+
 }
 
 const getUser = async (req, res) => {
@@ -173,7 +183,7 @@ const getRestorePasswordView = async (req, res) => {
 const getSearchEditMovieView = async (req, res) => {
     const titleToEdit = req.body.buscar;
     const filter = { Title: titleToEdit };
-    let data = await MovieModel.findOne(filter); 
+    let data = await MovieModel.findOne(filter);
     res.render('editdetail', data);
 }
 
@@ -191,11 +201,11 @@ const postSaveChanges = async (req, res) => {
     const idToEdit = { id_movie: req.body.id_movie }
     const update = req.body
     await MovieModel.findOneAndUpdate(idToEdit, update, { new: true })
-    res.status(201).render('message',{ msg: "Editado" })
+    res.status(201).render('message', { msg: "Editado" })
 }
 
 const getEditMovieView = async (req, res) => {
-    res.render('editmovie'); 
+    res.render('editmovie');
 }
 
 /** Descripción de la función: Crea una película nueva en la base de datos de mongo
@@ -211,7 +221,7 @@ const postCreateMovie = async (req, res) => {
     try {
         const film = new MovieModel(req.body);
         const result = await film.save();
-        res.status(201).render('message',{msg: `Pelicula ${req.body.Title} creada` })
+        res.status(201).render('message', { msg: `Pelicula ${req.body.Title} creada` })
     }
     catch (err) {
         console.log(err)
@@ -231,7 +241,7 @@ const editMovie = async (req, res) => {
     const filter = { title: req.body.title }
     const update = req.body
     let doc = await MovieModel.findOneAndUpdate(filter, update, { new: true })
-    res.status(201).render('message',{ msg: "Editado" })
+    res.status(201).render('message', { msg: "Editado" })
 }
 
 /** Descripción de la función: Devuelve vista movies con las peliculas favoritas del usuario logado 
@@ -269,7 +279,7 @@ const getFavouriteMovies = async (req, res) => {
     }
 }
 
-const getRemoveMovieView = (req, res) => {
+const getRemoveMovieView = async (req, res) => {
     res.render('removemovie')
 }
 
@@ -289,7 +299,7 @@ const removeTitle = async (req, res) => {
         await MovieModel.findOneAndDelete({ Title: title })
         res.status(202).json({ message: title + " deleted" })
     } else {
-        res.render('message',{ msg: "la película buscada no está en la base de datos" })
+        res.render('message', { msg: "la película buscada no está en la base de datos" })
     }
 }
 
@@ -309,14 +319,14 @@ const removefavourite = async (req, res) => {
 const addfavourite = async (req, res) => {
     //funcion para comprobar si ya esá guardada 
     const isSaved = await usuarios.checkSavedAsFavourite(req.decoded.user, req.body.id)
-    
+
     if (isSaved) {
         console.log("This movie is saved already")
-        res.render('message',{ msg: "This movie is saved already" })
+        res.render('message', { msg: "This movie is saved already" })
     } else {
-       
+
         await usuarios.addMovieToUser({ id_user: req.decoded.id_user, id_movie: req.body.id })
-        res.render('message',{ msg: "save " + req.body.id + " for user: " + req.decoded.id_user })
+        res.render('message', { msg: "save " + req.body.id + " for user: " + req.decoded.id_user })
 
     }
 }

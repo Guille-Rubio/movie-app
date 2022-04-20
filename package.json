@@ -4,9 +4,13 @@
   "description": "Proyecto intermedio backend aplicación de películas",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
-    "generate-docs":"jsdoc -c jsdoc.json",
+    "start": "node index.js",
+    "generate-docs": "jsdoc -c jsdoc.json",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines":{
+    "node":"16.14.0",
+    "npm":"8.3.1"
   },
   "repository": {
     "type": "git",
@@ -19,8 +23,10 @@
   },
   "homepage": "https://github.com/Guille-Rubio/movie-app#readme",
   "dependencies": {
+    "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "express": "^4.17.3",
+    "helmet": "^5.0.2",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.4.1",
     "mongoose": "^6.2.8",

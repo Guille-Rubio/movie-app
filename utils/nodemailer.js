@@ -1,5 +1,6 @@
 const nodemailer = require("nodemailer");
 require('dotenv')
+const usuarios = require('../controllers/usuarios');
 
 const email = process.env.PASS_RECOVER_EMAIL
 const password = process.env.PASS_RECOVER_PASSWORD
@@ -52,11 +53,12 @@ async function main(userEmail) {
 
 
 
-//main().catch(console.error);
 
+//main().catch(console.error);
+    }}
 
 const mailer = {
     main,
 }
 
-module.exports = mailer;
+module.exports = mailer

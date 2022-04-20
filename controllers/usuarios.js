@@ -66,7 +66,8 @@ const login = async (req, res) => {
     if (inputEmail == email && inputPassword == password) {
         console.log("correct email and password")
         //change logged state to true
-        const token = tokens.createToken(email, role, id)
+        const token = await tokens.createToken(email, role, id)
+        console.log(token)
 
         if (role === "admin") {
             res.cookie("access_token", token).render('admin');

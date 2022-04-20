@@ -2,20 +2,24 @@ const express = require("express");
 require('dotenv')
 const SECRET = process.env.MY_TOKEN_SECRET
 const jwt = require('jsonwebtoken')
+require('cookie-parser');
 
 const adminRoutes = express.Router();
 
-adminRoutes.use((req, res, next) => {
+adminRoutes.use(async (req, res, next) => {
   const token = req.cookies['access_token'];
+  
+  console.log(req.cookies['access_token']);
+ 
   if (token) {
     jwt.verify(token, SECRET, (err, decoded) => {
       if (err) {
         return res.json({ mensaje: 'Token inválida' });
       } else {
-        //comprobar que login está en true en SQL
+        
         req.decoded = decoded;
         if (decoded.role === "admin") {
-        
+
           next();
         } else { res.status(401).send({ mensaje: "ruta no autorizada" }) }
       }

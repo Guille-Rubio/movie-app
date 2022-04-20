@@ -18,12 +18,12 @@ router.post('/login', usuarios.login);
 //Logout
 router.post('/logout', usuarios.logout);
 
-router.get('/dashboard',userRoutes, controllers.getDashboardView);
-router.get('/search',userRoutes, controllers.getSearchView);
+router.get('/dashboard',commonRoutes, controllers.getDashboardView);
+router.get('/search',commonRoutes, controllers.getSearchView);
 //router.post('/search', controllers.getOneMovie);
-router.get('/search/:title',userRoutes, controllers.getOneMovie); //todas
+router.get('/search/:title',commonRoutes, controllers.getOneMovie); //todas
 //Ruta vista
-router.get('/movies/:title',userRoutes, controllers.getDetailsMovie);
+router.get('/movies/:title',commonRoutes, controllers.getDetailsMovie);
 /* router.get('/moviesdetail', (req, res) => {
     res.render('moviesdetail.pug');
 }) */
