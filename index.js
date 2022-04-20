@@ -1,4 +1,5 @@
-require('dotenv').config();
+//require('dotenv').config();
+const keys = require('./config/keys');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const express = require('express');
@@ -7,7 +8,7 @@ const morgan = require('./config/morganConfig');
 const helmet = require('helmet');
 const router = require('./routes/route');
 const app = express();
-const port = process.env.PORT || 5000;
+const port = keys.PORT //|| 5000;
 
 app.set('view engine', 'pug');
 app.set('views', './views');
