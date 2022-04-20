@@ -5,16 +5,17 @@ const SECRET = process.env.MY_TOKEN_SECRET
 
 const userRoutes = express.Router();
 
-userRoutes.use((req, res, next) => {
+userRoutes.use(async (req, res, next) => {
   const token = req.cookies['access_token'];
   if (token) {
     jwt.verify(token, SECRET, (err, decoded) => {
       if (err) {
+        console.log(err)
         return res.json({ mensaje: 'Token inválida' });
       } else {
         req.decoded = decoded;
         if (decoded.role === "user") {
-        
+
           next();
         } else { res.status(401).send({ mensaje: "ruta no autorizada" }) }
       }

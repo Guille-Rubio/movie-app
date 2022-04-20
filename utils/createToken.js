@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 
 const SECRET = process.env.MY_TOKEN_SECRET
 
-const createToken = (email, role, id) => {
+const createToken = async (email, role, id) => {
     const payload = {
         check: true,
         email: email,

@@ -6,7 +6,7 @@ const SECRET = process.env.MY_TOKEN_SECRET
 
 const commonRoutes = express.Router();
 
-commonRoutes.use((req, res, next) => {
+commonRoutes.use(async (req, res, next) => {
   const token = req.cookies['access_token'];
   if (token) {
     jwt.verify(token, SECRET, (err, decoded) => {
