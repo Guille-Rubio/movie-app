@@ -275,6 +275,7 @@ const getFavouriteMovies = async (req, res) => {
                 movies.push(data)
             }
         }
+        console.log(movies)
         res.status(200).render('movies', { movies: movies })
     }
 }
