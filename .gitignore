@@ -109,3 +109,6 @@ dist
 
 #Variables de entorno en development
 /config/dev.js
+
+#Morgan
+/config/morganConfig.js
