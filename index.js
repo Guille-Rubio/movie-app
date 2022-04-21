@@ -1,5 +1,5 @@
 require('dotenv').config();
-require('./config/keys');
+//require('./config/keys');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const express = require('express');
@@ -12,7 +12,6 @@ const port = process.env.PORT || 3000;
 
 app.set('view engine', 'pug');
 app.set('views', './views');
-
 app.use(compression())
 app.use(helmet());
 app.use(express.json());
