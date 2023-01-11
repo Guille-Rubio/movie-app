@@ -4,13 +4,14 @@
   "description": "Proyecto intermedio backend aplicación de películas",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "node index.js NODE_ENV=Production",
+    "dev":"nodemon index.js NODE_ENV=development",
     "generate-docs": "jsdoc -c jsdoc.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "engines":{
-    "node":"16.14.0",
-    "npm":"8.3.1"
+  "engines": {
+    "node": "16.14.0",
+    "npm": "8.3.1"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
   "dependencies": {
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "express": "^4.17.3",
     "helmet": "^5.0.2",
     "jsonwebtoken": "^8.5.1",
