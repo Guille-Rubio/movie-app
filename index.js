@@ -13,7 +13,7 @@ const helmet = require('helmet');
 const router = require('./routes/route');
 const app = express();
 
-const port = process.env.PORT || keys.PORT || 3000;
+const port = process.env.PORT || 3000;
 
 app.set('view engine', 'pug');
 app.set('views', './views');
@@ -40,5 +40,4 @@ app.use("/", router);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
-  console.log(process.env.NODE_ENV);
 });

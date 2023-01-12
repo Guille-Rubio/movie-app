@@ -4,7 +4,7 @@
   "description": "Proyecto intermedio backend aplicación de películas",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=production node index.js",
+    "start": "node index.js",
     "dev":"NODE_ENV=development nodemon index.js",
     "generate-docs": "jsdoc -c jsdoc.json",
     "test": "echo \"Error: no test specified\" && exit 1"
