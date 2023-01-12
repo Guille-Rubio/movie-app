@@ -6,6 +6,7 @@ const express = require('express');
 
 const morgan = require('./config/morganConfig');
 const cors = require('cors');
+const keys = require('./config/keys');
 
 
 const helmet = require('helmet');

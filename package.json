@@ -26,11 +26,8 @@
   "dependencies": {
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
-<<<<<<< HEAD
     "dotenv": "^16.0.0",
-=======
     "cors": "^2.8.5",
->>>>>>> develop
     "express": "^4.17.3",
     "helmet": "^5.0.2",
     "jsonwebtoken": "^8.5.1",
