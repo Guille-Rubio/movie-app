@@ -18,16 +18,29 @@ const regex = require('../utils/regex')
 } */
 
 const leerUsuario = async (req, res) => {
-    const user = await db.leerUsuario(req.body);
-    if (user.length > 0) {
-        res.status(200).json(user);
-    } else {
-        res.status(401).json({ msg: "No autorizado" });
+    try {
+        const user = await db.leerUsuario(req.body);
+        if (user.length > 0) {
+            res.status(200).json(user);
+        } else {
+            res.status(401).json({ msg: "No autorizado" });
+        }
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).json({ msg: error.message })
     }
+
 }
 
 const checkUserByEmail = async (email) => {
-    const user = await db.checkUserByEmail(email)
+    //PARA QUE ES ESTA FUNCIÓN SI NO DEVUELVE NADA???
+    try {
+        const user = await db.checkUserByEmail(email)
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).json({ msg: error.message })
+    }
 }
 
 /** Descripción de la función: Crea un nuevo usuario en la base de datos y hace login
@@ -38,14 +51,20 @@ const checkUserByEmail = async (email) => {
  * @param {object} res HTTP response
  */
 const signup = async (req, res) => {
-    const newUser = req.body;
-    if (regex.validateEmail(req.body.email) && regex.validatePassword(req.body.password)) {
-        const user = await db.guardarUsuario(newUser);
-        await login(req, res)
+    try {
+        const newUser = req.body;
+        if (regex.validateEmail(req.body.email) && regex.validatePassword(req.body.password)) {
+            const user = await db.guardarUsuario(newUser);
+            await login(req, res)
 
-    } else {
-        res.status(400).render('message', { msg: "Email o contraseña no válidos" })
+        } else {
+            res.status(400).render('message', { msg: "Email o contraseña no válidos" })
+        }
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).json({ msg: error.message })
     }
+
 }
 
 /**
@@ -58,29 +77,35 @@ const signup = async (req, res) => {
  */
 
 const login = async (req, res) => {
-    const inputEmail = req.body.email
-    const inputPassword = req.body.password
+    try {
 
 
-    const user = await db.checkSignedUpUser(inputEmail, inputPassword);
-    const users = await user.pop();
-    const { email, password, username, role, id_user } = users;
+        const inputEmail = req.body.email
+        const inputPassword = req.body.password
 
-    if (inputEmail === email && inputPassword === password) {
-        console.log("correct email and password")
-        //change logged state to true
-        const token = await tokens.createToken(email, role, id_user)
-        console.log(token)
 
-        if (role === "admin") {
-            res.cookie("access_token", token).render('admin');
-        } if (role === "user") {
-            res.cookie("access_token", token).render('dashboard')
+        const user = await db.checkSignedUpUser(inputEmail, inputPassword);
+        const users = await user.pop();
+        const { email, password, username, role, id_user } = users;
+
+        if (inputEmail === email && inputPassword === password) {
+            console.log("correct email and password")
+            //change logged state to true
+            const token = await tokens.createToken(email, role, id_user)
+            console.log(token)
+
+            if (role === "admin") {
+                res.cookie("access_token", token).render('admin');
+            } if (role === "user") {
+                res.cookie("access_token", token).render('dashboard')
+            }
+        } else {
+            res.render('message', { msg: "Incorrect email and/or password" })
         }
-    } else {
-        res.render('message', { msg: "Incorrect email and/or password" })
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).json({ msg: error.message })
     }
-
 }
 /** Descripción de la función: Desloguea al usuario, borra el token de la cookie y devuelve la vista de inicio. 
 * @memberof usuarios
@@ -91,7 +116,13 @@ const login = async (req, res) => {
 */
 
 const logout = async (req, res) => {
-    res.status(200).cookie("access_token", "").render('index');
+    try {
+        res.status(200).cookie("access_token", "").render('index');
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).json({ msg: error.message })
+    }
 
 }
 
