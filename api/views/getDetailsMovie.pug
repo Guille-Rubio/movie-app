@@ -1,0 +1,28 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Index
+        link(rel="stylesheet", href="../css/style.css")
+        include ./font.pug
+    body
+
+        include ./header.pug 
+        main
+            h1 Detalle de movie
+
+                    p Titulo: #{movie.Title}
+                    img(src=movie.Poster, alt="poster")
+                    p Año: #{movie.Year}
+                    p Directores: #{movie.Director}
+                    p Genero: #{movie.Genre}
+                    p Duración:  #{movie.Runtime}
+                    p Sipnosis: #{movie.Plot}
+                    p Actores: #{movie.Actors}
+                    p Rating: #{movie.Ratings}
+               
+
+        include ./footer.pug
+

@@ -1,0 +1,39 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Movies
+        link(rel="stylesheet", href="./css/style.css")
+        include ./font.pug
+
+    body 
+        include ./header.pug
+
+        main
+            h2 Tus películas favoritas
+            - var i = 0
+            each movie in movies
+                section(class="favouritecardscontainer")
+                    article(class="card") 
+                        h2 #{movies[i].Title}
+                        img(src=movies[i].Poster ,alt="poster")
+                        p year: #{movies[i].Year}
+                        p director: #{movies[i].Director}
+                        p genre: #{movies[i].Genre}
+                        p runtime: #{movies[i].Runtime}
+                        p plot: #{movies[i].Plot}
+                        p actor: #{movies[i].Actor}
+                        p opinions: #{movies[i].Opinions}
+                        - var idMovie = movies[i]._id;
+                        - var idOMDB = movies[i].imdbID
+                        p id mongo #{idMovie}
+                        p id OMDB #{idOMDB}
+                        - var ids = idMovie || idOMDB
+                        p ids #{ids}
+                        button(class="favbtn" value = ids) quitar favoritos
+                        - i++
+            
+        include ./footer.pug
+        script(src="/js/removefavourite.js") 

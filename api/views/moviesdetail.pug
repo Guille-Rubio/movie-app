@@ -1,0 +1,36 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Movies Detail
+        link(rel="stylesheet", href="../css/style.css")
+        include ./font.pug
+
+    body
+        include ./header 
+        h2 Detalle de película
+        main
+            section(class="cardcontainer")
+
+                each movie in detalles    
+                    section(class="card")
+                        p Titulo: #{movie.Title}
+                        img(src=movie.Poster, alt="poster")
+                        p Año: #{movie.Year}
+                        p Directores: #{movie.Director}
+                        p Genero: #{movie.Genre}
+                        p Duración:  #{movie.Runtime}
+                        - var id = movie.imdbID ||movie._id
+                    
+
+                        a(href='/movies/'+movie.imdbID) 
+                        button Más detalles
+              
+                        form(action='/addfavourite' method="POST")
+                            button(type="submit" class="addFavBtn" name="id" value=id) Añadir a favoritos
+
+            
+        include ./footer
+        //-script(src="/js/addfavourites.js")
