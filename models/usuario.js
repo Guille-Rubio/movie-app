@@ -45,8 +45,6 @@ const populateUsuariosTableWithSeed = async () => {
 
     }
 
-
-
 }
 
 
