@@ -19,13 +19,13 @@ app.set('view engine', 'pug');
 app.set('views', './views');
 app.use(compression())
 app.use(
-    helmet.contentSecurityPolicy({
-      directives: {
-          "img-src":["'Self'", "https://m.media-amazon.com"]
-      },
-    }),
-    
-  );
+  helmet.contentSecurityPolicy({
+    directives: {
+      "img-src": ["'Self'", "https://m.media-amazon.com"]
+    },
+  }),
+
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -38,4 +38,7 @@ app.use("/", router);
 
 
 
-app.listen(port, () => { console.log(`Example app listening on port ${port}`) });
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+  console.log(process.env.NODE_ENV);
+});
