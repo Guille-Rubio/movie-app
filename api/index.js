@@ -29,7 +29,7 @@ app.set('views', './views');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 //app.use(cookieParser());
-app.use(express.static('public'));
+app.use(express.static('./public'));
 
 //app.use(morgan(':method :host :status :param[id] - :response-time ms :body'));
 
@@ -41,3 +41,5 @@ app.use("/", router);
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 });
+
+module.exports = app;
