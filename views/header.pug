@@ -2,9 +2,11 @@ header
     h1 MOVIE APP 
         
     nav 
-        a(href="javascript: history.go(-1)")
-            button volver 
+        a(href="http://localhost:3000")
+            button home 
         form(action="/logout" method="POST")
             button(type="submit") logout
-        a(href="./")
-            button menú
+        a(href="http://localhost:3000/dashboard")
+            button dashboard
+        a(href="http://localhost:3000/admin")
+            button admin view

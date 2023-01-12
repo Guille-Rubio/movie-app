@@ -11,6 +11,43 @@ const pool = require("../utils/pgConfig");
  * 
  */
 
+const createUsersTable = async () => {
+    try {
+        let client = await pool.connect();
+        const newTable = await client.query(`CREATE TABLE IF NOT EXISTS usuarios (
+        id_user serial PRIMARY KEY, 
+        username VARCHAR (50),
+        email VARCHAR (50) UNIQUE NOT NULL,
+        password VARCHAR (50) NOT NULL,
+        role VARCHAR (50));`);
+        return newTable;
+    } catch (error) {
+        console.log(error.message);
+        throw error
+    } finally {
+        //client.release();
+    }
+
+
+};
+
+const populateUsuariosTableWithSeed = async () => {
+    try {
+        let client = await pool.connect();
+        const newUser = await client.query(`INSERT INTO usuarios (id_user, username,email,password,role)
+    VALUES(1,'Guille','guillermorubiog@gmail.com','ABCdef123!','admin'),(2,'Pepe','pepe@gmail.com','ABCdef123!','user');`)
+        return newUser
+    } catch (error) {
+        console.log(error.message);
+        throw error
+    } finally {
+        //client.release();
+
+    }
+
+}
+
+
 const guardarUsuario = async (usuario) => {
     const { user, email, password, role } = usuario;
     let client, result;
@@ -18,7 +55,7 @@ const guardarUsuario = async (usuario) => {
         client = await pool.connect(); // Espera a abrir conexion
         const data = await client.query
             (`INSERT INTO usuarios (username,email,password,role,logged) VALUES ($1,$2,$3,$4,$5)`
-                , [user, email, password, role,false])
+                , [user, email, password, role, false])
         result = { msg: "Usuario creado exitosamente." }
     } catch (err) {
         console.log(err);
@@ -52,12 +89,12 @@ const login = async (usuario) => {
                 FROM usuarios
                 WHERE email = $1 AND password = $2`, [email, password]);
 
-        if(data.rowCount > 0){
+        if (data.rowCount > 0) {
             await client.query(`UPDATE usuarios SET logged = true WHERE email = $1 AND password = $2`, [email, password]);
             result = data.rows
 
-        }else{
-            result={"message": "Usuario o contraseña incorrecta"}
+        } else {
+            result = { "message": "Usuario o contraseña incorrecta" }
         }
 
     } catch (err) {
@@ -231,10 +268,10 @@ const getUserFavouriteMovies = async (user) => {
 const removeUserFavouriteMovie = async (req, res) => {
     const id_movie = req.body.id;
     console.log("id de pelicula a borrar " + id_movie)
-    const user = req.decode.id_user 
+    const user = req.decode.id_user
     let client, result
     try {
-        client = await pool.connect(); 
+        client = await pool.connect();
 
         const data = await client.query(`
             DELETE FROM favourites
@@ -262,34 +299,31 @@ const removeUserFavouriteMovie = async (req, res) => {
 const checkSignedUpUser = async (email, password) => {
     console.log(email)
     console.log(password)
-    let client, result;
+    let client;
     try {
         client = await pool.connect(); // Espera a abrir conexion
         const data = await client.query(`
                 SELECT *
                 FROM usuarios
                 WHERE email = $1 and password = $2`, [email, password]);
-        result = data.rows
+        return data.rows;
     } catch (err) {
         console.log(err);
-    } finally {
-        client.release();
+
     }
-    return result
- }
+}
+/** Descripción de la función: Devuelve true si el usuario logado ya tiene el id_movie del parámetro guardado como favorito y false si no. 
+* @param {string} id_user
+* @param {string} id_movie
+* @returns mensaje
+* @exports usuarios
+* @method checkSavedAsFavourite
+* @namespace usuarios
+* @memberof function
+* 
+*/
 
- /** Descripción de la función: Devuelve true si el usuario logado ya tiene el id_movie del parámetro guardado como favorito y false si no. 
- * @param {string} id_user
- * @param {string} id_movie
- * @returns mensaje
- * @exports usuarios
- * @method checkSavedAsFavourite
- * @namespace usuarios
- * @memberof function
- * 
- */
-
- const checkSavedAsFavourite = async (id_user, id_movie) =>{
+const checkSavedAsFavourite = async (id_user, id_movie) => {
     let client, result;
     try {
         client = await pool.connect(); // Espera a abrir conexion
@@ -299,9 +333,9 @@ const checkSignedUpUser = async (email, password) => {
                 WHERE id_user = $1 and id_movie = $2`, [id_user, id_movie]);
         result = data.rows
         //QUE da de resultado???
-        if (result==0){
+        if (result == 0) {
             return false
-        }else{
+        } else {
             return true
         }
     } catch (err) {
@@ -311,11 +345,13 @@ const checkSignedUpUser = async (email, password) => {
         client.release();
     }
 
- }
+}
 
 
 
 const usuarios = {
+    createUsersTable,
+    populateUsuariosTableWithSeed,
     guardarUsuario,
     login,
     checkUserByEmail,

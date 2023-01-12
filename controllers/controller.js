@@ -19,6 +19,32 @@ const res = require('express/lib/response');
 const { LEGAL_TCP_SOCKET_OPTIONS } = require('mongodb');
 const { Browser } = require('puppeteer');
 const API_KEY = process.env.OMDB_API_KEY
+const regex = require('../utils/regex')
+
+
+
+const createTableUsuarios = async (req, res) => {
+    try {
+        const tablaUsuarios = await usuarios.createUsersTable();
+        res.status(201).json({ msg: "tabla usuarios creada" });
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({ msg: error.message });
+
+    }
+};
+
+const populateUsuariosTableWithSeed = async (req, res) => {
+    try {
+        const data = await usuarios.populateUsuariosTableWithSeed();
+        res.status(201).json({ msg: data });
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({ msg: error.message });
+    }
+}
+
+
 
 /**
 * Descripción de la función: función para buscar película en ombd por titulo 
@@ -333,6 +359,8 @@ const addfavourite = async (req, res) => {
 }
 
 const controllers = {
+    createTableUsuarios,
+    populateUsuariosTableWithSeed,
     getMovie,
     getSearchView,
     getIndex,

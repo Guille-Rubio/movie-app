@@ -8,12 +8,14 @@
 const db = require('../models/usuario');
 
 const tokens = require('../utils/createToken')
+const regex = require('../utils/regex')
 
+/* const guardarUsuario = async (req, res) => {
 
-const guardarUsuario = async (req, res) => {
     const user = await db.guardarUsuario(req.body);
-    res.status(200).render('message',{msg:user});
-}
+    res.status(200).render('message', { msg: user });
+
+} */
 
 const leerUsuario = async (req, res) => {
     const user = await db.leerUsuario(req.body);
@@ -37,15 +39,13 @@ const checkUserByEmail = async (email) => {
  */
 const signup = async (req, res) => {
     const newUser = req.body;
-    const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    const emailValidation = emailRegex.test(req.body.email)
-    if (!emailValidation) {
-        res.render('message',{ msg: "El email no es válido" })
+    if (regex.validateEmail(req.body.email) && regex.validatePassword(req.body.password)) {
+        const user = await db.guardarUsuario(newUser);
+        await login(req, res)
+
+    } else {
+        res.status(400).render('message', { msg: "Email o contraseña no válidos" })
     }
-
-    const user = await db.guardarUsuario(newUser);
-
-    await login(req, res)
 }
 
 /**
@@ -61,12 +61,15 @@ const login = async (req, res) => {
     const inputEmail = req.body.email
     const inputPassword = req.body.password
 
-    const query = await (await db.checkSignedUpUser(inputEmail, inputPassword)).pop()
-    const { email, password, role, id} = query
-    if (inputEmail == email && inputPassword == password) {
+
+    const user = await db.checkSignedUpUser(inputEmail, inputPassword);
+    const users = await user.pop();
+    const { email, password, username, role, id_user } = users;
+
+    if (inputEmail === email && inputPassword === password) {
         console.log("correct email and password")
         //change logged state to true
-        const token = await tokens.createToken(email, role, id)
+        const token = await tokens.createToken(email, role, id_user)
         console.log(token)
 
         if (role === "admin") {
@@ -75,7 +78,7 @@ const login = async (req, res) => {
             res.cookie("access_token", token).render('dashboard')
         }
     } else {
-        res.render('message',{ msg: "Incorrect email and/or password" })
+        res.render('message', { msg: "Incorrect email and/or password" })
     }
 
 }
@@ -94,7 +97,7 @@ const logout = async (req, res) => {
 
 
 const usuarios = {
-    guardarUsuario,
+    //guardarUsuario,
     leerUsuario,
     checkUserByEmail,
     signup,
