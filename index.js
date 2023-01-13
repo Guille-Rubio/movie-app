@@ -35,7 +35,7 @@ app.use(express.static('./public'));
 
 app.get('/', (req, res) => {
   try {
-    res.status(200).render(__dirname + "/views/index.pug");
+    res.status(200).render('index.pug');
 
   } catch (error) {
     console.log(req.query.title);
