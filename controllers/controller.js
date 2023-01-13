@@ -81,7 +81,7 @@ const getSearchView = async (req, res) => {
 
 const getIndex = async (req, res) => {
     try {
-        res.status(200).render("index");
+        res.status(200).render("index.pug");
 
     } catch (error) {
         console.log(req.query.title);

@@ -108,9 +108,11 @@ dist
 .DS_Store
 
 #Variables de entorno en development
-/config/dev.js
+
+api/config/dev.js
+config/dev.js
 
 
 #Morgan
-/config/morganConfig.js
+api/config/morganConfig.js
 
