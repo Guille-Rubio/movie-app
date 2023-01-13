@@ -33,7 +33,7 @@ app.use(express.static('./public'));
 
 //app.use(morgan(':method :host :status :param[id] - :response-time ms :body'));
 
-app.get('/index', (req, res) => {
+app.get('/', (req, res) => {
   try {
     res.status(200).render(__dirname + "/views/index.pug");
 

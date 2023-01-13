@@ -14,7 +14,7 @@ router.get('/populate-usuarios', controllers.populateUsuariosTableWithSeed);
 
 
 
-router.get('/', controllers.getIndex);
+//router.get('/', controllers.getIndex);
 router.get('/signup', controllers.getSignUpView);
 router.post('/signup', usuarios.signup);
 
