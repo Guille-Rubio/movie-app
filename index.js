@@ -29,7 +29,7 @@ app.set('views', __dirname + '/views');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 //app.use(cookieParser());
-app.use(express.static('./public'));
+app.use(express.static(__dirname + '/public'));
 
 //app.use(morgan(':method :host :status :param[id] - :response-time ms :body'));
 
