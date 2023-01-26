@@ -16,7 +16,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.set('view engine', 'pug');
-app.set('views', './views');
+app.set('views', __dirname + '/views');
 //app.use(compression());
 /* app.use(
   helmet.contentSecurityPolicy({
