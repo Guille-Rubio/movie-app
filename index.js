@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const express = require('express');
 
-//const morgan = require('./config/morganConfig');
+const morgan = require('./config/morganConfig');
 //const cors = require('cors');
 const keys = require('./config/keys');
 

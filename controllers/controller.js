@@ -18,8 +18,9 @@ const { readMovie, addMovieToUser } = require('../models/usuario');
 const res = require('express/lib/response');
 const { LEGAL_TCP_SOCKET_OPTIONS } = require('mongodb');
 const { Browser } = require('puppeteer');
-const API_KEY = process.env.OMDB_API_KEY
-const regex = require('../utils/regex')
+const API_KEY = process.env.OMDB_API_KEY;
+const regex = require('../utils/regex');
+const authoriseRoles = require('../utils/authoriseRoles');
 
 
 
@@ -70,7 +71,7 @@ const getMovie = async (req, res) => {
 
 const getSearchView = async (req, res) => {
     try {
-        console.log(req.query.title);
+        authoriseRoles(res.locals.role, ["admin", "user"]);
         res.status(200).render("search")
 
     } catch (error) {
@@ -213,6 +214,7 @@ const getSignUpView = async (req, res) => {
 }
 
 const getDashboardView = async (req, res) => {
+    authoriseRoles(res.locals.role, ["admin", "user"]);
     try {
         res.render('dashboard');
 
@@ -224,6 +226,7 @@ const getDashboardView = async (req, res) => {
 
 const getAdminView = async (req, res) => {
     try {
+        authoriseRoles(res.locals.role, ["admin"]);
         res.render('admin.pug')
     } catch (error) {
         console.log(error.message);
@@ -233,6 +236,7 @@ const getAdminView = async (req, res) => {
 
 const getCreateMovieView = async (req, res) => {
     try {
+        authoriseRoles(res.locals.role, ["admin"]);
         res.render('createmovie')
 
     } catch (error) {
