@@ -10,11 +10,15 @@ const createToken = async (email, role, id) => {
         role: role,
         id_user: id
     };
-    
+
     const token = jwt.sign(payload, SECRET, {
         expiresIn: "30min"
     });
     return token
 };
 
-module.exports = { createToken };
+const decodeToken = (token) => {
+    return jwt.verify(token, SECRET, (err, decoded) => {return decoded })
+};
+
+module.exports = { createToken, decodeToken };

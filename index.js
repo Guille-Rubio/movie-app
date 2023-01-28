@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const express = require('express');
 
-const morgan = require('./config/morganConfig');
+
 //const cors = require('cors');
 const keys = require('./config/keys');
 
@@ -31,7 +31,10 @@ app.use(express.urlencoded({ extended: true }));
 //app.use(cookieParser());
 app.use(express.static(__dirname + '/public'));
 
-//app.use(morgan(':method :host :status :param[id] - :response-time ms :body'));
+if (process.env.NODE_ENV === "development") {
+  const morgan = require('./config/morganConfig');
+  app.use(morgan(':method :url :host :status :param[id] - :response-time ms :body'));
+}
 
 app.get('/', (req, res) => {
   try {

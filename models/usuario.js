@@ -1,4 +1,5 @@
 const pool = require("../utils/pgConfig");
+const favourites = require('./favourites');
 
 /**
  * Descripción de la función: guarda el usuario pasado por parámetro en la tabla usuarios 
@@ -235,24 +236,32 @@ const updatePassword = async (usuario) => {
  * 
  */
 
-const getUserFavouriteMovies = async (user) => {
-    let client, result
+const getUserFavouriteMovies = async (id_user) => {
     try {
-        client = await pool.connect(); // Espera a abrir conexion
-
-        const data = await client.query(`
-            SELECT id_movie
-            FROM favourites
-            WHERE id_user = $1`, [user]);
-
-        const result = data.rows
-        return result
-    } catch (err) {
-        console.log(err);
-        throw err
-    } finally {
-        client.release();
+        const favs = await favourites.find({ id_user });
+        console.log(favs);
+        return favs;
+    } catch (error) {
+        console.log(error.message);
+        throw error
     }
+    /*   let client, result
+      try {
+          client = await pool.connect(); // Espera a abrir conexion
+  
+          const data = await client.query(`
+              SELECT id_movie
+              FROM favourites
+              WHERE id_user = $1`, [user]);
+  
+          const result = data.rows
+          return result
+      } catch (err) {
+          console.log(err);
+          throw err
+      } finally {
+          client.release();
+      } */
 }
 
 /** Descripción de la función: Elimina el registro de la tabal favoritos que relaciona al usuario logado con una película
