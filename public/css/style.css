@@ -65,6 +65,10 @@ input {
     border-radius: 0px;
 }
 
+input[type="text"] {
+    min-width: 200px;
+}
+
 input[type=submit] {
     padding: 10px;
     border: none;
@@ -161,7 +165,7 @@ input[type=submit] {
     background-color: var(--primary-color);
 }
 
-.small-text{
+.small-text {
     font-size: small;
 }
 
@@ -234,12 +238,20 @@ h2 {
 .login-form {
     display: flex;
     flex-direction: column;
-    gap:10px;
-    margin-bottom:15px;
+    gap: 10px;
+    margin-bottom: 15px;
 }
 
-.signup-form{
-    display:flex;
+.signup-form {
+    display: flex;
     flex-direction: column;
-    gap:10px;
+    gap: 10px;
+}
+
+
+#show-password {
+    display: flex;
+    flex-direction: row;
+    align-content: flex-start;
+    align-items: center;
 }

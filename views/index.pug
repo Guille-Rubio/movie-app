@@ -17,13 +17,17 @@ html(lang="en")
             form(method="POST" action="/login" class="login-form")
                 input(type="text",name="email" placeholder="email")
                 input(type="password", name="password" placeholder="password")
+                div(id="show-password")
+                    input(type="checkbox")
+                    span(class="small-text") Show password
                 input(type="submit", value="login") 
                     
-            span(class="small-text") no tines cuenta, 
-                a(href="/signup" class="small-text") registrate
+            span(class="small-text") You don't have an account?,  
+                a(href="/signup" class="small-text") Sign up here.
             
-            span(class="small-text") ¿has olvidado tu contraseña?  
-                a(href="/recoverpassword" class="small-text") recupérala aquí
+            span(class="small-text") You forgot your password?  
+                a(href="/recoverpassword" class="small-text") recover it here.
+        script(src="/js/index.js") 
 
             
 

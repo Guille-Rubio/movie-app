@@ -19,6 +19,9 @@ html(lang="en")
                 label(for="password")
                 input(type="password" name="password" id="password" placeholder="password")
                 label(for="password2" name="password2" id="password2" placeholder="Confirm password")
+                div(id="show-password")
+                    input(type="checkbox")
+                    span(class="small-text") Show passwords
                 select(name="role" id="role")
                     option(value="" disabled selected) Sign up as
                     option(value="admin") Admin
@@ -28,8 +31,8 @@ html(lang="en")
 
                 button Sign up with Google
                 p=msg
+        script(src="/js/signup.js") 
 
-                                        
 
 
         include ./footer.pug 
