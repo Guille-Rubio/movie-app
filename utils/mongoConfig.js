@@ -1,22 +1,31 @@
 const mongoose = require("mongoose");
-const mongoUser = process.env.MONGODB_USER;
-const mongoPassword = process.env.MONGODB_PASSWORD;
-const mongoCluster = process.env.MONGODB_CLUSTER;
-const mongoDBName = process.env.MONGO_DB_NAME;
 
-const url = `mongodb+srv://${mongoUser}:${mongoPassword}@${mongoCluster}.mongodb.net/${mongoDBName}?retryWrites=true&w=majority`
+const connectMongoDb = async () => {
 
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    ssl: true
-});//conexión con base de datos
+    if (process.env.NODE_ENV === 'production') {
+        mongoose.connect(process.env.MONGODB_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            ssl: true
+        });
 
+        const db = mongoose.connection;//objeto de la conexion
 
-const db = mongoose.connection;//objeto de la conexion
+        // Eventos
+        db.on("error", error => console.log(error));
+        db.once("open", () => console.log("connection to db established"))
+    }
 
-// Eventos
-db.on("error", error => console.log(error));
-db.once("open", () => console.log("connection to db established"))
+    if (process.env.NODE_ENV === 'development') {
+        mongoose.connect('mongodb://127.0.0.1:27017/movieApp')
 
-module.exports = { mongoose, db };
+        const db = mongoose.connection;//objeto de la conexion
+
+        // Eventos
+        db.on("error", error => console.log(error));
+        db.once("open", () => console.log("connection to db established"))
+
+    }
+}
+
+module.exports = { mongoose, connectMongoDb };

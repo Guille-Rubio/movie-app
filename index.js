@@ -3,6 +3,7 @@ require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const express = require('express');
+const { connectMongoDb } = require('./utils/mongoConfig');
 
 
 //const cors = require('cors');
@@ -11,6 +12,7 @@ const keys = require('./config/keys');
 
 //const helmet = require('helmet');
 const router = require('./routes/route');
+const api = require('./routes/api');
 const app = express();
 
 const port = process.env.PORT || 3000;
@@ -48,11 +50,13 @@ app.use(express.static(__dirname + '/public'));
 }); */
 
 app.use("/", router);
+app.use("/api", api);
 
 
 
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`Example app listening on port ${port}`)
+  await connectMongoDb()
 });
 
 module.exports = app;
