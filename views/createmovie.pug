@@ -12,8 +12,9 @@ html(lang="en")
         main
 
                 form(action="/createmovie" method="POST" class="createmovieform") 
-     
                     div(class="inputs")
+                        div(id="poster-preview-container")
+                            img(src="", alt="poster preview" id="poster-preview" onerror="hideImg()")
                         input(id="title" type="text" name="Title" placeholder="title")
                 
                         input(id="poster" type="text" name="Poster" placeholder="poster url")

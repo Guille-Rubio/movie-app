@@ -20,7 +20,8 @@ html(lang="en")
                 div(id="show-password")
                     input(type="checkbox")
                     span(class="small-text") Show password
-                input(type="submit", value="login") 
+                input(type="submit", value="login")
+            span(id="login-message")= msg 
                     
             span(class="small-text") You don't have an account?,  
                 a(href="/signup" class="small-text") Sign up here.

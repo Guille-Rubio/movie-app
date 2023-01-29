@@ -124,6 +124,7 @@ input[type=submit] {
     flex-wrap: wrap;
     flex-direction: column;
     justify-content: center;
+    align-content: center;
 }
 
 .createmovieform>input {
@@ -237,6 +238,7 @@ h2 {
     text-shadow: 0 0 0.05em #fff, 0 0 0.2em #fe05e1, 0 0 0.3em #fe05e1;
     transform: rotate(-7deg);
 }
+/* End of header styles*/
 
 .invalid-text-input {
     border-bottom: 2px solid red;
@@ -260,9 +262,6 @@ h2 {
     border-bottom: 2px solid green;
 }
 
-
-
-
 #show-password {
     display: flex;
     flex-direction: row;
@@ -272,4 +271,18 @@ h2 {
 
 #password-strength-message {
     max-width: 200px;
+}
+
+#poster-preview-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+}
+
+#poster-preview{
+    display: none;
+    width: 200px;
+    text-align: center;
+    
 }

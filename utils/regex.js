@@ -1,11 +1,11 @@
 //Que contenga @ y un .
 const validateEmail = (email) => {
-    const regexEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const regexEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,7}$/;
     return regexEmail.test(email.toLowerCase());
 };
 //minimo 8 caracteres, minusculas, mayusculas, caracter especial y numero
 const validatePassword = (password) => {
-    const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*\_\-])(?=.{8,})/;
+    const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return regexPassword.test(password);
 };
 //solo letras y espacios (se usa en nombre y en apellido)

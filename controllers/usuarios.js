@@ -78,29 +78,30 @@ const signup = async (req, res) => {
 
 const login = async (req, res) => {
     try {
-
-
         const inputEmail = req.body.email
         const inputPassword = req.body.password
 
-
         const user = await db.checkSignedUpUser(inputEmail, inputPassword);
-        const users = await user.pop();
-        const { email, password, username, role, id_user } = users;
+        if (user.length > 0) {
+            const users = await user.pop();
+            const { email, password, username, role, id_user } = users;
 
-        if (inputEmail === email && inputPassword === password) {
-            console.log("correct email and password")
-            //change logged state to true
-            const token = await tokens.createToken(email, role, id_user)
-            console.log(token)
+            if (inputEmail === email && inputPassword === password) {
+                console.log("correct email and password")
+                //change logged state to true
+                const token = await tokens.createToken(email, role, id_user)
+                console.log("login token", token)
 
-            if (role === "admin") {
-                res.cookie("access_token", token).render('admin');
-            } if (role === "user") {
-                res.cookie("access_token", token).render('dashboard')
-            }
+                if (role === "admin") {
+                    res.cookie("access_token", token).render('admin');
+                } if (role === "user") {
+                    res.cookie("access_token", token).render('dashboard')
+                }
+            } /* else {
+                res.render('message', { msg: "Incorrect email and/or password" })
+            } */
         } else {
-            res.render('message', { msg: "Incorrect email and/or password" })
+            res.status(200).render('index', { msg: "Incorrect email or password, please try again" })
         }
     } catch (error) {
         console.log(error.message);
