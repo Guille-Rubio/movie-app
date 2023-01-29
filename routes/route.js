@@ -7,9 +7,9 @@ const roleManager = require('../middleware/roleManager');
 
 
 
+router.get('/', controllers.getHomeView)
 router.get('/create-tables', controllers.createTableUsuarios);
 router.get('/populate-usuarios', controllers.populateUsuariosTableWithSeed);
-
 
 
 //router.get('/', controllers.getIndex);

@@ -14,6 +14,10 @@ const router = require('./routes/route');
 const app = express();
 
 const port = process.env.PORT || 3000;
+if (process.env.NODE_ENV === "development") {
+  const morgan = require('./config/morganConfig');
+  app.use(morgan(':method :url :host :status :param[id] - :response-time ms :body'));
+}
 
 app.set('view engine', 'pug');
 app.set('views', __dirname + '/views');
@@ -31,12 +35,9 @@ app.use(express.urlencoded({ extended: true }));
 //app.use(cookieParser());
 app.use(express.static(__dirname + '/public'));
 
-if (process.env.NODE_ENV === "development") {
-  const morgan = require('./config/morganConfig');
-  app.use(morgan(':method :url :host :status :param[id] - :response-time ms :body'));
-}
 
-app.get('/', (req, res) => {
+
+/* app.get('/', (req, res) => {
   try {
     res.status(200).render('index.pug');
 
@@ -44,7 +45,7 @@ app.get('/', (req, res) => {
     console.log(req.query.title);
     res.status(200).render("search")
   }
-});
+}); */
 
 app.use("/", router);
 

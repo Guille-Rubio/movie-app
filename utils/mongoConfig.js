@@ -6,7 +6,12 @@ const mongoDBName = process.env.MONGO_DB_NAME;
 
 const url = `mongodb+srv://${mongoUser}:${mongoPassword}@${mongoCluster}.mongodb.net/${mongoDBName}?retryWrites=true&w=majority`
 
-mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });//conexión con base de datos
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    ssl: true
+});//conexión con base de datos
+
 
 const db = mongoose.connection;//objeto de la conexion
 
@@ -14,4 +19,4 @@ const db = mongoose.connection;//objeto de la conexion
 db.on("error", error => console.log(error));
 db.once("open", () => console.log("connection to db established"))
 
-module.exports = mongoose;
+module.exports = { mongoose, db };

@@ -40,6 +40,16 @@ const populateUsuariosTableWithSeed = async (req, res) => {
 };
 
 
+const getHomeView = (req, res) => {
+    try {
+        res.status(200).render('index.pug');
+    } catch (error) {
+        console.log(error.message);
+        res.status(200).render("search")
+    }
+};
+
+
 
 /**
 * Descripción de la función: función para buscar película en ombd por titulo 
@@ -100,10 +110,10 @@ const searchMovieInOMDB = async (req, res) => {
         const response = await fetch(`http://www.omdbapi.com/?t=${titleSought}&apikey=${API_KEY}`)
         const data = await response.json()
 
-        console.log("resultado de OMDB", data.Title)
+        console.log("resultado de OMDB", data.title)
 
         if (data.Response === "False") {
-            const movie = await (await Favourites.find({ Title: titleSought })).pop();
+            const movie = await (await Favourites.find({ title: titleSought })).pop();
 
             console.log(movie);
 
@@ -131,12 +141,13 @@ const searchMovieInOMDB = async (req, res) => {
 
 const getOneMovie = async (req, res) => {
     try {
+        authoriseRoles(res.locals.role, ["admin", "user"]);
         const result = [];
         const titleSought = req.params.title
         const response = await fetch(`https://www.omdbapi.com/?s=${titleSought}&apikey=${API_KEY}`)
         const movies = await response.json();
         if (movies.Response == "False") {
-            const pelisMongo = await (await Favourites.find({ Title: titleSought })).pop();
+            const pelisMongo = await (await Favourites.find({ title: titleSought })).pop();
             result.push(pelisMongo);
             if (pelisMongo) {
                 res.render("moviesdetail", { detalles: result })
@@ -184,6 +195,7 @@ const getUser = async (req, res) => {
  */
 const getDetailsMovie = async (req, res) => {
     try {
+        authoriseRoles(res.locals.role, ["admin", "user"]);
         const titleSought = req.params.title
         const response = await fetch(`https://www.omdbapi.com/?i=${titleSought}&apikey=${API_KEY}`)
         const movie = await response.json()
@@ -205,8 +217,8 @@ const getSignUpView = async (req, res) => {
 }
 
 const getDashboardView = async (req, res) => {
-    authoriseRoles(res.locals.role, ["admin", "user"]);
     try {
+        authoriseRoles(res.locals.role, ["admin", "user"]);
         res.render('dashboard');
 
     } catch (error) {
@@ -264,8 +276,9 @@ const getRestorePasswordView = async (req, res) => {
  */
 const getSearchEditMovieView = async (req, res) => {
     try {
+        authoriseRoles(res.locals.role, ["admin"]);
         const titleToEdit = req.body.buscar;
-        const filter = { Title: titleToEdit };
+        const filter = { title: titleToEdit };
         let data = await Favourites.findOne(filter);
         res.render('editdetail', data);
     } catch (error) {
@@ -286,6 +299,7 @@ const getSearchEditMovieView = async (req, res) => {
 
 const postSaveChanges = async (req, res) => {
     try {
+        authoriseRoles(res.locals.role, ["admin"]);
         const idToEdit = { id_movie: req.body.id_movie }
         const update = req.body
         await Favourites.findOneAndUpdate(idToEdit, update, { new: true })
@@ -298,6 +312,7 @@ const postSaveChanges = async (req, res) => {
 
 const getEditMovieView = async (req, res) => {
     try {
+        authoriseRoles(res.locals.role, ["admin"]);
         res.render('editmovie');
     } catch (error) {
         console.log(error.message);
@@ -315,17 +330,15 @@ const getEditMovieView = async (req, res) => {
 
 
 const postCreateMovie = async (req, res) => {
-
     try {
-        const film = new Favourites(req.body);
-        const result = await film.save();
-        res.status(201).render('message', { msg: `Pelicula ${req.body.Title} creada` })
-    }
-    catch (error) {
+        authoriseRoles(res.locals.role, ["admin"]);
+
+        const newFilm = await Favourites.create(req.body);
+        res.status(201).render('message', { msg: `Pelicula ${newFilm.title} creada` })
+    } catch (error) {
         console.log(error.message);
         res.status(400).json({ msg: error.message })
     }
-
 }
 
 /** Descripción de la función: busca por título y edita una película en la base de datos de mongo
@@ -360,6 +373,7 @@ const editMovie = async (req, res) => {
 
 const getFavouriteMovies = async (req, res) => {
     try {
+        authoriseRoles(res.locals.role, ["admin", "user"]);
         const ids = []
         const cookie = req.headers.cookie;
         const token = cookie.slice(cookie.indexOf("=") + 1, cookie.length);
@@ -385,7 +399,7 @@ const getFavouriteMovies = async (req, res) => {
                 }
             }
             console.log(movies)
-            res.status(200).render('movies', { movies: movies })
+            res.status(200).render('movies', { movies })
         }
     } catch (error) {
         console.log(error.message);
@@ -395,6 +409,7 @@ const getFavouriteMovies = async (req, res) => {
 
 const getRemoveMovieView = async (req, res) => {
     try {
+        authoriseRoles(res.locals.role, ["admin"]);
         res.render('removemovie')
     } catch (error) {
         console.log(error.message);
@@ -412,11 +427,12 @@ const getRemoveMovieView = async (req, res) => {
 
 const removeTitle = async (req, res) => {
     try {
+        authoriseRoles(res.locals.role, ["admin"]);
         const title = req.query.title
-        const titleIsSaved = await Favourites.findOne({ Title: title }).exec() ? true : false
+        const titleIsSaved = await Favourites.findOne({ title }).exec() ? true : false
         console.log("title is saved: " + titleIsSaved)
         if (titleIsSaved) {
-            await Favourites.findOneAndDelete({ Title: title })
+            await Favourites.findOneAndDelete({ title })
             res.status(202).json({ message: title + " deleted" })
         } else {
             res.render('message', { msg: "la película buscada no está en la base de datos" })
@@ -429,6 +445,7 @@ const removeTitle = async (req, res) => {
 
 const removefavourite = async (req, res) => {
     try {
+        authoriseRoles(res.locals.role, ["admin", "user"]);
         await usuarios.removeUserFavouriteMovie(req, res);
         //funcion usuario eliminar registro usuario e id   
     } catch (error) {
@@ -448,6 +465,7 @@ const removefavourite = async (req, res) => {
 const addfavourite = async (req, res) => {
     //funcion para comprobar si ya esá guardada 
     try {
+        authoriseRoles(res.locals.role, ["admin", "user"]);
         const cookie = req.headers.cookie;
         const token = cookie.slice(cookie.indexOf("=") + 1, cookie.length);
         const { id_user } = decodeToken(token);
@@ -471,6 +489,7 @@ const addfavourite = async (req, res) => {
 const controllers = {
     createTableUsuarios,
     populateUsuariosTableWithSeed,
+    getHomeView,
     getMovie,
     getSearchView,
     getIndex,
