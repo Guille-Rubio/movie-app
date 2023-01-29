@@ -44,6 +44,10 @@ emailInput.addEventListener('blur', () => {
     }
 });
 
+passwordInput.addEventListener('focus', () => {
+    passwordInput.classList.remove("invalid-text-input");
+});
+
 passwordInput.addEventListener('input', (event) => {
     event.preventDefault();
     const validPassword = validatePassword(passwordInput.value);
