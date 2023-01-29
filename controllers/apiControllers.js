@@ -32,7 +32,10 @@ const createMovie = async (req, res) => {
 }
 const updateMovie = async (req, res) => {
     try {
-        res.status(200).json();
+        const filter = { title: req.body.title };
+        const update = req.body;
+        const updated = await Favourites.findOneAndUpdate(filter, update);
+        res.status(200).json(updated);
     } catch (error) {
         console.log(error);
         res.status(400).json({ msg: error.message })
@@ -40,6 +43,7 @@ const updateMovie = async (req, res) => {
 }
 const deleteMovie = async (req, res) => {
     try {
+        await Favourites.deleteOne({ title: req.body.title })
         res.status(200).json();
     } catch (error) {
         console.log(error);
