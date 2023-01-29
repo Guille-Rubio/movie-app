@@ -66,7 +66,7 @@ input {
 }
 
 input[type=submit] {
-    padding:10px;
+    padding: 10px;
     border: none;
     border-radius: 50px;
     background: linear-gradient(145deg, #cacaca, #f0f0f0);
@@ -104,7 +104,7 @@ input[type=submit] {
 
 .imgindex {
     max-width: 150px;
-    margin:15px;
+    margin: 15px;
 }
 
 .createmovieform {
@@ -159,6 +159,10 @@ input[type=submit] {
     left: 5px;
     transition: 0.2s;
     background-color: var(--primary-color);
+}
+
+.small-text{
+    font-size: small;
 }
 
 /* Header */
@@ -230,4 +234,12 @@ h2 {
 .login-form {
     display: flex;
     flex-direction: column;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.signup-form{
+    display:flex;
+    flex-direction: column;
+    gap:10px;
 }
