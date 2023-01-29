@@ -65,6 +65,10 @@ input {
     border-radius: 0px;
 }
 
+input:focus {
+    outline: none;
+}
+
 input[type="text"] {
     min-width: 200px;
 }
@@ -234,6 +238,10 @@ h2 {
     transform: rotate(-7deg);
 }
 
+.invalid-text-input {
+    border-bottom: 2px solid red;
+
+}
 
 .login-form {
     display: flex;
@@ -248,10 +256,20 @@ h2 {
     gap: 10px;
 }
 
+.valid-text-input {
+    border-bottom: 2px solid green;
+}
+
+
+
 
 #show-password {
     display: flex;
     flex-direction: row;
     align-content: flex-start;
     align-items: center;
+}
+
+#password-strength-message {
+    max-width: 200px;
 }

@@ -11,6 +11,7 @@ html(lang="en")
     body
         include ./header.pug
         main
+            h3 Sign up
             form(action="" method="POST" class="signup-form") 
                 label(for="email")
                 input(type="text" name="email" id="email" placeholder="email")
@@ -18,10 +19,10 @@ html(lang="en")
                 input(type="text" name="user" id="user" placeholder="user")
                 label(for="password")
                 input(type="password" name="password" id="password" placeholder="password")
-                label(for="password2" name="password2" id="password2" placeholder="Confirm password")
                 div(id="show-password")
                     input(type="checkbox")
-                    span(class="small-text") Show passwords
+                    span(class="small-text") Show password
+                span(class="small-text" id="password-strength-message")
                 select(name="role" id="role")
                     option(value="" disabled selected) Sign up as
                     option(value="admin") Admin
