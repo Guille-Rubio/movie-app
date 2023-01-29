@@ -11,20 +11,16 @@ html(lang="en")
 
         include ./header.pug 
         main
-            p Bienvenido a la movieApp
-
-            a(href="/signup")
-                button.btLogin Sign up!
-
+           
             img(src="./assets/img/perropalomitas.png" alt='imagen de prueba' class="imgindex")
 
-            form(method="POST" action="/login")
-                input(type="text",name="email" placeholder="Introduzca el email...")
-                input(type="password", name="password" placeholder="Introduzca contraseña...")
-
-
-                input(type="submit", value="login con email y password") 
+            form(method="POST" action="/login" class="login-form")
+                input(type="text",name="email" placeholder="email")
+                input(type="password", name="password" placeholder="password")
+                input(type="submit", value="login") 
                     
+            a(href="/signup") no tienes cuenta, registrate
+            
             a(href="/recoverpassword") recuperar contraseña
 
             

@@ -29,7 +29,7 @@ router.get('/movies/:title', roleManager, controllers.getDetailsMovie);
 /* router.get('/moviesdetail', (req, res) => {
     res.render('moviesdetail.pug');
 }) */
-router.get('/movies', roleManager, controllers.getFavouriteMovies);
+router.get('/mymovies', roleManager, controllers.getFavouriteMovies);
 router.get('/admin', roleManager, controllers.getAdminView)
 router.get('/createmovie', roleManager, controllers.getCreateMovieView);
 router.post('/createmovie', roleManager, controllers.postCreateMovie);

@@ -1,12 +1,16 @@
 header
-    h1 MOVIE APP 
-        
-    nav 
+    div(class="heading-container")
+        h1
+            span MOVIE
+            span MOVIE
+        h2 APP
+
+    nav
         a(href="http://localhost:3000")
-            button home 
+            button(class="primary-button") home
         form(action="/logout" method="POST")
-            button(type="submit") logout
+            button(class="primary-button" type="submit") logout
         a(href="http://localhost:3000/dashboard")
-            button dashboard
+            button(class="primary-button") dashboard
         a(href="http://localhost:3000/admin")
-            button admin view
+            button(class="primary-button") admin view

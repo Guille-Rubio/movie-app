@@ -9,14 +9,14 @@ html(lang="en")
         include ./font.pug
     body 
         include ./header.pug
-        h2 Vista administrador
+        h3 Vista administrador
 
         main
             a(href="/createmovie")
-                button Crear película 
+                button(class="primary-button") Crear película 
             a(href="/editmovie")
-                button Editar película
+                button(class="primary-button") Editar película
             a(href="/removemovie")
-                button Eliminar película 
+                button(class="primary-button") Eliminar película 
         
         include ./footer.pug 

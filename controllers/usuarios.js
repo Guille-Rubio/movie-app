@@ -117,7 +117,7 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
     try {
-        res.status(200).cookie("access_token", "").render('index');
+        res.status(200).cookie("access_token", "").redirect('/');
 
     } catch (error) {
         console.log(error.message);
