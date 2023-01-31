@@ -15,12 +15,14 @@ const Movie = require('./movie');
 const createUsersTable = async () => {
     try {
         let client = await pool.connect();
-        const newTable = await client.query(`CREATE TABLE IF NOT EXISTS usuarios (
-        id_user serial PRIMARY KEY, 
-        username VARCHAR (50),
-        email VARCHAR (50) UNIQUE NOT NULL,
-        password VARCHAR (50) NOT NULL,
-        role VARCHAR (50));`);
+        const newTable = await client.query(`CREATE TABLE IF NOT EXISTS users (
+            id_user serial PRIMARY KEY,
+            username VARCHAR (50),
+            email VARCHAR (50) UNIQUE NOT NULL,
+            password VARCHAR (50) NOT NULL,
+            role VARCHAR (50),
+            logged BOOLEAN
+        );`);
         return newTable;
     } catch (error) {
         console.log(error.message);
@@ -35,8 +37,8 @@ const createUsersTable = async () => {
 const populateUsuariosTableWithSeed = async () => {
     try {
         let client = await pool.connect();
-        const newUser = await client.query(`INSERT INTO usuarios (id_user, username,email,password,role)
-    VALUES(1,'Guille','guillermorubiog@gmail.com','ABCdef123!','admin'),(2,'Pepe','pepe@gmail.com','ABCdef123!','user');`)
+        const newUser = await client.query(`INSERT INTO users (id_user, username,email,password,role)
+    VALUES(1,'Guille','guillermo@gmail.com','ABCdef123!','admin'),(2,'Pepe','pepe@gmail.com','ABCdef123!','user');`)
         return newUser
     } catch (error) {
         console.log(error.message);
@@ -68,7 +70,7 @@ const guardarUsuario = async (usuario) => {
     try {
         client = await pool.connect(); // Espera a abrir conexion
         const data = await client.query
-            (`INSERT INTO usuarios (username,email,password,role,logged) VALUES ($1,$2,$3,$4,$5)`
+            (`INSERT INTO users (username,email,password,role,logged) VALUES ($1,$2,$3,$4,$5)`
                 , [user, email, password, role, false])
         result = { msg: "Usuario creado exitosamente." }
     } catch (err) {
@@ -100,11 +102,11 @@ const login = async (usuario) => {
         client = await pool.connect();
         const data = await client.query(`
                 SELECT username,email,role,logged
-                FROM usuarios
+                FROM users
                 WHERE email = $1 AND password = $2`, [email, password]);
 
         if (data.rowCount > 0) {
-            await client.query(`UPDATE usuarios SET logged = true WHERE email = $1 AND password = $2`, [email, password]);
+            await client.query(`UPDATE users SET logged = true WHERE email = $1 AND password = $2`, [email, password]);
             result = data.rows
 
         } else {
@@ -134,7 +136,7 @@ const checkUserByEmail = async (email) => {
         client = await pool.connect();
         const data = await client.query(`
                 SELECT user,email,role
-                FROM usuarios
+                FROM users
                 WHERE email = $1`, [email]);
 
         result = data.rows
@@ -227,7 +229,7 @@ const updatePassword = async (usuario) => {
     try {
         client = await pool.connect(); // Espera a abrir conexion
         const data = await client.query
-            (` UPDATE usuarios SET password =$1 WHERE id =$2`
+            (` UPDATE users SET password =$1 WHERE id =$2`
                 , [password, id])
         result = { msg: "Usuario modificado exitosamente." }
     } catch (err) {
@@ -326,7 +328,7 @@ const checkSignedUpUser = async (email, password) => {
         client = await pool.connect(); // Espera a abrir conexion
         const data = await client.query(`
                 SELECT *
-                FROM usuarios
+                FROM users
                 WHERE email = $1 and password = $2`, [email, password]);
         return data.rows;
     } catch (err) {
