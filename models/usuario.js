@@ -1,5 +1,5 @@
 const pool = require("../utils/pgConfig");
-const favourites = require('./favourites');
+const Movie = require('./movie');
 
 /**
  * Descripción de la función: guarda el usuario pasado por parámetro en la tabla usuarios 
@@ -45,9 +45,22 @@ const populateUsuariosTableWithSeed = async () => {
         //client.release();
 
     }
+};
 
-}
 
+const createFavoritesTable = async () => {
+    try {
+        let client = await pool.connect();
+        const newTable = await client.query(`CREATE TABLE IF NOT EXISTS favorites (
+        id_favorite serial PRIMARY KEY, 
+        id_user VARCHAR (50),
+        id_movie VARCHAR (50));`);
+        return newTable;
+    } catch (error) {
+        console.log(error.message);
+        throw error
+    };
+};
 
 const guardarUsuario = async (usuario) => {
     const { user, email, password, role } = usuario;
@@ -238,7 +251,7 @@ const updatePassword = async (usuario) => {
 
 const getUserFavouriteMovies = async (id_user) => {
     try {
-        const favs = await favourites.find({ id_user });
+        const favs = await Movie.find({ id_user });
         console.log(favs);
         return favs;
     } catch (error) {
@@ -361,6 +374,7 @@ const checkSavedAsFavourite = async (id_user, id_movie) => {
 const usuarios = {
     createUsersTable,
     populateUsuariosTableWithSeed,
+    createFavoritesTable,
     guardarUsuario,
     login,
     checkUserByEmail,
@@ -371,6 +385,6 @@ const usuarios = {
     removeUserFavouriteMovie,
     checkSignedUpUser,
     checkSavedAsFavourite
-}
+};
 
 module.exports = usuarios;

@@ -1,5 +1,4 @@
 require('dotenv').config();
-//require('./config/keys');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const express = require('express');

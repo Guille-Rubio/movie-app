@@ -9,7 +9,7 @@ const usuarios = require('../models/usuario');
 const fetch = require('node-fetch');
 require('mongoose');
 const jwt = require('jsonwebtoken');
-const Favourites = require('../models/favourites');
+const Favourites = require('../models/movie');
 const API_KEY = process.env.OMDB_API_KEY;
 const regex = require('../utils/regex');
 const authoriseRoles = require('../utils/authoriseRoles');
@@ -21,7 +21,8 @@ const { decodeToken } = require('../utils/createToken');
 const createTableUsuarios = async (req, res) => {
     try {
         await usuarios.createUsersTable();
-        res.status(201).json({ msg: "tabla usuarios creada" });
+        await usuarios.createFavoritesTable();
+        res.status(201).json({ msg: "tablas creadas" });
     } catch (error) {
         console.log(error);
         res.status(400).json({ msg: error.message });
