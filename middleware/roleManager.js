@@ -24,7 +24,7 @@ roleManager.use(async (req, res, next) => {
                 if (role === "admin") {
                     res.locals.role = "admin";
                     next();
-                } else if (role = "user") {
+                } else if (role === "user") {
                     res.locals.role = "user";
                     next();
 
