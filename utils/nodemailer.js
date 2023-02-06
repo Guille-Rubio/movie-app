@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
 require('dotenv')
-const usuarios = require('../controllers/usuarios');
+const usuarios = require('../models/usuario');
+const token = require('../utils/createToken');
 
 const email = process.env.PASS_RECOVER_EMAIL
 const password = process.env.PASS_RECOVER_PASSWORD
@@ -9,10 +10,10 @@ const smtp = process.env.SMTP_SERVER
 const restorePasswordURL = "http://localhost:3000/restorepassword"
 
 // async..await is not allowed in global scope, must use a wrapper
-async function main(userEmail) {
+async function sendPasswordRecoveryEmailTo(userEmail) {
     //checks whether the user exists. 
 
-    const userExists = await usuarios.checkExistingUser(userEmail);
+    const userExists = await usuarios.checkUserExistsByEmail(userEmail);
 
     console.log(userExists)
 
@@ -58,7 +59,7 @@ async function main(userEmail) {
     }}
 
 const mailer = {
-    main,
+    sendPasswordRecoveryEmailTo,
 }
 
 module.exports = mailer

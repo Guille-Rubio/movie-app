@@ -64,7 +64,7 @@ const createFavoritesTable = async () => {
     };
 };
 
-const guardarUsuario = async (usuario) => {
+const createNewUser = async (usuario) => {//UPDATED
     const { user, email, password, role } = usuario;
     let client, result;
     try {
@@ -72,7 +72,7 @@ const guardarUsuario = async (usuario) => {
         const data = await client.query
             (`INSERT INTO users (username,email,password,role,logged) VALUES ($1,$2,$3,$4,$5)`
                 , [user, email, password, role, false])
-        result = { msg: "Usuario creado exitosamente." }
+        result = data.rowCount > 0 ? true : false;
     } catch (err) {
         console.log(err);
         if (err.code == 23505) {
@@ -121,6 +121,59 @@ const login = async (usuario) => {
     return result
 }
 
+
+const getAllUsers = async () => {
+    try {
+        client = await pool.connect();
+        const data = await client.query(`
+                SELECT email,role
+                FROM users`);
+        result = data.rows
+
+    } catch (err) {
+        console.log(err);
+    } finally {
+        client.release();
+    }
+    return result
+}
+
+
+const deleteUserByEmail = async (email) => {
+    let result;
+    try {
+        client = await pool.connect();
+        const data = await client.query(`
+                DELETE FROM users WHERE email = $1`, [email]);
+        result = data.rowCount
+
+    } catch (err) {
+        console.log(err);
+    } finally {
+        client.release();
+    }
+    return result
+}
+
+
+const updatePasswordByEmail = async (email, newPassword) => {
+    let client, result;
+    try {
+        client = await pool.connect(); // Espera a abrir conexion
+        const data = await client.query
+            (` UPDATE users SET password =$1 WHERE email =$2`
+                , [newPassword, email])
+        result = data.rowCount;
+    } catch (err) {
+
+        console.log(err);
+    } finally {
+        client.release();
+    }
+    return result
+}
+
+
 /** Descripción de la función: Devuelve el usuario y el role del email pasado como parámetro
  * @param {string} email 
  * @returns mensaje
@@ -131,7 +184,7 @@ const login = async (usuario) => {
  * @return datos del usuario con el email especificado
  */
 
-const checkUserByEmail = async (email) => {
+const checkUserExistsByEmail = async (email) => {
     try {
         client = await pool.connect();
         const data = await client.query(`
@@ -139,7 +192,7 @@ const checkUserByEmail = async (email) => {
                 FROM users
                 WHERE email = $1`, [email]);
 
-        result = data.rows
+        result = data.rowCount > 0 ? true : false;
 
     } catch (err) {
         console.log(err);
@@ -377,9 +430,12 @@ const usuarios = {
     createUsersTable,
     populateUsuariosTableWithSeed,
     createFavoritesTable,
-    guardarUsuario,
+    createNewUser,
     login,
-    checkUserByEmail,
+    getAllUsers,
+    deleteUserByEmail,
+    updatePasswordByEmail,
+    checkUserExistsByEmail,
     addMovieToUser,
     readMovie,
     updatePassword,

@@ -24,7 +24,7 @@ router.post('/logout', usuarios.logout);
 router.get('/dashboard', roleManager, controllers.getDashboardView);
 router.get('/search', roleManager, controllers.getSearchView);
 //router.post('/search', controllers.getOneMovie);
-router.get('/search/:title', roleManager, controllers.getOneMovie); //todas
+router.get('/search/:title', roleManager, controllers.getMoviesFromOmdb);
 //Ruta vista
 router.get('/movies/:title', roleManager, controllers.getDetailsMovie);
 /* router.get('/moviesdetail', (req, res) => {

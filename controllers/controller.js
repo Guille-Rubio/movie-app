@@ -105,7 +105,7 @@ const getIndex = async (req, res) => {
  * 
  */
 
-const searchMovieInOMDB = async (req, res) => {
+const searchTitleInOMDB = async (req, res) => {//DEAD CODE??
     try {
         const titleSought = req.body.title
         const response = await fetch(`http://www.omdbapi.com/?t=${titleSought}&apikey=${API_KEY}`)
@@ -140,7 +140,7 @@ const searchMovieInOMDB = async (req, res) => {
 * @param {object} res HTTP response
  */
 
-const getOneMovie = async (req, res) => {
+const getMoviesFromOmdb = async (req, res) => {//RETURNS SEVERAL MOVIES!! BAD NAMING
     try {
         authoriseRoles(res.locals.role, ["admin", "user"]);
         const result = [];
@@ -490,11 +490,12 @@ const addfavourite = async (req, res) => {
 const controllers = {
     createTableUsuarios,
     populateUsuariosTableWithSeed,
+    getMoviesFromOmdb,
     getHomeView,
     getMovie,
     getSearchView,
     getIndex,
-    searchMovieInOMDB,
+    searchTitleInOMDB,
     getUser,
     getSignUpView,
     getDashboardView,
@@ -513,7 +514,6 @@ const controllers = {
     removeTitle,
     removefavourite,
     addfavourite,
-    getOneMovie,
 }
 
 module.exports = controllers

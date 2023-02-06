@@ -7,8 +7,8 @@
 
 const db = require('../models/usuario');
 
-const tokens = require('../utils/createToken')
-const regex = require('../utils/regex')
+const tokens = require('../utils/createToken');
+const regex = require('../utils/regex');
 
 /* const guardarUsuario = async (req, res) => {
 
@@ -36,10 +36,11 @@ const checkUserByEmail = async (email) => {
     //PARA QUE ES ESTA FUNCIÓN SI NO DEVUELVE NADA???
     try {
         const user = await db.checkUserByEmail(email)
+        return user;
 
     } catch (error) {
         console.log(error.message);
-        res.status(400).json({ msg: error.message })
+       
     }
 }
 
@@ -54,9 +55,11 @@ const signup = async (req, res) => {
     try {
         const newUser = req.body;
         if (regex.validateEmail(req.body.email) && regex.validatePassword(req.body.password)) {
-            const user = await db.guardarUsuario(newUser);
-            await login(req, res)
-
+            const userWasCreated = await db.guardarUsuario(newUser);
+            if (userWasCreated) {
+                await login(req, res)
+            }
+        
         } else {
             res.status(400).render('message', { msg: "Email o contraseña no válidos" })
         }
@@ -64,7 +67,6 @@ const signup = async (req, res) => {
         console.log(error.message);
         res.status(400).json({ msg: error.message })
     }
-
 }
 
 /**
